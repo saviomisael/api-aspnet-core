@@ -1,14 +1,15 @@
 ﻿version: "3.8"
 
 services:
-  gameswebapi.presentation:
+  gameswebapi:
     build:
       context: .
       dockerfile: GamesWebApi.Presentation/Dockerfile
     ports:
       - "80:80"
     depends_on: 
-      - api_db
+      api_db:
+        condition: service_healthy
     networks:
       - backend
   api_db:
