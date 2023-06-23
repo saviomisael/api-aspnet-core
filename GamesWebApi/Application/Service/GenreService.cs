@@ -1,10 +1,11 @@
 using Application.Exception;
+using Application.Service.Contracts;
 using Domain.Entity;
 using Domain.Repository;
 
 namespace Application.Service;
 
-public class GenreService
+public class GenreService : IGenreService
 {
     private readonly IGenreRepository _repository;
     public GenreService(IGenreRepository repository)
