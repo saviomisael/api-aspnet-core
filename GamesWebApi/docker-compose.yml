@@ -9,6 +9,8 @@ services:
       - "80:80"
     depends_on: 
       - api_db
+    networks:
+      - backend
   api_db:
     image: mcr.microsoft.com/mssql/server:2022-latest
     user: root
@@ -22,7 +24,12 @@ services:
       retries: 20
     ports:
       - "1433:1433"
+    networks: 
+      - backend
 
 volumes:
   api_data: {}
+  
+networks:
+  backend: {}
 
