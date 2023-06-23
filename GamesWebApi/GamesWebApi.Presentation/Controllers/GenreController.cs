@@ -44,7 +44,7 @@ public class GenreController : ControllerBase
 
             return BadRequest(errorsDto);
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return StatusCode(500);
         }
