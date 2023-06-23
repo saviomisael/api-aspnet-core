@@ -1,5 +1,6 @@
 using Domain.Entity;
 using Domain.Repository;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data.Repository;
 
@@ -12,9 +13,9 @@ public class GenreRepository : IGenreRepository
         _context = context;
     }
 
-    public Genre? GetByName(string name)
+    public async Task<Genre?> GetByName(string name)
     {
-        return _context.Genres.FirstOrDefault(g => g.Name == name);
+        return await _context.Genres.FirstOrDefaultAsync(g => g.Name == name);
     }
 
     public async Task CreateGenre(Genre genre)
