@@ -16,4 +16,10 @@ public class GenreRepository : IGenreRepository
     {
         return _context.Genres.FirstOrDefault(g => g.Name == name);
     }
+
+    public async Task CreateGenre(Genre genre)
+    {
+        _context.Genres.Add(genre);
+        await _context.SaveChangesAsync();
+    }
 }
