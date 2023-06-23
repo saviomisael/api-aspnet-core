@@ -8,6 +8,7 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 {
     opt.UseSqlServer(builder.Configuration.GetConnectionString("GamesWebApi"), sqpOptions =>
     {
+        sqpOptions.MigrationsAssembly("GamesWebApi.Presentation");
         sqpOptions.EnableRetryOnFailure(
             maxRetryCount: 10,
             maxRetryDelay: TimeSpan.FromSeconds(30),
