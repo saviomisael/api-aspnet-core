@@ -5,7 +5,7 @@ namespace GamesWebApi.IoC;
 
 public static class ApplicationExtensions
 {
-    public static void addAppDependencies(this IServiceCollection service)
+    public static void AddAppDependencies(this IServiceCollection service)
     {
         service.AddScoped<IGenreService, GenreService>();
     }

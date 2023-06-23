@@ -5,7 +5,7 @@ namespace GamesWebApi.IoC;
 
 public static class InfrastructureExtensions
 {
-    public static void addInfraDependecies(this IServiceCollection service)
+    public static void AddInfraDependecies(this IServiceCollection service)
     {
         service.AddScoped<IGenreRepository, GenreRepository>();
     }
