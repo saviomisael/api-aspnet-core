@@ -18,6 +18,7 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
         );
     });
 });
+builder.Services.addInfraDependecies();
 
 var app = builder.Build();
 
