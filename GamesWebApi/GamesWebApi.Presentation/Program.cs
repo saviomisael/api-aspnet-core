@@ -8,10 +8,10 @@ builder.Services.AddValidatorDependecies();
 builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(opt =>
 {
-    opt.UseSqlServer(builder.Configuration.GetConnectionString("GamesWebApi"), sqpOptions =>
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("GamesWebApi"), sqlOptions =>
     {
-        sqpOptions.MigrationsAssembly("GamesWebApi.Presentation");
-        sqpOptions.EnableRetryOnFailure(
+        sqlOptions.MigrationsAssembly("GamesWebApi.Presentation");
+        sqlOptions.EnableRetryOnFailure(
             maxRetryCount: 10,
             maxRetryDelay: TimeSpan.FromSeconds(30),
             errorNumbersToAdd: null
