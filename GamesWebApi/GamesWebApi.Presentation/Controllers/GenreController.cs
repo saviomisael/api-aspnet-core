@@ -19,19 +19,20 @@ public class GenreController : ControllerBase
     }
 
     [HttpPost(ApiRoutes.GenreRoutes.Create)]
-    public async Task<IActionResult> CreateGenre([FromServices] IValidator<CreateGenreDTO> validator, CreateGenreDTO dto)
+    public async Task<IActionResult> CreateGenre([FromServices] IValidator<CreateGenreDTO> validator,
+        [FromBody] CreateGenreDTO dto)
     {
-        ValidationResult result = await validator.ValidateAsync(dto);
+        var result = await validator.ValidateAsync(dto);
 
         if (!result.IsValid)
         {
             return BadRequest(result.Errors);
         }
-        
+
         try
         {
             var genre = new Genre(dto.Name);
-            
+
             var genreSaved = await _service.CreateGenre(genre);
 
             return Created(ApiRoutes.GenreRoutes.Create, genreSaved);
@@ -40,10 +41,12 @@ public class GenreController : ControllerBase
         {
             var errorsDto = new ErrorResponseDTO();
             errorsDto.Errors.Add(e.Message);
-            
+
             return BadRequest(errorsDto);
         }
-
-        return StatusCode(500);
+        catch (Exception e)
+        {
+            return StatusCode(500);
+        }
     }
 }
