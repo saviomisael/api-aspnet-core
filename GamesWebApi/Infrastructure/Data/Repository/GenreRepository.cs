@@ -12,7 +12,7 @@ public class GenreRepository : IGenreRepository
         _context = context;
     }
 
-    public Genre? getByName(string name)
+    public Genre? GetByName(string name)
     {
         return _context.Genres.FirstOrDefault(g => g.Name == name);
     }

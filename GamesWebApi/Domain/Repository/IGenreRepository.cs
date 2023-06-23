@@ -4,5 +4,5 @@ namespace Domain.Repository;
 
 public interface IGenreRepository
 {
-    Genre? getByName(string name);
+    Genre? GetByName(string name);
 }
