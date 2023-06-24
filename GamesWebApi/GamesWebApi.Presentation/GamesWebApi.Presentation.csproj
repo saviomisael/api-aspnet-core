@@ -42,5 +42,9 @@
     <ItemGroup>
       <Folder Include="Migrations\" />
     </ItemGroup>
+    
+    <ItemGroup>
+        <InternalsVisibleTo Include="GamesWebApi.Tests" />
+    </ItemGroup>
 
 </Project>
