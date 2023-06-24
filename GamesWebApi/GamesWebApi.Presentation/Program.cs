@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddValidatorDependecies();
-builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(opt =>
 {
     opt.UseSqlServer(builder.Configuration.GetConnectionString("GamesWebApi"), sqlOptions =>
@@ -20,6 +19,7 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 });
 builder.Services.AddInfraDependecies();
 builder.Services.AddAppDependencies();
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
