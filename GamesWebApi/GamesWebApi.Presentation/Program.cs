@@ -19,6 +19,7 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 });
 builder.Services.AddInfraDependecies();
 builder.Services.AddAppDependencies();
+builder.Services.AddMapper();
 builder.Services.AddControllers();
 
 var app = builder.Build();
