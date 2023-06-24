@@ -1,0 +1,19 @@
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+
+WORKDIR /src
+
+COPY GamesWebApi.sln .
+
+COPY ["GamesWebApi.Presentation/GamesWebApi.Presentation.csproj", "GamesWebApi.Presentation/"]
+
+COPY ["Application/Application.csproj", "Application/"]
+
+COPY ["Domain/Domain.csproj", "Domain/"]
+
+COPY ["Infrastructure/Infrastructure.csproj", "Infrastructure/"]
+
+RUN dotnet restore "GamesWebApi.Presentation/GamesWebApi.Presentation.csproj"
+
+COPY . .
+
+CMD [ "dotnet", "test" ]
