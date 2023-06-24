@@ -1,6 +1,6 @@
 namespace GamesWebApi.DTO;
 
-public class CreateGenreDTO
+public class CreateGenreDto
 {
     public string Name { get; set; } = default!;
 }

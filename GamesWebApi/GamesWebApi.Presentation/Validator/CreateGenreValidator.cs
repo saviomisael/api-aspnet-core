@@ -3,7 +3,7 @@ using GamesWebApi.DTO;
 
 namespace GamesWebApi.Validator;
 
-public class CreateGenreValidator : AbstractValidator<CreateGenreDTO>
+public class CreateGenreValidator : AbstractValidator<CreateGenreDto>
 {
     public CreateGenreValidator()
     {

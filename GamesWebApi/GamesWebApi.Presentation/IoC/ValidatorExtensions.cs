@@ -8,6 +8,6 @@ public static class ValidatorExtensions
 {
     public static void AddValidatorDependecies(this IServiceCollection service)
     {
-        service.AddScoped<IValidator<CreateGenreDTO>, CreateGenreValidator>();
+        service.AddScoped<IValidator<CreateGenreDto>, CreateGenreValidator>();
     }
 }
