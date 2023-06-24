@@ -7,7 +7,7 @@ using Domain.Repository;
 using Moq;
 using Xunit;
 
-namespace GamesWebApi.Tests;
+namespace GamesWebApi.Tests.Unit;
 
 public class GenreServiceTests
 {
