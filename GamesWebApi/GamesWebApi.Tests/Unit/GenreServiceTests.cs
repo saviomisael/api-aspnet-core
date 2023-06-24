@@ -4,6 +4,7 @@ using Application.Exception;
 using Application.Service;
 using Domain.Entity;
 using Domain.Repository;
+using FluentAssertions;
 using Moq;
 using Xunit;
 
@@ -24,7 +25,9 @@ public class GenreServiceTests
         
         var service = new GenreService(_repoMock.Object);
 
-        await Assert.ThrowsAsync<GenreAlreadyExistsException>( () => service.CreateGenre(new Genre("test")));
+        await service.Invoking(x => x.CreateGenre(new Genre("test")))
+            .Should().ThrowAsync<GenreAlreadyExistsException>()
+            .WithMessage("Genre test already exists.");
     }
 
     [Fact]
@@ -35,8 +38,8 @@ public class GenreServiceTests
         var service = new GenreService(_repoMock.Object);
         
         var result = await service.CreateGenre(new Genre("action"));
-        
-        Assert.IsType<Genre>(result);
-        Assert.Equal("action", result.Name);
+
+        result.Should().BeOfType<Genre>();
+        result.Name.Should().BeEquivalentTo("action");
     }
 }
