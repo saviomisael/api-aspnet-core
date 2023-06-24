@@ -2,7 +2,6 @@ using Application.Exception;
 using Application.Service.Contracts;
 using Domain.Entity;
 using FluentValidation;
-using FluentValidation.Results;
 using GamesWebApi.DTO;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,14 +18,18 @@ public class GenreController : ControllerBase
     }
 
     [HttpPost(ApiRoutes.GenreRoutes.Create)]
-    public async Task<IActionResult> CreateGenre([FromServices] IValidator<CreateGenreDTO> validator,
-        [FromBody] CreateGenreDTO dto)
+    public async Task<IActionResult> CreateGenre([FromServices] IValidator<CreateGenreDto> validator,
+        [FromBody] CreateGenreDto dto)
     {
         var result = await validator.ValidateAsync(dto);
 
         if (!result.IsValid)
         {
-            return BadRequest(result.Errors);
+            var errors = result.Errors.Select(x => x.ErrorMessage);
+
+            var errorDto = new ErrorResponseDto();
+            errorDto.Errors = errors.ToList();
+            return BadRequest(errors);
         }
 
         try
@@ -39,7 +42,7 @@ public class GenreController : ControllerBase
         }
         catch (GenreAlreadyExistsException e)
         {
-            var errorsDto = new ErrorResponseDTO();
+            var errorsDto = new ErrorResponseDto();
             errorsDto.Errors.Add(e.Message);
 
             return BadRequest(errorsDto);
