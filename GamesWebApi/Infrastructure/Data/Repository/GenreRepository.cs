@@ -18,9 +18,8 @@ public class GenreRepository : IGenreRepository
         return await _context.Genres.FirstOrDefaultAsync(g => g.Name == name);
     }
 
-    public async Task CreateGenre(Genre genre)
+    public void CreateGenre(Genre genre)
     {
         _context.Genres.Add(genre);
-        await _context.SaveChangesAsync();
     }
 }

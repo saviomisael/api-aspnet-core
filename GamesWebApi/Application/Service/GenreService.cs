@@ -2,29 +2,31 @@ using Application.Exception;
 using Application.Service.Contracts;
 using Domain.Entity;
 using Domain.Repository;
+using Infrastructure.Data;
 
 namespace Application.Service;
 
 public class GenreService : IGenreService
 {
-    private readonly IGenreRepository _repository;
-    public GenreService(IGenreRepository repository)
+    private readonly IUnitOfWork _unitOfWork;
+    public GenreService(IUnitOfWork unitOfWork)
     {
-        _repository = repository;
+        _unitOfWork = unitOfWork;
     }
     
     public async Task<Genre> CreateGenre(Genre genre)
     {
-        var genreFromDb = await _repository.GetByName(genre.Name);
+        var genreFromDb = await _unitOfWork.GenreRepository.GetByName(genre.Name);
 
         if (genreFromDb != null)
         {
             throw new GenreAlreadyExistsException(genre.Name);
         }
 
-        await _repository.CreateGenre(genre);
+        _unitOfWork.GenreRepository.CreateGenre(genre);
+        await _unitOfWork.Commit();
 
-        var genreSaved = await _repository.GetByName(genre.Name);
+        var genreSaved = await _unitOfWork.GenreRepository.GetByName(genre.Name);
 
         if (genreSaved is null)
         {
