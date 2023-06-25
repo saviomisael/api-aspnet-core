@@ -12,6 +12,8 @@ services:
         condition: service_healthy
     networks:
       - backend
+    volumes:
+      - "./GamesWebApi.Tests:/src/GamesWebApi.Tests"
   api_db:
     image: mcr.microsoft.com/mssql/server:2022-latest
     user: root
