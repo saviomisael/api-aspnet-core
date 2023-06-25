@@ -25,7 +25,7 @@ builder.Services.AddCors(opt =>
     });
 });
 
-builder.Services.AddInfraDependecies();
+builder.Services.AddInfraDependencies();
 builder.Services.AddAppDependencies();
 builder.Services.AddValidatorDependecies();
 builder.Services.AddControllers();

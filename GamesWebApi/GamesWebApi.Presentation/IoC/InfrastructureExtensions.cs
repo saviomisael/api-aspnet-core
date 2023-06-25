@@ -1,12 +1,14 @@
 using Domain.Repository;
+using Infrastructure.Data;
 using Infrastructure.Data.Repository;
 
 namespace GamesWebApi.IoC;
 
 public static class InfrastructureExtensions
 {
-    public static void AddInfraDependecies(this IServiceCollection service)
+    public static void AddInfraDependencies(this IServiceCollection service)
     {
         service.AddScoped<IGenreRepository, GenreRepository>();
+        service.AddScoped<IUnitOfWork, UnitOfWork>();
     }
 }
