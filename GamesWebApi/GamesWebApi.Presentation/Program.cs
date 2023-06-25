@@ -19,9 +19,9 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 
 builder.Services.AddCors(opt =>
 {
-    opt.AddPolicy("cors_api", builder =>
+    opt.AddPolicy("cors_api", policy =>
     {
-        builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+        policy.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
     });
 });
 
