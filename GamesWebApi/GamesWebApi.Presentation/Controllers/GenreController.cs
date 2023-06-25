@@ -27,8 +27,10 @@ public class GenreController : ControllerBase
         {
             var errors = result.Errors.Select(x => x.ErrorMessage);
 
-            var errorDto = new ErrorResponseDto();
-            errorDto.Errors = errors.ToList();
+            var errorDto = new ErrorResponseDto()
+            {
+                Errors = errors.ToList()
+            };
             return BadRequest(errors);
         }
 
