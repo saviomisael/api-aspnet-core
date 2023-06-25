@@ -23,8 +23,10 @@ public class GenreControllerTests
     {
         var client = _factory.CreateClient();
 
-        var request = new CreateGenreDto();
-        request.Name = "a";
+        var request = new CreateGenreDto
+        {
+            Name = "a"
+        };
 
         var content = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
 
