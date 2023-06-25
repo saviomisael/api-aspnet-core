@@ -5,7 +5,7 @@ namespace Infrastructure.Data;
 public class UnitOfWork : IUnitOfWork
 {
     private readonly AppDbContext _context;
-    public readonly IGenreRepository GenreRepository;
+    public IGenreRepository GenreRepository { get; }
     
     public UnitOfWork(AppDbContext context, IGenreRepository genreRepository)
     {
@@ -13,7 +13,7 @@ public class UnitOfWork : IUnitOfWork
         GenreRepository = genreRepository;
     }
     
-    public async void Commit()
+    public async Task Commit()
     {
         await _context.SaveChangesAsync();
     }

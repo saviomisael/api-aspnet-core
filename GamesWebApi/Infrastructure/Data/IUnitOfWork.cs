@@ -1,6 +1,9 @@
+using Domain.Repository;
+
 namespace Infrastructure.Data;
 
 public interface IUnitOfWork
 {
-    void Commit();
+    Task Commit();
+    IGenreRepository GenreRepository { get; }
 }
