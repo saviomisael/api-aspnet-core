@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GamesWebApi.Controllers;
 
+[Produces("application/json")]
 [ApiController]
 public class GenreController : ControllerBase
 {
@@ -17,6 +18,25 @@ public class GenreController : ControllerBase
         _service = service;
     }
 
+    /// <summary>
+    /// Creates a genre.
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <remarks>
+    /// Sample request:
+    ///
+    ///     POST /api/v1/genres
+    ///     {
+    ///        "name": "genre"
+    ///     }
+    /// </remarks>
+    /// <returns>The newly created genre.</returns>
+    /// <response code="201">Returns the newly created genre.</response>
+    /// <response code="400">Returns all errors in the request.</response>
+    /// <response code="500">Internal Server Error.</response>
+    [ProducesResponseType(typeof(Genre),StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ErrorResponseDto), 400)]
+    [ProducesResponseType(500)]
     [HttpPost(ApiRoutes.GenreRoutes.Create)]
     public async Task<IActionResult> CreateGenre([FromServices] IValidator<CreateGenreDto> validator,
         [FromBody] CreateGenreDto dto)

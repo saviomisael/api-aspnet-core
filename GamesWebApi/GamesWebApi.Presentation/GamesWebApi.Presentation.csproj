@@ -49,4 +49,8 @@
         <InternalsVisibleTo Include="GamesWebApi.Tests" />
     </ItemGroup>
 
+    <PropertyGroup>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
+
 </Project>

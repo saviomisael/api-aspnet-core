@@ -8,6 +8,8 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 
+ENV ASPNETCORE_ENVIRONMENT=Development
+
 WORKDIR /src
 
 COPY ["GamesWebApi.Presentation/GamesWebApi.Presentation.csproj", "GamesWebApi.Presentation/"]
@@ -31,6 +33,8 @@ FROM build AS publish
 RUN dotnet publish "GamesWebApi.Presentation.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
+
+ENV ASPNETCORE_ENVIRONMENT=Development
 
 WORKDIR /app
 
