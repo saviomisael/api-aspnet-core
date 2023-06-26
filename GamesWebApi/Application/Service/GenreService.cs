@@ -35,4 +35,9 @@ public class GenreService : IGenreService
 
         return genreSaved;
     }
+
+    public ICollection<Genre> GetAll()
+    {
+        return _unitOfWork.GenreRepository.GetAll().ToList();
+    }
 }
