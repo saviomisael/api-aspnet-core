@@ -3,6 +3,7 @@ using Application.Service.Contracts;
 using Domain.Entity;
 using Domain.Repository;
 using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Service;
 
@@ -36,8 +37,8 @@ public class GenreService : IGenreService
         return genreSaved;
     }
 
-    public ICollection<Genre> GetAll()
+    public async Task<ICollection<Genre>> GetAll()
     {
-        return _unitOfWork.GenreRepository.GetAll().ToList();
+        return await _unitOfWork.GenreRepository.GetAll();
     }
 }

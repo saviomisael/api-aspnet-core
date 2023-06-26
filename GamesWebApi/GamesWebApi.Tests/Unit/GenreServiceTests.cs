@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Application.Exception;
 using Application.Service;
@@ -48,5 +49,27 @@ public class GenreServiceTests
 
         result.Should().BeOfType<Genre>();
         result.Name.Should().BeEquivalentTo("action");
+    }
+
+    [Fact]
+    public async Task GetAll_ShouldReturnAllGenres()
+    {
+        _repoMock.Setup(repo => repo.GetAll()).ReturnsAsync(new Genre[]
+        {
+            new Genre("genre 1"),
+            new Genre("genre 2"),
+            new Genre("genre 3"),
+            new Genre("genre 4")
+        }.ToList());
+        
+        var service = new GenreService(new UnitOfWork(_context, _repoMock.Object));
+
+        var result = await service.GetAll();
+
+        result.Count.Should().Be(4);
+        result.FirstOrDefault(x => x.Name == "genre 1").Should().NotBeNull();
+        result.FirstOrDefault(x => x.Name == "genre 2").Should().NotBeNull();
+        result.FirstOrDefault(x => x.Name == "genre 3").Should().NotBeNull();
+        result.FirstOrDefault(x => x.Name == "genre 4").Should().NotBeNull();
     }
 }

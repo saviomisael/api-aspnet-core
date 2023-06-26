@@ -23,8 +23,8 @@ public class GenreRepository : IGenreRepository
         _context.Genres.Add(genre);
     }
 
-    public IQueryable<Genre> GetAll()
+    public async Task<ICollection<Genre>> GetAll()
     {
-        return _context.Genres;
+        return await _context.Genres.ToListAsync();
     }
 }
