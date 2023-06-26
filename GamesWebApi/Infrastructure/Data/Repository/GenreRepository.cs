@@ -22,4 +22,9 @@ public class GenreRepository : IGenreRepository
     {
         _context.Genres.Add(genre);
     }
+
+    public IQueryable<Genre> GetAll()
+    {
+        return _context.Genres;
+    }
 }
