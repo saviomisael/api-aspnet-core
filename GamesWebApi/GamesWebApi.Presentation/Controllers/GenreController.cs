@@ -35,8 +35,8 @@ public class GenreController : ControllerBase
     /// <response code="400">Returns all errors in the request.</response>
     /// <response code="500">Internal Server Error.</response>
     [ProducesResponseType(typeof(Genre),StatusCodes.Status201Created)]
-    [ProducesResponseType(typeof(ErrorResponseDto), 400)]
-    [ProducesResponseType(500)]
+    [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [HttpPost(ApiRoutes.GenreRoutes.Create)]
     public async Task<IActionResult> CreateGenre([FromServices] IValidator<CreateGenreDto> validator,
         [FromBody] CreateGenreDto dto)
@@ -75,6 +75,12 @@ public class GenreController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Gets all genres.
+    /// </summary>
+    /// <returns>Returns all genres.</returns>
+    /// <response code="201">Returns all genres.</response>
+    [ProducesResponseType(typeof(ICollection<Genre>),StatusCodes.Status200OK)]
     [HttpGet(ApiRoutes.GenreRoutes.GetAll)]
     public async Task<IActionResult> GetAll()
     {
