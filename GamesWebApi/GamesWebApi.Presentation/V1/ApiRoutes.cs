@@ -8,5 +8,6 @@ public static class ApiRoutes
     public static class GenreRoutes
     {
         public const string Create = Base + "/genres";
+        public const string GetAll = Base + "/genres";
     }
 }

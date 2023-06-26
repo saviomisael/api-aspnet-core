@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.Entity;
 using FluentAssertions;
 using GamesWebApi.DTO;
 using Infrastructure.Data;
@@ -56,6 +58,26 @@ public class GenreControllerTests : IAsyncLifetime
         var response = await client.PostAsync(ApiRoutes.GenreRoutes.Create, body);
 
         response.StatusCode.Should().Be(HttpStatusCode.Created);
+    }
+
+    [Fact]
+    public async void GetAll_ShouldReturnAllGenresFromDB()
+    {
+        _context.Genres.Add(new Genre("genre 1"));
+        _context.Genres.Add(new Genre("genre 2"));
+        _context.Genres.Add(new Genre("genre 3"));
+        _context.Genres.Add(new Genre("genre 4"));
+        await _context.SaveChangesAsync();
+        
+        var client = _factory.CreateClient();
+
+        var response = await client.GetAsync(ApiRoutes.GenreRoutes.GetAll);
+        var body = response.Content.ReadAsStringAsync().Result;
+        var genresFromBody = JsonConvert.DeserializeObject<ICollection<Genre>>(body);
+
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        genresFromBody.Should().NotBeNull();
+        genresFromBody.Count.Should().Be(4);
     }
 
     private void InitContext()

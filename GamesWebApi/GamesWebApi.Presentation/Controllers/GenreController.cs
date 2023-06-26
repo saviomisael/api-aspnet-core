@@ -74,4 +74,12 @@ public class GenreController : ControllerBase
             return StatusCode(500);
         }
     }
+
+    [HttpGet(ApiRoutes.GenreRoutes.GetAll)]
+    public async Task<IActionResult> GetAll()
+    {
+        var genres = await _service.GetAll();
+
+        return Ok(genres);
+    }
 }
