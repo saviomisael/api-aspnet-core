@@ -82,11 +82,7 @@ public class GenreControllerTests : IAsyncLifetime
 
     private void InitContext()
     {
-        var options = new DbContextOptionsBuilder<AppDbContext>()
-            .UseSqlServer(
-                "Data Source=api_db; Initial Catalog=gamesdb; User Id=SA; Password=123aBc@#;TrustServerCertificate=True;Encrypt=False;")
-            .Options;
-        _context = new AppDbContext(options);
+        _context = new AppDbContext(AppDbContextOptions.GetSqlServerOptions());
     }
 
     private async Task ClearData()
