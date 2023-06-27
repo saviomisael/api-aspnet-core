@@ -27,4 +27,9 @@ public class GenreRepository : IGenreRepository
     {
         return await _context.Genres.ToListAsync();
     }
+
+    public void Delete(Genre genre)
+    {
+        _context.Genres.Remove(genre);
+    }
 }
