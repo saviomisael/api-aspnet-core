@@ -94,6 +94,19 @@ public class GenreControllerTests : IAsyncLifetime
         errors.Errors.Contains("Genre genre not found.").Should().BeTrue();
     }
 
+    [Fact]
+    public async void DeleteByName_ShouldReturnNoContent_WhenGenreIsDeleted()
+    {
+        _context.Genres.Add(new Genre("genre"));
+        await _context.SaveChangesAsync();
+        
+        var client = _factory.CreateClient();
+
+        var result = await client.DeleteAsync(ApiRoutes.GenreRoutes.DeleteByName.Replace("{name}", "genre"));
+
+        result.StatusCode.Should().Be(HttpStatusCode.NoContent);
+    }
+
     private void InitContext()
     {
         _context = new AppDbContext(AppDbContextOptions.GetSqlServerOptions());
