@@ -21,10 +21,7 @@ public class GenreServiceTests
     public GenreServiceTests()
     {
         _repoMock = new Mock<IGenreRepository>();
-        var options = new DbContextOptionsBuilder<AppDbContext>()
-            .UseInMemoryDatabase("database")
-            .Options;
-        _context = new AppDbContext(options);
+        _context = new AppDbContext(AppDbContextOptions.GetInMemoryOptions());
     }
     [Fact]
     public async Task CreateGenre_ShouldThrowGenreAlreadyExistsException()
