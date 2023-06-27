@@ -89,6 +89,15 @@ public class GenreController : ControllerBase
         return Ok(genres);
     }
 
+    /// <summary>
+    /// Deletes a genre.
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns>Deletes a genre.</returns>
+    /// <response code="204">Successfully deleted.</response>
+    /// <response code="404">Genre not found.</response>
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status404NotFound)]
     [HttpDelete(ApiRoutes.GenreRoutes.DeleteByName)]
     public async Task<IActionResult> DeleteByName(string name)
     {
