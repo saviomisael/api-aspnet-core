@@ -4,7 +4,7 @@
 
 Build tests
 
-### `docker compose -f docker-compose.dev.yml up`
+### `docker compose -f docker-compose.dev.yml run gameswebapi dotnet test --collect:"Xplat Code Coverage"`
 
 Run tests
 

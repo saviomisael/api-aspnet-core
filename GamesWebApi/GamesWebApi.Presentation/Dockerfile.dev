@@ -15,5 +15,3 @@ COPY ["Infrastructure/Infrastructure.csproj", "Infrastructure/"]
 RUN dotnet restore "GamesWebApi.Presentation/GamesWebApi.Presentation.csproj"
 
 COPY . .
-
-CMD [ "dotnet", "test", "--collect:\"Xplat Code Coverage\"" ]
