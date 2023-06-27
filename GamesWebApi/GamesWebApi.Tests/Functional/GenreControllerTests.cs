@@ -80,6 +80,20 @@ public class GenreControllerTests : IAsyncLifetime
         genresFromBody.Count.Should().Be(4);
     }
 
+    [Fact]
+    public async void DeleteByName_ShouldReturnNotFound_WhenGenreDoesNotExist()
+    {
+        var client = _factory.CreateClient();
+
+        var result = await client.DeleteAsync(ApiRoutes.GenreRoutes.DeleteByName.Replace("{name}", "genre"));
+        var body = result.Content.ReadAsStringAsync().Result;
+        var errors = JsonConvert.DeserializeObject<ErrorResponseDto>(body);
+
+        result.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        errors.Should().NotBeNull();
+        errors.Errors.Contains("Genre genre not found.").Should().BeTrue();
+    }
+
     private void InitContext()
     {
         _context = new AppDbContext(AppDbContextOptions.GetSqlServerOptions());

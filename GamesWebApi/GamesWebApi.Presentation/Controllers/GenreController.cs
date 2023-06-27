@@ -88,4 +88,21 @@ public class GenreController : ControllerBase
 
         return Ok(genres);
     }
+
+    [HttpDelete(ApiRoutes.GenreRoutes.DeleteByName)]
+    public async Task<IActionResult> DeleteByName(string name)
+    {
+        try
+        {
+            await _service.DeleteByName(name);
+            return NoContent();
+        }
+        catch (GenreNotFoundException e)
+        {
+            var errorsDto = new ErrorResponseDto();
+            errorsDto.Errors.Add(e.Message);
+
+            return NotFound(errorsDto);
+        }
+    }
 }

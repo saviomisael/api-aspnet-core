@@ -9,5 +9,6 @@ public static class ApiRoutes
     {
         public const string Create = Base + "/genres";
         public const string GetAll = Base + "/genres";
+        public const string DeleteByName = Base + "/genres/{name}";
     }
 }
