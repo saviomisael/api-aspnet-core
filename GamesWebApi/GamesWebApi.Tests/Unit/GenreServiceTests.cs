@@ -73,7 +73,7 @@ public class GenreServiceTests
     [Fact]
     public async Task DeleteByName_ShouldThrowGenreNotFoundException_WhenGenreNotExists()
     {
-        _repoMock.Setup(repo => repo.Delete(It.IsAny<Genre>())).Throws(new GenreNotFoundException("genre"));
+        _repoMock.Setup(repo => repo.GetByName(It.IsAny<string>())).ReturnsAsync((Genre?)null);
         
         var service = new GenreService(new UnitOfWork(_context, _repoMock.Object));
 
