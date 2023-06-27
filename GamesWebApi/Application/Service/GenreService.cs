@@ -41,4 +41,17 @@ public class GenreService : IGenreService
     {
         return await _unitOfWork.GenreRepository.GetAll();
     }
+
+    public async Task DeleteByName(string name)
+    {
+        var genre = await _unitOfWork.GenreRepository.GetByName(name);
+
+        if (genre is null)
+        {
+            throw new GenreNotFoundException(name);
+        }
+        
+        _unitOfWork.GenreRepository.Delete(genre);
+        await _unitOfWork.Commit();
+    }
 }

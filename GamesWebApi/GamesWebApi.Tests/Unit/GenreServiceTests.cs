@@ -72,4 +72,14 @@ public class GenreServiceTests
         result.FirstOrDefault(x => x.Name == "genre 3").Should().NotBeNull();
         result.FirstOrDefault(x => x.Name == "genre 4").Should().NotBeNull();
     }
+
+    [Fact]
+    public async Task DeleteByName_ShouldThrowGenreNotFoundException_WhenGenreNotExists()
+    {
+        _repoMock.Setup(repo => repo.Delete(It.IsAny<Genre>())).Throws(new GenreNotFoundException("genre"));
+        
+        var service = new GenreService(new UnitOfWork(_context, _repoMock.Object));
+
+        await service.Invoking(s => s.DeleteByName("genre")).Should().ThrowAsync<GenreNotFoundException>().WithMessage("Genre genre not found.");
+    }
 }
