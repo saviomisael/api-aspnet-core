@@ -39,7 +39,7 @@ public class PlatformController : ControllerBase
     [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [HttpPost(ApiRoutes.PlatformRoutes.Create)]
-    public async Task<IActionResult> CreateGenre([FromServices] IValidator<CreatePlatformDto> validator,
+    public async Task<IActionResult> CreatePlatform([FromServices] IValidator<CreatePlatformDto> validator,
         [FromBody] CreatePlatformDto dto)
     {
         var result = await validator.ValidateAsync(dto);
