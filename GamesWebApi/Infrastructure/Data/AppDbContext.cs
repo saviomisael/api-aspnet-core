@@ -12,8 +12,10 @@ public class AppDbContext : DbContext
     {
         modelBuilder.ApplyConfiguration(new GenreMap());
         modelBuilder.ApplyConfiguration(new PlatformMap());
+        modelBuilder.ApplyConfiguration(new AgeRatingMap());
     }
 
     public DbSet<Genre> Genres { get; set; } = null!;
     public DbSet<Platform> Platforms { get; set; } = null!;
+    public DbSet<AgeRating> AgeRatings { get; set; } = null!;
 }
