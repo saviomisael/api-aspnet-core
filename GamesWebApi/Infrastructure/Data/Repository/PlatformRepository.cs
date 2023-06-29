@@ -22,4 +22,9 @@ public class PlatformRepository : IPlatformRepository
     {
         _context.Platforms.Add(platform);
     }
+
+    public async Task<ICollection<Platform>> GetAllAsync()
+    {
+        return await _context.Platforms.ToListAsync();
+    }
 }
