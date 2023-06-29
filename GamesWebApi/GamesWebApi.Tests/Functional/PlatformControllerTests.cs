@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Mime;
@@ -72,6 +73,25 @@ public class PlatformControllerTests : IAsyncLifetime
 
         response.StatusCode.Should().Be(HttpStatusCode.Created);
         platformResponse.Name.Should().Be("xbox");
+    }
+
+    [Fact]
+    public async void GetAll_ShouldReturnAllPlatformsFromDb()
+    {
+        _context.Add(new Platform("platform 1"));
+        _context.Add(new Platform("platform 2"));
+        _context.Add(new Platform("platform 3"));
+        _context.Add(new Platform("platform 4"));
+        await _context.SaveChangesAsync();
+        
+        var client = _factory.CreateClient();
+
+        var response = await client.GetAsync(ApiRoutes.PlatformRoutes.GetAll);
+
+        var platforms = ConvertResponseHelper.ToObject<ICollection<Platform>>(response);
+
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        platforms.Count.Should().Be(4);
     }
 
     public async Task InitializeAsync()
