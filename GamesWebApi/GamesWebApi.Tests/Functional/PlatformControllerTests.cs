@@ -36,8 +36,7 @@ public class PlatformControllerTests : IAsyncLifetime
             Name = "ba"
         };
 
-        var body = new StringContent(JsonConvert.SerializeObject(platformDto), Encoding.UTF8, "application/json");
-        var response = await client.PostAsync(ApiRoutes.PlatformRoutes.Create, body);
+        var response = await client.PostAsync(ApiRoutes.PlatformRoutes.Create, ConvertRequestHelper.ToJson(platformDto));
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
@@ -52,10 +51,7 @@ public class PlatformControllerTests : IAsyncLifetime
 
         var dto = new CreatePlatformDto { Name = "xbox" };
 
-        var request = new StringContent(JsonConvert.SerializeObject(dto), Encoding.UTF8,
-            MediaTypeNames.Application.Json);
-
-        var response = await client.PostAsync(ApiRoutes.PlatformRoutes.Create, request);
+        var response = await client.PostAsync(ApiRoutes.PlatformRoutes.Create, ConvertRequestHelper.ToJson(dto));
         
         var errorsFromBody = ConvertResponseHelper.ToObject<ErrorResponseDto>(response);
 
@@ -69,10 +65,8 @@ public class PlatformControllerTests : IAsyncLifetime
         var client = _factory.CreateClient();
 
         var dto = new CreatePlatformDto { Name = "xbox" };
-        var request = new StringContent(JsonConvert.SerializeObject(dto), Encoding.UTF8,
-            MediaTypeNames.Application.Json);
 
-        var response = await client.PostAsync(ApiRoutes.PlatformRoutes.Create, request);
+        var response = await client.PostAsync(ApiRoutes.PlatformRoutes.Create, ConvertRequestHelper.ToJson(dto));
 
         var platformResponse = ConvertResponseHelper.ToObject<Platform>(response);
 
