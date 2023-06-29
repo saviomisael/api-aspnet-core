@@ -45,7 +45,10 @@ public class PlatformService : IPlatformService
     {
         var platform = await _unitOfWork.PlatformRepository.GetByNameAsync(name);
 
-        if (platform is null) return;
+        if (platform is null)
+        {
+            throw new PlatformNotFoundException(name);
+        }
         
         _unitOfWork.PlatformRepository.DeleteByName(platform);
     }

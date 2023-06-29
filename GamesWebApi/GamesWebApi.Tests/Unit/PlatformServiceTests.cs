@@ -59,4 +59,14 @@ public class PlatformServiceTests
         
         await service.DeleteByNameAsync("platform");
     }
+
+    [Fact]
+    public async void DeleteByNameAsync_ShouldThrowPlatformNotFoundException()
+    {
+        _platformRepoMock.Setup(x => x.GetByNameAsync(It.IsAny<string>())).ReturnsAsync((Platform?)null);
+
+        var service = new PlatformService(new UnitOfWork(_context, _genreRepoMock.Object, _platformRepoMock.Object));
+
+        await service.Invoking(x => x.DeleteByNameAsync(It.IsAny<string>())).Should().ThrowAsync<PlatformNotFoundException>();
+    }
 }
