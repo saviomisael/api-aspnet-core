@@ -6,8 +6,9 @@ namespace GamesWebApi.IoC;
 
 public static class ValidatorExtensions
 {
-    public static void AddValidatorDependecies(this IServiceCollection service)
+    public static void AddValidatorDependencies(this IServiceCollection service)
     {
         service.AddScoped<IValidator<CreateGenreDto>, CreateGenreValidator>();
+        service.AddScoped<IValidator<CreatePlatformDto>, CreatePlatformValidator>();
     }
 }

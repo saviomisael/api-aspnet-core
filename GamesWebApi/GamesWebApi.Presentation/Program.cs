@@ -26,7 +26,7 @@ builder.Services.AddCors(opt =>
 
 builder.Services.AddInfraDependencies();
 builder.Services.AddAppDependencies();
-builder.Services.AddValidatorDependecies();
+builder.Services.AddValidatorDependencies();
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen(options =>
 {
