@@ -15,7 +15,7 @@ public class GenreService : IGenreService
     
     public async Task<Genre> CreateGenre(Genre genre)
     {
-        var genreFromDb = await _unitOfWork.GenreRepository.GetByName(genre.Name);
+        var genreFromDb = await _unitOfWork.GenreRepository.GetByNameAsync(genre.Name);
 
         if (genreFromDb != null)
         {
@@ -25,7 +25,7 @@ public class GenreService : IGenreService
         _unitOfWork.GenreRepository.CreateGenre(genre);
         await _unitOfWork.Commit();
 
-        var genreSaved = await _unitOfWork.GenreRepository.GetByName(genre.Name);
+        var genreSaved = await _unitOfWork.GenreRepository.GetByNameAsync(genre.Name);
 
         if (genreSaved is null)
         {
@@ -37,12 +37,12 @@ public class GenreService : IGenreService
 
     public async Task<ICollection<Genre>> GetAll()
     {
-        return await _unitOfWork.GenreRepository.GetAll();
+        return await _unitOfWork.GenreRepository.GetAllAsync();
     }
 
     public async Task DeleteByName(string name)
     {
-        var genre = await _unitOfWork.GenreRepository.GetByName(name);
+        var genre = await _unitOfWork.GenreRepository.GetByNameAsync(name);
 
         if (genre is null)
         {

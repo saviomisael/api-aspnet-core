@@ -13,7 +13,7 @@ public class PlatformRepository : IPlatformRepository
         _context = context;
     }
     
-    public async Task<Platform?> GetByName(string name)
+    public async Task<Platform?> GetByNameAsync(string name)
     {
         return await _context.Platforms.FirstOrDefaultAsync(x => x.Name == name);
     }

@@ -4,8 +4,8 @@ namespace Domain.Repository;
 
 public interface IGenreRepository
 {
-    Task<Genre?> GetByName(string name);
+    Task<Genre?> GetByNameAsync(string name);
     void CreateGenre(Genre genre);
-    Task<ICollection<Genre>> GetAll();
+    Task<ICollection<Genre>> GetAllAsync();
     void Delete(Genre genre);
 }

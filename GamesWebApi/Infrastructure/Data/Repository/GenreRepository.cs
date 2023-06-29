@@ -13,7 +13,7 @@ public class GenreRepository : IGenreRepository
         _context = context;
     }
 
-    public async Task<Genre?> GetByName(string name)
+    public async Task<Genre?> GetByNameAsync(string name)
     {
         return await _context.Genres.FirstOrDefaultAsync(g => g.Name == name);
     }
@@ -23,7 +23,7 @@ public class GenreRepository : IGenreRepository
         _context.Genres.Add(genre);
     }
 
-    public async Task<ICollection<Genre>> GetAll()
+    public async Task<ICollection<Genre>> GetAllAsync()
     {
         return await _context.Genres.ToListAsync();
     }

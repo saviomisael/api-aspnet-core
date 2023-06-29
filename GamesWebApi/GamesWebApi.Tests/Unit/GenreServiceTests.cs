@@ -26,7 +26,7 @@ public class GenreServiceTests
     [Fact]
     public async Task CreateGenre_ShouldThrowGenreAlreadyExistsException()
     {
-        _repoMock.Setup(repository => repository.GetByName(It.IsAny<string>())).Throws(new GenreAlreadyExistsException("test"));
+        _repoMock.Setup(repository => repository.GetByNameAsync(It.IsAny<string>())).Throws(new GenreAlreadyExistsException("test"));
         
         var service = new GenreService(new UnitOfWork(_context, _repoMock.Object, _platformRepoMock.Object));
 
@@ -38,7 +38,7 @@ public class GenreServiceTests
     [Fact]
     public async Task CreateGenre_ShouldCreateAGenre()
     {
-        _repoMock.SetupSequence(repo => repo.GetByName(It.IsAny<string>())).ReturnsAsync((Genre?)null).ReturnsAsync(new Genre("action"));
+        _repoMock.SetupSequence(repo => repo.GetByNameAsync(It.IsAny<string>())).ReturnsAsync((Genre?)null).ReturnsAsync(new Genre("action"));
 
         var service = new GenreService(new UnitOfWork(_context, _repoMock.Object, _platformRepoMock.Object));
         
@@ -51,7 +51,7 @@ public class GenreServiceTests
     [Fact]
     public async Task GetAll_ShouldReturnAllGenres()
     {
-        _repoMock.Setup(repo => repo.GetAll()).ReturnsAsync(new[]
+        _repoMock.Setup(repo => repo.GetAllAsync()).ReturnsAsync(new[]
         {
             new Genre("genre 1"),
             new Genre("genre 2"),
@@ -73,7 +73,7 @@ public class GenreServiceTests
     [Fact]
     public async Task DeleteByName_ShouldThrowGenreNotFoundException_WhenGenreNotExists()
     {
-        _repoMock.Setup(repo => repo.GetByName(It.IsAny<string>())).ReturnsAsync((Genre?)null);
+        _repoMock.Setup(repo => repo.GetByNameAsync(It.IsAny<string>())).ReturnsAsync((Genre?)null);
         
         var service = new GenreService(new UnitOfWork(_context, _repoMock.Object, _platformRepoMock.Object));
 

@@ -4,6 +4,6 @@ namespace Domain.Repository;
 
 public interface IPlatformRepository
 {
-    Task<Platform?> GetByName(string name);
+    Task<Platform?> GetByNameAsync(string name);
     void CreatePlatform(Platform platform);
 }

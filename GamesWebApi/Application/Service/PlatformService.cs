@@ -16,7 +16,7 @@ public class PlatformService : IPlatformService
 
     public async Task<Platform> CreatePlatform(Platform platform)
     {
-        var platformAlreadyExists = await _unitOfWork.PlatformRepository.GetByName(platform.Name);
+        var platformAlreadyExists = await _unitOfWork.PlatformRepository.GetByNameAsync(platform.Name);
 
         if (platformAlreadyExists != null)
         {
@@ -26,7 +26,7 @@ public class PlatformService : IPlatformService
         _unitOfWork.PlatformRepository.CreatePlatform(platform);
         await _unitOfWork.Commit();
 
-        var platformFromDb = await _unitOfWork.PlatformRepository.GetByName(platform.Name);
+        var platformFromDb = await _unitOfWork.PlatformRepository.GetByNameAsync(platform.Name);
 
         if (platformFromDb is null)
         {

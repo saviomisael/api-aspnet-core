@@ -27,7 +27,7 @@ public class PlatformServiceTests
     [Fact]
     public async void CreatePlatform_ShouldThrowsPlatformAlreadyExistsException_WhenPlatformAlreadyExists()
     {
-        _platformRepoMock.Setup(x => x.GetByName(It.IsAny<string>())).ReturnsAsync(new Platform("platform"));
+        _platformRepoMock.Setup(x => x.GetByNameAsync(It.IsAny<string>())).ReturnsAsync(new Platform("platform"));
 
         var service = new PlatformService(new UnitOfWork(_context, _genreRepoMock.Object, _platformRepoMock.Object));
 
@@ -38,7 +38,7 @@ public class PlatformServiceTests
     [Fact]
     public async void CreatePlatform_ShouldReturnNewlyPlatform_WhenPlatformDoesNotAlreadyExist()
     {
-        _platformRepoMock.SetupSequence(repo => repo.GetByName(It.IsAny<string>())).ReturnsAsync((Platform?)null)
+        _platformRepoMock.SetupSequence(repo => repo.GetByNameAsync(It.IsAny<string>())).ReturnsAsync((Platform?)null)
             .ReturnsAsync(new Platform("xbox"));
 
         var service = new PlatformService(new UnitOfWork(_context, _genreRepoMock.Object, _platformRepoMock.Object));
