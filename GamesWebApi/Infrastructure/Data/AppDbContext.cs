@@ -11,7 +11,9 @@ public class AppDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new GenreMap());
+        modelBuilder.ApplyConfiguration(new PlatformMap());
     }
 
     public DbSet<Genre> Genres { get; set; } = null!;
+    public DbSet<Platform> Platforms { get; set; } = null!;
 }
