@@ -1,4 +1,4 @@
-namespace GamesWebApi;
+namespace GamesWebApi.V1;
 
 public static class ApiRoutes
 {
@@ -10,5 +10,10 @@ public static class ApiRoutes
         public const string Create = Base + "/genres";
         public const string GetAll = Base + "/genres";
         public const string DeleteByName = Base + "/genres/{name}";
+    }
+
+    public static class PlatformRoutes
+    {
+        public const string Create = Base + "/platforms";
     }
 }

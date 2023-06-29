@@ -3,6 +3,7 @@ using Application.Service.Contracts;
 using Domain.Entity;
 using FluentValidation;
 using GamesWebApi.DTO;
+using GamesWebApi.V1;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GamesWebApi.Controllers;
@@ -51,7 +52,7 @@ public class GenreController : ControllerBase
             {
                 Errors = errors.ToList()
             };
-            return BadRequest(errors);
+            return BadRequest(errorDto);
         }
 
         try
