@@ -48,4 +48,15 @@ public class PlatformServiceTests
         result.Should().BeOfType<Platform>();
         result.Name.Should().Be("xbox");
     }
+
+    [Fact]
+    public async void DeleteByNameAsync_ShouldDeleteAPlatform()
+    {
+        _platformRepoMock.Setup(x => x.GetByNameAsync(It.IsAny<string>())).ReturnsAsync(new Platform("platform"));
+        _platformRepoMock.Setup(x => x.DeleteByName(It.IsAny<Platform>())).Verifiable();
+        
+        var service = new PlatformService(new UnitOfWork(_context, _genreRepoMock.Object, _platformRepoMock.Object));
+        
+        await service.DeleteByNameAsync("platform");
+    }
 }

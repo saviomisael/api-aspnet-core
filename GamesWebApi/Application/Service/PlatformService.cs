@@ -40,4 +40,13 @@ public class PlatformService : IPlatformService
     {
         return await _unitOfWork.PlatformRepository.GetAllAsync();
     }
+
+    public async Task DeleteByNameAsync(string name)
+    {
+        var platform = await _unitOfWork.PlatformRepository.GetByNameAsync(name);
+
+        if (platform is null) return;
+        
+        _unitOfWork.PlatformRepository.DeleteByName(platform);
+    }
 }
