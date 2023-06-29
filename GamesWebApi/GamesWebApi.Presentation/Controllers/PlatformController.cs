@@ -94,8 +94,18 @@ public class PlatformController : ControllerBase
     [HttpDelete(ApiRoutes.PlatformRoutes.DeleteByName)]
     public async Task<IActionResult> DeleteByName(string name)
     {
-        await _platformService.DeleteByNameAsync(name);
+        try
+        {
+            await _platformService.DeleteByNameAsync(name);
 
-        return NoContent();
+            return NoContent();
+        }
+        catch (PlatformNotFoundException e)
+        {
+            var errorDto = new ErrorResponseDto();
+            errorDto.Errors.Add(e.Message);
+            
+            return NotFound(errorDto);
+        }
     }
 }

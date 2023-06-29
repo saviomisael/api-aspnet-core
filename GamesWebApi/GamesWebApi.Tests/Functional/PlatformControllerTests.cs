@@ -107,6 +107,16 @@ public class PlatformControllerTests : IAsyncLifetime
         response.StatusCode.Should().Be(HttpStatusCode.NoContent);
     }
 
+    [Fact]
+    public async void DeleteByName_ShouldReturnNotFound_WhenPlatformDoesNotExist()
+    {
+        var client = _factory.CreateClient();
+
+        var response = await client.DeleteAsync(ApiRoutes.PlatformRoutes.DeleteByName.Replace("{name}", "xbox"));
+
+        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+    }
+
     public async Task InitializeAsync()
     {
         await _context.Database.ExecuteSqlRawAsync("DELETE FROM Platforms");
