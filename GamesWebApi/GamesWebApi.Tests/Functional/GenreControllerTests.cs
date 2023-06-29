@@ -86,8 +86,7 @@ public class GenreControllerTests : IAsyncLifetime
         var client = _factory.CreateClient();
 
         var result = await client.DeleteAsync(ApiRoutes.GenreRoutes.DeleteByName.Replace("{name}", "genre"));
-        var body = result.Content.ReadAsStringAsync().Result;
-        var errors = JsonConvert.DeserializeObject<ErrorResponseDto>(body);
+        var errors = ConvertResponseHelper.ToObject<ErrorResponseDto>(result);
 
         result.StatusCode.Should().Be(HttpStatusCode.NotFound);
         errors.Should().NotBeNull();
