@@ -32,7 +32,7 @@ public class PlatformController : ControllerBase
     ///     }
     /// </remarks>
     /// <returns>The newly created genre.</returns>
-    /// <response code="201">Returns the newly created genre.</response>
+    /// <response code="201">Returns the newly created platform.</response>
     /// <response code="400">Returns all errors in the request.</response>
     /// <response code="500">Internal Server Error.</response>
     [ProducesResponseType(typeof(Platform),StatusCodes.Status201Created)]
