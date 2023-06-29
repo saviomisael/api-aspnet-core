@@ -16,5 +16,6 @@ public static class ApiRoutes
     {
         public const string Create = Base + "/platforms";
         public const string GetAll = Base + "/platforms";
+        public const string DeleteByName = Base + "/platforms/{name}";
     }
 }

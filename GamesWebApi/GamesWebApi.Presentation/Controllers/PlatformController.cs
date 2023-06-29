@@ -89,4 +89,13 @@ public class PlatformController : ControllerBase
 
         return Ok(platforms);
     }
+
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [HttpDelete(ApiRoutes.PlatformRoutes.DeleteByName)]
+    public async Task<IActionResult> DeleteByName(string name)
+    {
+        await _platformService.DeleteByNameAsync(name);
+
+        return NoContent();
+    }
 }
