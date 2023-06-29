@@ -1,3 +1,5 @@
+using System;
+using System.Threading.Tasks;
 using Application.Exception;
 using Application.Service;
 using Domain.Entity;
@@ -31,5 +33,19 @@ public class PlatformServiceTests
 
         await service.Invoking(x => x.CreatePlatform(new Platform("platform"))).Should()
             .ThrowAsync<PlatformAlreadyExistsException>().WithMessage("Platform platform already exists.");
+    }
+
+    [Fact]
+    public async void CreatePlatform_ShouldReturnNewlyPlatform_WhenPlatformDoesNotAlreadyExist()
+    {
+        _platformRepoMock.SetupSequence(repo => repo.GetByName(It.IsAny<string>())).ReturnsAsync((Platform?)null)
+            .ReturnsAsync(new Platform("xbox"));
+
+        var service = new PlatformService(new UnitOfWork(_context, _genreRepoMock.Object, _platformRepoMock.Object));
+
+        var result = await service.CreatePlatform(new Platform("xbox"));
+
+        result.Should().BeOfType<Platform>();
+        result.Name.Should().Be("xbox");
     }
 }

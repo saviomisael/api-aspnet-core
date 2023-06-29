@@ -7,7 +7,7 @@ namespace Application.Service;
 
 public class PlatformService : IPlatformService
 {
-    private IUnitOfWork _unitOfWork;
+    private readonly IUnitOfWork _unitOfWork;
 
     public PlatformService(IUnitOfWork unitOfWork)
     {
@@ -16,7 +16,7 @@ public class PlatformService : IPlatformService
 
     public async Task<Platform> CreatePlatform(Platform platform)
     {
-        var platformAlreadyExists = _unitOfWork.PlatformRepository.GetByName(platform.Name);
+        var platformAlreadyExists = await _unitOfWork.PlatformRepository.GetByName(platform.Name);
 
         if (platformAlreadyExists != null)
         {
@@ -33,6 +33,6 @@ public class PlatformService : IPlatformService
             throw new InternalServerErrorException();
         }
 
-        return platform;
+        return platformFromDb;
     }
 }
