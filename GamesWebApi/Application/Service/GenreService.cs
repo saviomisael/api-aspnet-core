@@ -1,9 +1,7 @@
 using Application.Exception;
 using Application.Service.Contracts;
 using Domain.Entity;
-using Domain.Repository;
 using Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Service;
 

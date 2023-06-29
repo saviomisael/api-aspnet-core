@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Exception;
@@ -7,7 +6,6 @@ using Domain.Entity;
 using Domain.Repository;
 using FluentAssertions;
 using Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
 using Moq;
 using Xunit;
 
@@ -53,7 +51,7 @@ public class GenreServiceTests
     [Fact]
     public async Task GetAll_ShouldReturnAllGenres()
     {
-        _repoMock.Setup(repo => repo.GetAll()).ReturnsAsync(new Genre[]
+        _repoMock.Setup(repo => repo.GetAll()).ReturnsAsync(new[]
         {
             new Genre("genre 1"),
             new Genre("genre 2"),
