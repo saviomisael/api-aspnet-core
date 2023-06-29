@@ -75,4 +75,18 @@ public class PlatformController : ControllerBase
             return StatusCode(500);
         }
     }
+    
+    /// <summary>
+    /// Gets all platforms.
+    /// </summary>
+    /// <returns>Returns all platforms.</returns>
+    /// <response code="200">Returns all platforms.</response>
+    [ProducesResponseType(typeof(ICollection<Platform>),StatusCodes.Status200OK)]
+    [HttpGet(ApiRoutes.PlatformRoutes.GetAll)]
+    public async Task<IActionResult> GetAll()
+    {
+        var platforms = await _platformService.GetAllAsync();
+
+        return Ok(platforms);
+    }
 }
