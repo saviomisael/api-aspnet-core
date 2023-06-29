@@ -42,6 +42,10 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
+using var scope = app.Services.CreateScope();
+var dataSeeder = scope.ServiceProvider.GetService<DataSeeder>();
+dataSeeder?.Seed();
+
 app.UseCors("cors_api");
 
 app.MapControllers();

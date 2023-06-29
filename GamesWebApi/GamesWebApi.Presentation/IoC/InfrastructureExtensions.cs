@@ -11,5 +11,6 @@ public static class InfrastructureExtensions
         service.AddScoped<IGenreRepository, GenreRepository>();
         service.AddScoped<IPlatformRepository, PlatformRepository>();
         service.AddScoped<IUnitOfWork, UnitOfWork>();
+        service.AddTransient<DataSeeder>();
     }
 }
