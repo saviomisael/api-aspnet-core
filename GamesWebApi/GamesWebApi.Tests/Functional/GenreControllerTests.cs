@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Domain.Entity;
 using FluentAssertions;
 using GamesWebApi.DTO;
+using GamesWebApi.V1;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
