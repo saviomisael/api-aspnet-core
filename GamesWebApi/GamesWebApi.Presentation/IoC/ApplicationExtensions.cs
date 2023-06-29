@@ -9,5 +9,6 @@ public static class ApplicationExtensions
     {
         service.AddScoped<IGenreService, GenreService>();
         service.AddScoped<IPlatformService, PlatformService>();
+        service.AddScoped<IAgeRatingService, AgeRatingService>();
     }
 }
