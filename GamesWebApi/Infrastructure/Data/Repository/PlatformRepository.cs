@@ -27,4 +27,9 @@ public class PlatformRepository : IPlatformRepository
     {
         return await _context.Platforms.ToListAsync();
     }
+
+    public void DeleteByName(Platform platform)
+    {
+        _context.Platforms.Remove(platform);
+    }
 }

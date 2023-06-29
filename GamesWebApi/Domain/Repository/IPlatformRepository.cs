@@ -7,4 +7,5 @@ public interface IPlatformRepository
     Task<Platform?> GetByNameAsync(string name);
     void CreatePlatform(Platform platform);
     Task<ICollection<Platform>> GetAllAsync();
+    void DeleteByName(Platform platform);
 }
