@@ -6,4 +6,5 @@ public interface IUnitOfWork
 {
     Task Commit();
     IGenreRepository GenreRepository { get; }
+    IPlatformRepository PlatformRepository { get; }
 }
