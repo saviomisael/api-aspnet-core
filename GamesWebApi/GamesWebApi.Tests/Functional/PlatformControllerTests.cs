@@ -63,6 +63,23 @@ public class PlatformControllerTests : IAsyncLifetime
         errorsFromBody.Errors.Contains("Platform xbox already exists.").Should().BeTrue();
     }
 
+    [Fact]
+    public async void CreatePlatform_ShouldReturnCreated_WhenRequestIsValid()
+    {
+        var client = _factory.CreateClient();
+
+        var dto = new CreatePlatformDto { Name = "xbox" };
+        var request = new StringContent(JsonConvert.SerializeObject(dto), Encoding.UTF8,
+            MediaTypeNames.Application.Json);
+
+        var response = await client.PostAsync(ApiRoutes.PlatformRoutes.Create, request);
+
+        var platformResponse = ConvertResponseHelper.ToObject<Platform>(response);
+
+        response.StatusCode.Should().Be(HttpStatusCode.Created);
+        platformResponse.Name.Should().Be("xbox");
+    }
+
     public async Task InitializeAsync()
     {
         await _context.Database.ExecuteSqlRawAsync("DELETE FROM Platforms");
