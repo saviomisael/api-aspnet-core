@@ -1,6 +1,6 @@
 using Application.Exception;
-using Application.Service.Contracts;
 using Domain.Entity;
+using Domain.Service;
 using FluentValidation;
 using GamesWebApi.DTO;
 using GamesWebApi.V1;

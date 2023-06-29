@@ -1,6 +1,6 @@
 using Domain.Entity;
 
-namespace Application.Service.Contracts;
+namespace Domain.Service;
 
 public interface IPlatformService
 {

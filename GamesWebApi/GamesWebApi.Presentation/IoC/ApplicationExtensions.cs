@@ -1,5 +1,5 @@
 using Application.Service;
-using Application.Service.Contracts;
+using Domain.Service;
 
 namespace GamesWebApi.IoC;
 

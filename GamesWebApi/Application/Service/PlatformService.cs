@@ -1,6 +1,6 @@
 using Application.Exception;
-using Application.Service.Contracts;
 using Domain.Entity;
+using Domain.Service;
 using Infrastructure.Data;
 
 namespace Application.Service;
