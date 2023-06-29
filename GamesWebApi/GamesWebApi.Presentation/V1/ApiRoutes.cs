@@ -18,4 +18,9 @@ public static class ApiRoutes
         public const string GetAll = Base + "/platforms";
         public const string DeleteByName = Base + "/platforms/{name}";
     }
+
+    public static class AgeRatingRoutes
+    {
+        public const string GetAll = Base + "/age-ratings";
+    }
 }
