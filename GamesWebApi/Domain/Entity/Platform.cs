@@ -2,5 +2,10 @@ namespace Domain.Entity;
 
 public class Platform : AggregateRoot
 {
-    public string Name { get; set; } = default!;
+    public string Name { get; }
+
+    public Platform(string name)
+    {
+        Name = name;
+    }
 }
