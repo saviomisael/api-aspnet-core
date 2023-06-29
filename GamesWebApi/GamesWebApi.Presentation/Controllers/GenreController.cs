@@ -80,7 +80,7 @@ public class GenreController : ControllerBase
     /// Gets all genres.
     /// </summary>
     /// <returns>Returns all genres.</returns>
-    /// <response code="201">Returns all genres.</response>
+    /// <response code="200">Returns all genres.</response>
     [ProducesResponseType(typeof(ICollection<Genre>),StatusCodes.Status200OK)]
     [HttpGet(ApiRoutes.GenreRoutes.GetAll)]
     public async Task<IActionResult> GetAll()
