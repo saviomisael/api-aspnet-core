@@ -12,5 +12,6 @@ public class PlatformMap : IEntityTypeConfiguration<Platform>
         builder.Property(x => x.Id).HasMaxLength(36).HasColumnName("PlatformId");
         builder.HasKey(x => x.Id).HasName("Id").HasName("PlatformId");
         builder.Property(x => x.Name).HasMaxLength(255).IsRequired();
+        builder.HasIndex(x => x.Name).IsUnique();
     }
 }
