@@ -58,7 +58,7 @@ public class GenreController : ControllerBase
         {
             var genre = new Genre(dto.Name);
 
-            var genreSaved = await _service.CreateGenre(genre);
+            var genreSaved = await _service.CreateGenreAsync(genre);
 
             return Created(ApiRoutes.GenreRoutes.Create, genreSaved);
         }
@@ -84,7 +84,7 @@ public class GenreController : ControllerBase
     [HttpGet(ApiRoutes.GenreRoutes.GetAll)]
     public async Task<IActionResult> GetAll()
     {
-        var genres = await _service.GetAll();
+        var genres = await _service.GetAllAsync();
 
         return Ok(genres);
     }
@@ -103,7 +103,7 @@ public class GenreController : ControllerBase
     {
         try
         {
-            await _service.DeleteByName(name);
+            await _service.DeleteByNameAsync(name);
             return NoContent();
         }
         catch (GenreNotFoundException e)

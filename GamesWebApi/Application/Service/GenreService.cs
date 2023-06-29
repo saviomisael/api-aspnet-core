@@ -13,7 +13,7 @@ public class GenreService : IGenreService
         _unitOfWork = unitOfWork;
     }
     
-    public async Task<Genre> CreateGenre(Genre genre)
+    public async Task<Genre> CreateGenreAsync(Genre genre)
     {
         var genreFromDb = await _unitOfWork.GenreRepository.GetByNameAsync(genre.Name);
 
@@ -35,12 +35,12 @@ public class GenreService : IGenreService
         return genreSaved;
     }
 
-    public async Task<ICollection<Genre>> GetAll()
+    public async Task<ICollection<Genre>> GetAllAsync()
     {
         return await _unitOfWork.GenreRepository.GetAllAsync();
     }
 
-    public async Task DeleteByName(string name)
+    public async Task DeleteByNameAsync(string name)
     {
         var genre = await _unitOfWork.GenreRepository.GetByNameAsync(name);
 

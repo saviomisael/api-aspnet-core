@@ -4,5 +4,6 @@ namespace Application.Service.Contracts;
 
 public interface IPlatformService
 {
-    Task<Platform> CreatePlatform(Platform platform);
+    Task<Platform> CreatePlatformAsync(Platform platform);
+    Task<ICollection<Platform>> GetAllAsync();
 }

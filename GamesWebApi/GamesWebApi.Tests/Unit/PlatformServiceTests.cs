@@ -31,7 +31,7 @@ public class PlatformServiceTests
 
         var service = new PlatformService(new UnitOfWork(_context, _genreRepoMock.Object, _platformRepoMock.Object));
 
-        await service.Invoking(x => x.CreatePlatform(new Platform("platform"))).Should()
+        await service.Invoking(x => x.CreatePlatformAsync(new Platform("platform"))).Should()
             .ThrowAsync<PlatformAlreadyExistsException>().WithMessage("Platform platform already exists.");
     }
 
@@ -43,7 +43,7 @@ public class PlatformServiceTests
 
         var service = new PlatformService(new UnitOfWork(_context, _genreRepoMock.Object, _platformRepoMock.Object));
 
-        var result = await service.CreatePlatform(new Platform("xbox"));
+        var result = await service.CreatePlatformAsync(new Platform("xbox"));
 
         result.Should().BeOfType<Platform>();
         result.Name.Should().Be("xbox");

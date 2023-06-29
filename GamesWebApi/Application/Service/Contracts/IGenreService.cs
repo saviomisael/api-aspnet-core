@@ -4,7 +4,7 @@ namespace Application.Service.Contracts;
 
 public interface IGenreService
 {
-    Task<Genre> CreateGenre(Genre genre);
-    Task<ICollection<Genre>> GetAll();
-    Task DeleteByName(string name);
+    Task<Genre> CreateGenreAsync(Genre genre);
+    Task<ICollection<Genre>> GetAllAsync();
+    Task DeleteByNameAsync(string name);
 }

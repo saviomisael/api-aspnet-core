@@ -14,7 +14,7 @@ public class PlatformService : IPlatformService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<Platform> CreatePlatform(Platform platform)
+    public async Task<Platform> CreatePlatformAsync(Platform platform)
     {
         var platformAlreadyExists = await _unitOfWork.PlatformRepository.GetByNameAsync(platform.Name);
 
@@ -34,5 +34,10 @@ public class PlatformService : IPlatformService
         }
 
         return platformFromDb;
+    }
+
+    public async Task<ICollection<Platform>> GetAllAsync()
+    {
+        return await _unitOfWork.PlatformRepository.GetAllAsync();
     }
 }

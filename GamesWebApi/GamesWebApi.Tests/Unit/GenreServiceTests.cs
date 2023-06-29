@@ -30,7 +30,7 @@ public class GenreServiceTests
         
         var service = new GenreService(new UnitOfWork(_context, _repoMock.Object, _platformRepoMock.Object));
 
-        await service.Invoking(x => x.CreateGenre(new Genre("test")))
+        await service.Invoking(x => x.CreateGenreAsync(new Genre("test")))
             .Should().ThrowAsync<GenreAlreadyExistsException>()
             .WithMessage("Genre test already exists.");
     }
@@ -42,7 +42,7 @@ public class GenreServiceTests
 
         var service = new GenreService(new UnitOfWork(_context, _repoMock.Object, _platformRepoMock.Object));
         
-        var result = await service.CreateGenre(new Genre("action"));
+        var result = await service.CreateGenreAsync(new Genre("action"));
 
         result.Should().BeOfType<Genre>();
         result.Name.Should().BeEquivalentTo("action");
@@ -61,7 +61,7 @@ public class GenreServiceTests
         
         var service = new GenreService(new UnitOfWork(_context, _repoMock.Object, _platformRepoMock.Object));
 
-        var result = await service.GetAll();
+        var result = await service.GetAllAsync();
 
         result.Count.Should().Be(4);
         result.FirstOrDefault(x => x.Name == "genre 1").Should().NotBeNull();
@@ -77,6 +77,6 @@ public class GenreServiceTests
         
         var service = new GenreService(new UnitOfWork(_context, _repoMock.Object, _platformRepoMock.Object));
 
-        await service.Invoking(s => s.DeleteByName("genre")).Should().ThrowAsync<GenreNotFoundException>().WithMessage("Genre genre not found.");
+        await service.Invoking(s => s.DeleteByNameAsync("genre")).Should().ThrowAsync<GenreNotFoundException>().WithMessage("Genre genre not found.");
     }
 }
