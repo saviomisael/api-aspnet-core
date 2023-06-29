@@ -57,8 +57,7 @@ public class PlatformControllerTests : IAsyncLifetime
 
         var response = await client.PostAsync(ApiRoutes.PlatformRoutes.Create, request);
         
-        var body = response.Content.ReadAsStringAsync().Result;
-        var errorsFromBody = JsonConvert.DeserializeObject<ErrorResponseDto>(body);
+        var errorsFromBody = ConvertResponseHelper.ToObject<ErrorResponseDto>(response);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         errorsFromBody.Errors.Contains("Platform xbox already exists.").Should().BeTrue();
