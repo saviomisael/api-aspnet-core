@@ -36,9 +36,7 @@ public class GenreControllerTests : IAsyncLifetime
             Name = "a"
         };
 
-        var content = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
-
-        var response = await client.PostAsync(ApiRoutes.GenreRoutes.Create, content);
+        var response = await client.PostAsync(ApiRoutes.GenreRoutes.Create, ConvertRequestHelper.ToJson(request));
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
@@ -53,9 +51,7 @@ public class GenreControllerTests : IAsyncLifetime
             Name = "genre"
         };
 
-        var body = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
-
-        var response = await client.PostAsync(ApiRoutes.GenreRoutes.Create, body);
+        var response = await client.PostAsync(ApiRoutes.GenreRoutes.Create, ConvertRequestHelper.ToJson(request));
 
         response.StatusCode.Should().Be(HttpStatusCode.Created);
     }
@@ -72,8 +68,7 @@ public class GenreControllerTests : IAsyncLifetime
         var client = _factory.CreateClient();
 
         var response = await client.GetAsync(ApiRoutes.GenreRoutes.GetAll);
-        var body = response.Content.ReadAsStringAsync().Result;
-        var genresFromBody = JsonConvert.DeserializeObject<ICollection<Genre>>(body);
+        var genresFromBody = ConvertResponseHelper.ToObject<ICollection<Genre>>(response);
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         genresFromBody.Should().NotBeNull();
