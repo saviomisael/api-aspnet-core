@@ -23,6 +23,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     });
 });
 builder.Services.AddInfraDependencies();
+builder.Services.AddApplicationDependencies();
 
 builder.Services.AddCors(opt =>
 {
