@@ -1,4 +1,5 @@
 using ImagesServer.Extensions;
+using ImagesServer.IoC;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +17,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         );
     });
 });
+builder.Services.AddInfraDependencies();
 
 builder.Services.AddCors(opt =>
 {
