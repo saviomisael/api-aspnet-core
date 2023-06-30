@@ -1,17 +1,14 @@
 ## Commands
 
-### `docker compose -f docker-compose.dev.yml build --no-cache`
+### Run tests
+1. `cd ../ImagesServer && docker compose up -d`
+2. `cd ../GamesWebApi && dotnet test --collect:"Xplat Code Coverage"`
 
-Build tests
+### Build project
 
-### `docker compose -f docker-compose.dev.yml run gameswebapi dotnet test --collect:"Xplat Code Coverage"`
+- `dotnet restore`
 
-Run tests
-
-### `docker compose build --no-cache`
-
-Build project
-
-### `docker compose up`
-
-Run application
+### Run application
+1. `cd ../ImagesServer && docker compose up -d`
+2. `cd ../GamesWebApi/GamesWebApi.Presentation && dotnet run`
+3. Acessar [http://localhost:5002/swagger/index.html](http://localhost:5002/swagger/index.html)

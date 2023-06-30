@@ -7,11 +7,11 @@ services:
     ports:
       - "3000:80"
     depends_on:
-      images_db:
+      db:
         condition: service_healthy
     networks:
       - images_server
-  images_db:
+  db:
     image: mcr.microsoft.com/mssql/server:2022-latest
     user: root
     restart: always
@@ -23,7 +23,7 @@ services:
       interval: 1s
       retries: 20
     ports:
-      - "1434:1433"
+      - "1433:1433"
     networks:
       - images_server
 
