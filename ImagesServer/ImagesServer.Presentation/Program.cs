@@ -1,9 +1,14 @@
+using Application.Options;
 using ImagesServer.Extensions;
 using ImagesServer.IoC;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var domainOptions = new DomainOptions();
+builder.Configuration.GetSection("DomainOptions").Bind(domainOptions);
+builder.Services.AddSingleton(domainOptions);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
