@@ -1,3 +1,6 @@
+## Description
+An Images Server tested with Postman.
+
 ## Commands
 
 ### Run application
