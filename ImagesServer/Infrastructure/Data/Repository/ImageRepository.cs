@@ -24,4 +24,9 @@ public class ImageRepository : IImageRepository
 
         return image != null;
     }
+
+    public async Task<Image?> GetImage(string name)
+    {
+        return await _context.Images.FirstOrDefaultAsync(x => x.Name == name);
+    }
 }
