@@ -19,12 +19,12 @@ public class ImageService : IImageService
     
     public async Task<ImageResponseDto> CreateImageAsync(Image image)
     {
-        var nameAlreadyExists = await _unitOfWork.ImageRepository.ImageAlreadyExists(image.Name);
+        var nameAlreadyExists = await _unitOfWork.ImageRepository.ImageAlreadyExistsAsync(image.Name);
 
         while (nameAlreadyExists)
         {
             image.GenerateNewName();
-            nameAlreadyExists = await _unitOfWork.ImageRepository.ImageAlreadyExists(image.Name);
+            nameAlreadyExists = await _unitOfWork.ImageRepository.ImageAlreadyExistsAsync(image.Name);
         }
         
         _unitOfWork.ImageRepository.SaveImage(image);

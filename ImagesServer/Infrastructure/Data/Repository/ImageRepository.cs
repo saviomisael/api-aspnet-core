@@ -18,14 +18,14 @@ public class ImageRepository : IImageRepository
         _context.Images.Add(image);
     }
 
-    public async Task<bool> ImageAlreadyExists(string imageName)
+    public async Task<bool> ImageAlreadyExistsAsync(string imageName)
     {
         var image = await _context.Images.FirstOrDefaultAsync(x => x.Name == imageName);
 
         return image != null;
     }
 
-    public async Task<Image?> GetImage(string name)
+    public async Task<Image?> GetImageAsync(string name)
     {
         return await _context.Images.FirstOrDefaultAsync(x => x.Name == name);
     }
