@@ -1,5 +1,7 @@
+using System.Net;
 using System.Net.Mime;
 using Domain.Entity;
+using Domain.Repository;
 using Domain.Service;
 using ImagesServer.DTO;
 using ImagesServer.V1;
@@ -12,10 +14,12 @@ public class ImageController : ControllerBase
 {
     private const decimal FiveMb = 5 * 1024 * 1024;
     private readonly IImageService _service;
+    private readonly IImageRepository _repository;
 
-    public ImageController(IImageService service)
+    public ImageController(IImageService service, IImageRepository repository)
     {
         _service = service;
+        _repository = repository;
     }
 
     [Produces(MediaTypeNames.Application.Json)]
@@ -38,17 +42,28 @@ public class ImageController : ControllerBase
             errorsDto.Errors.Add("Image must have no more than 5 MB.");
             return BadRequest(errorsDto);
         }
-
-        var filePath = Path.GetTempFileName();
-        await using var stream = System.IO.File.Create(filePath);
-        await image.CopyToAsync(stream);
+        
         using var memoryStream = new MemoryStream();
-        await stream.CopyToAsync(memoryStream);
+        await image.OpenReadStream().CopyToAsync(memoryStream);
 
         var imageDomain = new Image(image.ContentType.Split("/")[1], memoryStream.ToArray());
 
         var response = await _service.CreateImageAsync(imageDomain);
-        
+
         return Created(ApiRoutes.Images.CreateImage, response);
+    }
+
+    [Produces(MediaTypeNames.Image.Jpeg, "image/jpg", "image/png", MediaTypeNames.Application.Json)]
+    [HttpGet(ApiRoutes.Images.GetImage)]
+    public async Task<IActionResult> GetImage(string name)
+    {
+        var image = await _repository.GetImageAsync(name);
+        
+        if (image is null)
+        {
+            return NotFound();
+        }
+
+        return new FileContentResult(image.Content, $"image/{image.Extension}");
     }
 }
