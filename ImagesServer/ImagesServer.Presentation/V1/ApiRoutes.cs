@@ -9,5 +9,6 @@ public static class ApiRoutes
     public static class Images
     {
         public const string CreateImage = Base + "/images";
+        public const string GetImage = Base + "/images/{name}";
     }
 }
