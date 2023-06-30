@@ -2,4 +2,4 @@
 
 ### Run application
 1. `docker compose up`
-2. Criar o banco de dados no container `CREATE DATABASE GamesDB;`. Pode usar o DBeaver.
+2. Create database in container `CREATE DATABASE GamesDB;`. You can use DBeaver.
