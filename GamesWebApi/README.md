@@ -1,14 +1,16 @@
 ## Commands
 
 ### Run tests
-1. `cd ../ImagesServer && docker compose up -d`
-2. `cd ../GamesWebApi && dotnet test --collect:"Xplat Code Coverage"`
+1. `docker compose up -d`
+2. Criar o banco de dados no container `CREATE DATABASE GamesDB;`. Pode usar o DBeaver.
+3. `cd ../GamesWebApi && dotnet test --collect:"Xplat Code Coverage"`
 
 ### Build project
 
 - `dotnet restore`
 
 ### Run application
-1. `cd ../ImagesServer && docker compose up -d`
-2. `cd ../GamesWebApi/GamesWebApi.Presentation && dotnet run`
-3. Acessar [http://localhost:5002/swagger/index.html](http://localhost:5002/swagger/index.html)
+1. `docker compose up -d`
+2. Criar o banco de dados no container `CREATE DATABASE GamesDB;`. Pode usar o DBeaver.
+3. `cd ../GamesWebApi/GamesWebApi.Presentation && dotnet run`
+4. Acessar [http://localhost:5002/swagger/index.html](http://localhost:5002/swagger/index.html)
