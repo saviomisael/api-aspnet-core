@@ -61,7 +61,9 @@ public class ImageController : ControllerBase
         
         if (image is null)
         {
-            return NotFound();
+            var errorDto = new ErrorsDto();
+            errorDto.Errors.Add("Image not found.");
+            return NotFound(errorDto);
         }
 
         return new FileContentResult(image.Content, $"image/{image.Extension}");
