@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Mime;
+using Domain.DTO;
 using Domain.Entity;
 using Domain.Repository;
 using Domain.Service;
@@ -22,7 +23,16 @@ public class ImageController : ControllerBase
         _repository = repository;
     }
 
+    /// <summary>
+    /// Save an image.
+    /// </summary>
+    /// <param name="image"></param>
+    /// <returns>The url of image saved.</returns>
+    /// <response code="415">Server only support images of type jpeg, jpg, and png.</response>
     [Produces(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(typeof(ErrorsDto), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status415UnsupportedMediaType)]
+    [ProducesResponseType(typeof(ImageResponseDto), StatusCodes.Status201Created)]
     [HttpPost(ApiRoutes.Images.CreateImage)]
     public async Task<IActionResult> CreateImage(IFormFile image)
     {
@@ -30,10 +40,7 @@ public class ImageController : ControllerBase
 
         if (!extensionIsValid)
         {
-            var errorsDto = new ErrorsDto();
-            errorsDto.Errors.Add("Image must be jpeg, jpg, or png.");
-
-            return BadRequest(errorsDto);
+            return new UnsupportedMediaTypeResult();
         }
 
         if (image.Length > FiveMb)
@@ -54,6 +61,7 @@ public class ImageController : ControllerBase
     }
 
     [Produces(MediaTypeNames.Image.Jpeg, "image/jpg", "image/png", MediaTypeNames.Application.Json)]
+    [ProducesResponseType(typeof(ErrorsDto), StatusCodes.Status404NotFound)]
     [HttpGet(ApiRoutes.Images.GetImage)]
     public async Task<IActionResult> GetImage(string name)
     {
