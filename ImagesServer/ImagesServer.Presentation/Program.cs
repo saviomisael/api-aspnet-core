@@ -8,6 +8,11 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.Limits.MaxRequestBodySize = 5 * 1024 * 1024;
+});
+
 var domainOptions = new DomainOptions();
 builder.Configuration.GetSection("DomainOptions").Bind(domainOptions);
 builder.Services.AddSingleton(domainOptions);
