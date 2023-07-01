@@ -3,7 +3,6 @@ namespace GamesWebApi.DTO;
 public class CreateGameDto
 {
     public string Name { get; set; } = string.Empty;
-    public string UrlImage { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public decimal Price { get; set; }
     public DateTime ReleaseDate { get; set; }
