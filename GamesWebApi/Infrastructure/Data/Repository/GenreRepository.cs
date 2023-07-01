@@ -32,4 +32,11 @@ public class GenreRepository : IGenreRepository
     {
         _context.Genres.Remove(genre);
     }
+
+    public async Task<bool> GenreExistsAsync(string genreId)
+    {
+        var genre = await _context.Genres.FirstOrDefaultAsync(x => x.Id == genreId);
+
+        return genre != null;
+    }
 }
