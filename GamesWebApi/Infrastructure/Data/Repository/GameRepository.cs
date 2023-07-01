@@ -12,7 +12,7 @@ public class GameRepository : IGameRepository
         _context = context;
     }
     
-    public void saveGame(Game game)
+    public void SaveGame(Game game)
     {
         _context.Games.Add(game);
     }

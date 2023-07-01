@@ -4,5 +4,5 @@ namespace Domain.Repository;
 
 public interface IGameRepository
 {
-    void saveGame(Game game);
+    void SaveGame(Game game);
 }
