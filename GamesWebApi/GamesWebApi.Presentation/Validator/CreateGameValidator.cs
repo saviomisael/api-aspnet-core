@@ -21,6 +21,7 @@ public class CreateGameValidator : AbstractValidator<CreateGameDto>
             .WithMessage("Platforms provided must have at least 1 platform and no more than 4 platforms.");
         RuleFor(x => x.Image.Length).Must(HasLengthLessThanOrEqualFiveMb).WithMessage("Image too big.");
         RuleFor(x => x.Image.ContentType).Must(IsImageMediaTypeSupported).WithMessage("Image type not supported.");
+        RuleFor(x => x.AgeRatingId).NotEmpty().WithMessage("Age rating must be provided.");
     }
 
     private bool BeAValidDate(DateTime date) => !date.Equals(default);

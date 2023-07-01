@@ -2,7 +2,7 @@ namespace Domain.Entity;
 
 public abstract class AggregateRoot
 {
-    public string Id { get; }
+    public string Id { get; set; }
 
     protected AggregateRoot()
     {
