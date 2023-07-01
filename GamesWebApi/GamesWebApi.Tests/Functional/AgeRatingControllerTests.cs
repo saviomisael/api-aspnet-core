@@ -13,12 +13,10 @@ namespace GamesWebApi.Tests.Functional;
 public class AgeRatingControllerTests
 {
     private readonly WebApplicationFactory<Program> _factory;
-    private readonly AppDbContext _context;
 
     public AgeRatingControllerTests()
     {
         _factory = new WebApplicationFactory<Program>();
-        _context = new AppDbContext(AppDbContextOptions.GetSqlServerOptions());
     }
 
     [Fact]
