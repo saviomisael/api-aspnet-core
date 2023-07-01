@@ -15,7 +15,7 @@ public class ImagesServerApiClient : IImagesServerApiClient
         _httpClientFactory = factory;
     }
 
-    public async Task<ImageResponseDto?> PostImage(Stream imageStream, string contentType, string imageName)
+    public async Task<ImageResponseDto?> PostImageAsync(Stream imageStream, string contentType, string imageName)
     {
         var httpClient = _httpClientFactory.CreateClient("ImagesServer");
 
