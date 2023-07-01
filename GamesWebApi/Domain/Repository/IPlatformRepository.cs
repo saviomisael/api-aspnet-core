@@ -8,4 +8,5 @@ public interface IPlatformRepository
     void CreatePlatform(Platform platform);
     Task<ICollection<Platform>> GetAllAsync();
     void DeleteByName(Platform platform);
+    Task<bool> PlatformExistsAsync(string platformId);
 }
