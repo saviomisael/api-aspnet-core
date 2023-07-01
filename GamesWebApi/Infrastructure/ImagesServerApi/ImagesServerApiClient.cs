@@ -17,9 +17,9 @@ public class ImagesServerApiClient : IImagesServerApiClient
         _client.BaseAddress = new Uri(options.BaseUrl);
     }
 
-    public async Task<ImageResponseDto?> PostImageAsync(Stream imageStream, string contentType, string imageName)
+    public async Task<ImageResponseDto?> PostImageAsync(byte[] imageBytes, string contentType, string imageName)
     {
-        var imageContent = new StreamContent(imageStream);
+        var imageContent = new ByteArrayContent(imageBytes);
         imageContent.Headers.ContentType = new MediaTypeHeaderValue(contentType);
 
         using MultipartFormDataContent multipartContent = new();

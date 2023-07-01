@@ -38,7 +38,9 @@ public class GameController : ControllerBase
             return BadRequest(errorsDto);
         }
 
-        var image = await _apiClient.PostImageAsync(dto.Image.OpenReadStream(), dto.Image.ContentType,
+        using var memoryStream = new MemoryStream();
+        await dto.Image.OpenReadStream().CopyToAsync(memoryStream);
+        var image = await _apiClient.PostImageAsync(memoryStream.ToArray(), dto.Image.ContentType,
             dto.Image.FileName);
 
         if (image is null)
