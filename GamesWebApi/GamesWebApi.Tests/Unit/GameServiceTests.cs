@@ -64,4 +64,27 @@ public class GameServiceTests
 
         await service.Invoking(x => x.CreateGame(game)).Should().ThrowAsync<GenreNotFoundException>();
     }
+
+    [Fact]
+    public async void CreateGame_ShouldThrowPlatformNotFoundException_WhenPlatformDoesNotExist()
+    {
+        _ageRepoMock.Setup(x => x.AgeExistsAsync(It.IsAny<string>())).ReturnsAsync(true);
+        _genreRepoMock.Setup(x => x.GenreExistsAsync(It.IsAny<string>())).ReturnsAsync(true);
+        _platformRepoMock.Setup(x => x.PlatformExistsAsync(It.IsAny<string>())).ReturnsAsync(false);
+
+        _unitOfWork.AgeRatingRepository = _ageRepoMock.Object;
+        _unitOfWork.GenreRepository = _genreRepoMock.Object;
+        _unitOfWork.PlatformRepository = _platformRepoMock.Object;
+
+        var service = new GameService(_unitOfWork);
+
+        var game = new Game
+        {
+            AgeRating = new AgeRating("3+", "description"),
+            Genres = new List<Genre>() { new("genre") },
+            Platforms = new List<Platform>() { new("platform") }
+        };
+        
+        await service.Invoking(x => x.CreateGame(game)).Should().ThrowAsync<PlatformNotFoundException>();
+    }
 }
