@@ -23,4 +23,9 @@ public static class ApiRoutes
     {
         public const string GetAll = Base + "/age-ratings";
     }
+
+    public static class GameRoutes
+    {
+        public const string CreateGame = Base + "/games";
+    }
 }
