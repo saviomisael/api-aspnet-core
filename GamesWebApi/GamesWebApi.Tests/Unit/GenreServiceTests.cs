@@ -14,14 +14,13 @@ namespace GamesWebApi.Tests.Unit;
 public class GenreServiceTests
 {
     private readonly Mock<IGenreRepository> _repoMock;
-    private readonly AppDbContext _context;
     private readonly IUnitOfWork _unitOfWork;
 
     public GenreServiceTests()
     {
         _repoMock = new Mock<IGenreRepository>();
-        _context = new AppDbContext(AppDbContextOptions.GetInMemoryOptions());
-        _unitOfWork = new UnitOfWork(_context);
+        var context = new AppDbContext(AppDbContextOptions.GetInMemoryOptions());
+        _unitOfWork = new UnitOfWork(context);
     }
     [Fact]
     public async Task CreateGenre_ShouldThrowGenreAlreadyExistsException()

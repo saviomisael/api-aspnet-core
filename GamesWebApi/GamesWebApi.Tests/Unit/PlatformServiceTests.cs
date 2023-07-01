@@ -14,14 +14,13 @@ namespace GamesWebApi.Tests.Unit;
 public class PlatformServiceTests
 {
     private readonly Mock<IPlatformRepository> _platformRepoMock;
-    private readonly AppDbContext _context;
     private readonly IUnitOfWork _unitOfWork;
 
     public PlatformServiceTests()
     {
         _platformRepoMock = new Mock<IPlatformRepository>();
-        _context = new AppDbContext(AppDbContextOptions.GetInMemoryOptions());
-        _unitOfWork = new UnitOfWork(_context);
+        var context = new AppDbContext(AppDbContextOptions.GetInMemoryOptions());
+        _unitOfWork = new UnitOfWork(context);
     }
 
     [Fact]
