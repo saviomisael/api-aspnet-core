@@ -1,5 +1,6 @@
 using System.Reflection;
 using GamesWebApi.IoC;
+using GamesWebApi.Options;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -22,6 +23,11 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 builder.Services.AddCors(opt =>
 {
     opt.AddPolicy("cors_api", policy => { policy.WithOrigins("*").AllowAnyMethod().AllowAnyHeader(); });
+});
+builder.Services.AddHttpClient("ImagesServer", httpClient =>
+{
+    httpClient.BaseAddress =
+        new Uri(builder.Configuration.GetValue<ImagesServerOptions>("ImagesServerOptions").BaseUrl);
 });
 
 builder.Services.AddInfraDependencies();
