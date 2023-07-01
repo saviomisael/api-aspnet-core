@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Application.Exception;
 using Application.Service;
 using Domain.Entity;
@@ -16,7 +17,7 @@ public class GameServiceTests
     private readonly Mock<IGenreRepository> _genreRepoMock;
     private readonly Mock<IPlatformRepository> _platformRepoMock;
     private readonly IUnitOfWork _unitOfWork;
-    
+
     public GameServiceTests()
     {
         _gameRepoMock = new Mock<IGameRepository>();
@@ -28,7 +29,7 @@ public class GameServiceTests
     }
 
     [Fact]
-    public async void CreateGame_ShouldThrowAgeRatingNotFoundException_WhenAgeDoesNotExist()
+    public async void CreateGame_ShouldThrowAgeNotFoundException_WhenAgeDoesNotExist()
     {
         _ageRepoMock.Setup(x => x.AgeExistsAsync(It.IsAny<string>())).ReturnsAsync(false);
 
@@ -42,5 +43,25 @@ public class GameServiceTests
         };
 
         await service.Invoking(x => x.CreateGame(game)).Should().ThrowAsync<AgeNotFoundException>();
+    }
+
+    [Fact]
+    public async void CreateGame_ShouldThrowGenreNotFoundException_WhenGenreDoesNotExist()
+    {
+        _ageRepoMock.Setup(x => x.AgeExistsAsync(It.IsAny<string>())).ReturnsAsync(true);
+        _genreRepoMock.Setup(x => x.GenreExistsAsync(It.IsAny<string>())).ReturnsAsync(false);
+
+        _unitOfWork.AgeRatingRepository = _ageRepoMock.Object;
+        _unitOfWork.GenreRepository = _genreRepoMock.Object;
+
+        var service = new GameService(_unitOfWork);
+
+        var game = new Game
+        {
+            AgeRating = new AgeRating("3+", "description"),
+            Genres = new List<Genre>() { new("genre") }
+        };
+
+        await service.Invoking(x => x.CreateGame(game)).Should().ThrowAsync<GenreNotFoundException>();
     }
 }
