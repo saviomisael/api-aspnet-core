@@ -5,10 +5,10 @@ namespace Infrastructure.Data;
 public class UnitOfWork : IUnitOfWork
 {
     private readonly AppDbContext _context;
-    public IGenreRepository GenreRepository { get; }
-    public IPlatformRepository PlatformRepository { get; }
-    public IAgeRatingRepository AgeRatingRepository { get; }
-    public IGameRepository GameRepository { get; }
+    public IGenreRepository GenreRepository { get; set; } = null!;
+    public IPlatformRepository PlatformRepository { get; set; } = null!;
+    public IAgeRatingRepository AgeRatingRepository { get; set; } = null!;
+    public IGameRepository GameRepository { get; set; } = null!;
 
     public UnitOfWork(AppDbContext context, IGenreRepository genreRepository, IPlatformRepository platformRepository, IAgeRatingRepository ageRatingRepository, IGameRepository gameRepository)
     {
@@ -17,6 +17,11 @@ public class UnitOfWork : IUnitOfWork
         PlatformRepository = platformRepository;
         AgeRatingRepository = ageRatingRepository;
         GameRepository = gameRepository;
+    }
+
+    public UnitOfWork(AppDbContext context)
+    {
+        _context = context;
     }
     
     public async Task CommitAsync()

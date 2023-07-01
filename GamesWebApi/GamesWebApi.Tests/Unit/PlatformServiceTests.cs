@@ -13,19 +13,15 @@ namespace GamesWebApi.Tests.Unit;
 
 public class PlatformServiceTests
 {
-    private readonly Mock<IGenreRepository> _genreRepoMock;
     private readonly Mock<IPlatformRepository> _platformRepoMock;
-    private readonly Mock<IAgeRatingRepository> _ageRepoMock;
-    private readonly Mock<IGameRepository> _gameRepoMock;
     private readonly AppDbContext _context;
+    private readonly IUnitOfWork _unitOfWork;
 
     public PlatformServiceTests()
     {
-        _genreRepoMock = new Mock<IGenreRepository>();
         _platformRepoMock = new Mock<IPlatformRepository>();
-        _ageRepoMock = new Mock<IAgeRatingRepository>();
-        _gameRepoMock = new Mock<IGameRepository>();
         _context = new AppDbContext(AppDbContextOptions.GetInMemoryOptions());
+        _unitOfWork = new UnitOfWork(_context);
     }
 
     [Fact]
@@ -33,7 +29,9 @@ public class PlatformServiceTests
     {
         _platformRepoMock.Setup(x => x.GetByNameAsync(It.IsAny<string>())).ReturnsAsync(new Platform("platform"));
 
-        var service = new PlatformService(new UnitOfWork(_context, _genreRepoMock.Object, _platformRepoMock.Object, _ageRepoMock.Object, _gameRepoMock.Object));
+        _unitOfWork.PlatformRepository = _platformRepoMock.Object;
+        
+        var service = new PlatformService(_unitOfWork);
 
         await service.Invoking(x => x.CreatePlatformAsync(new Platform("platform"))).Should()
             .ThrowAsync<PlatformAlreadyExistsException>().WithMessage("Platform platform already exists.");
@@ -45,7 +43,9 @@ public class PlatformServiceTests
         _platformRepoMock.SetupSequence(repo => repo.GetByNameAsync(It.IsAny<string>())).ReturnsAsync((Platform?)null)
             .ReturnsAsync(new Platform("xbox"));
 
-        var service = new PlatformService(new UnitOfWork(_context, _genreRepoMock.Object, _platformRepoMock.Object, _ageRepoMock.Object, _gameRepoMock.Object));
+        _unitOfWork.PlatformRepository = _platformRepoMock.Object;
+        
+        var service = new PlatformService(_unitOfWork);
 
         var result = await service.CreatePlatformAsync(new Platform("xbox"));
 
@@ -59,7 +59,9 @@ public class PlatformServiceTests
         _platformRepoMock.Setup(x => x.GetByNameAsync(It.IsAny<string>())).ReturnsAsync(new Platform("platform"));
         _platformRepoMock.Setup(x => x.DeleteByName(It.IsAny<Platform>())).Verifiable();
         
-        var service = new PlatformService(new UnitOfWork(_context, _genreRepoMock.Object, _platformRepoMock.Object, _ageRepoMock.Object, _gameRepoMock.Object));
+        _unitOfWork.PlatformRepository = _platformRepoMock.Object;
+        
+        var service = new PlatformService(_unitOfWork);
         
         await service.DeleteByNameAsync("platform");
     }
@@ -69,8 +71,10 @@ public class PlatformServiceTests
     {
         _platformRepoMock.Setup(x => x.GetByNameAsync(It.IsAny<string>())).ReturnsAsync((Platform?)null);
 
-        var service = new PlatformService(new UnitOfWork(_context, _genreRepoMock.Object, _platformRepoMock.Object, _ageRepoMock.Object, _gameRepoMock.Object));
-
+        _unitOfWork.PlatformRepository = _platformRepoMock.Object;
+        
+        var service = new PlatformService(_unitOfWork);
+        
         await service.Invoking(x => x.DeleteByNameAsync(It.IsAny<string>())).Should().ThrowAsync<PlatformNotFoundException>();
     }
 }

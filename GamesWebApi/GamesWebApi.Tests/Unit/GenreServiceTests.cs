@@ -14,25 +14,23 @@ namespace GamesWebApi.Tests.Unit;
 public class GenreServiceTests
 {
     private readonly Mock<IGenreRepository> _repoMock;
-    private readonly Mock<IPlatformRepository> _platformRepoMock;
-    private readonly Mock<IAgeRatingRepository> _ageRepoMock;
-    private readonly Mock<IGameRepository> _gameRepoMock;
     private readonly AppDbContext _context;
+    private readonly IUnitOfWork _unitOfWork;
 
     public GenreServiceTests()
     {
         _repoMock = new Mock<IGenreRepository>();
-        _platformRepoMock = new Mock<IPlatformRepository>();
-        _ageRepoMock = new Mock<IAgeRatingRepository>();
-        _gameRepoMock = new Mock<IGameRepository>();
         _context = new AppDbContext(AppDbContextOptions.GetInMemoryOptions());
+        _unitOfWork = new UnitOfWork(_context);
     }
     [Fact]
     public async Task CreateGenre_ShouldThrowGenreAlreadyExistsException()
     {
         _repoMock.Setup(repository => repository.GetByNameAsync(It.IsAny<string>())).Throws(new GenreAlreadyExistsException("test"));
+
+        _unitOfWork.GenreRepository = _repoMock.Object;
         
-        var service = new GenreService(new UnitOfWork(_context, _repoMock.Object, _platformRepoMock.Object, _ageRepoMock.Object, _gameRepoMock.Object));
+        var service = new GenreService(_unitOfWork);
 
         await service.Invoking(x => x.CreateGenreAsync(new Genre("test")))
             .Should().ThrowAsync<GenreAlreadyExistsException>()
@@ -44,7 +42,9 @@ public class GenreServiceTests
     {
         _repoMock.SetupSequence(repo => repo.GetByNameAsync(It.IsAny<string>())).ReturnsAsync((Genre?)null).ReturnsAsync(new Genre("action"));
 
-        var service = new GenreService(new UnitOfWork(_context, _repoMock.Object, _platformRepoMock.Object, _ageRepoMock.Object, _gameRepoMock.Object));
+        _unitOfWork.GenreRepository = _repoMock.Object;
+        
+        var service = new GenreService(_unitOfWork);
         
         var result = await service.CreateGenreAsync(new Genre("action"));
 
@@ -63,7 +63,9 @@ public class GenreServiceTests
             new Genre("genre 4")
         }.ToList());
         
-        var service = new GenreService(new UnitOfWork(_context, _repoMock.Object, _platformRepoMock.Object, _ageRepoMock.Object, _gameRepoMock.Object));
+        _unitOfWork.GenreRepository = _repoMock.Object;
+        
+        var service = new GenreService(_unitOfWork);
 
         var result = await service.GetAllAsync();
 
@@ -79,7 +81,9 @@ public class GenreServiceTests
     {
         _repoMock.Setup(repo => repo.GetByNameAsync(It.IsAny<string>())).ReturnsAsync((Genre?)null);
         
-        var service = new GenreService(new UnitOfWork(_context, _repoMock.Object, _platformRepoMock.Object, _ageRepoMock.Object, _gameRepoMock.Object));
+        _unitOfWork.GenreRepository = _repoMock.Object;
+        
+        var service = new GenreService(_unitOfWork);
 
         await service.Invoking(s => s.DeleteByNameAsync("genre")).Should().ThrowAsync<GenreNotFoundException>().WithMessage("Genre genre not found.");
     }
