@@ -2,20 +2,18 @@ namespace Domain.Entity;
 
 public class Game : AggregateRoot
 {
-    public string Name { get; set; }
-    public string UrlImage { get; set; }
-    public string Description { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string UrlImage { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
     public decimal Price { get; set; }
     public DateTime ReleaseDate { get; set; }
-    public AgeRating AgeRating { get; set; }
-    public string AgeRatingId { get; set; }
-    public ICollection<Genre> Genres { get; set; }
-    public ICollection<Platform> Platforms { get; set; }
+    public AgeRating AgeRating { get; set; } = null!;
+    public string? AgeRatingId { get; set; }
+    public ICollection<Genre> Genres { get; set; } = new List<Genre>();
+    public ICollection<Platform> Platforms { get; set; } = new List<Platform>();
 
     public Game()
-    {
-        
-    }
+    { }
     
     public Game(string name, string urlImage, string description, decimal price, DateTime releaseDate, AgeRating ageRating)
     {
