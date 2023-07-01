@@ -7,6 +7,8 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Mime;
 using System.Text;
+using System.Threading.Tasks;
+using Domain.Entity;
 using FluentAssertions;
 using GamesWebApi.DTO;
 using GamesWebApi.V1;
@@ -21,8 +23,8 @@ namespace GamesWebApi.Tests.Functional;
 
 public class GameControllerTests
 {
-    private AppDbContext _context;
-    private WebApplicationFactory<Program> _factory;
+    private readonly AppDbContext _context;
+    private readonly WebApplicationFactory<Program> _factory;
 
     public GameControllerTests()
     {
