@@ -14,7 +14,7 @@ public class GameService : IGameService
         _unitOfWork = unitOfWork;
     }
     
-    public async Task<Game> CreateGame(Game game)
+    public async Task<Game> CreateGameAsync(Game game)
     {
         var age = await _unitOfWork.AgeRatingRepository.AgeExistsAsync(game.AgeRating.Id);
 

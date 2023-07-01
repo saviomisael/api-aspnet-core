@@ -4,5 +4,5 @@ namespace Domain.Service;
 
 public interface IGameService
 {
-    Task<Game> CreateGame(Game game);
+    Task<Game> CreateGameAsync(Game game);
 }
