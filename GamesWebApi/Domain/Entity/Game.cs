@@ -2,15 +2,21 @@ namespace Domain.Entity;
 
 public class Game : AggregateRoot
 {
-    public string Name { get; }
-    public string UrlImage { get; }
-    public string Description { get; }
-    public decimal Price { get; }
-    public DateTime ReleaseDate { get; }
-    public AgeRating AgeRating { get; }
-    public ICollection<Genre> Genres { get; }
-    public ICollection<Platform> Platforms { get; }
+    public string Name { get; set; }
+    public string UrlImage { get; set; }
+    public string Description { get; set; }
+    public decimal Price { get; set; }
+    public DateTime ReleaseDate { get; set; }
+    public AgeRating AgeRating { get; set; }
+    public string AgeRatingId { get; set; }
+    public ICollection<Genre> Genres { get; set; }
+    public ICollection<Platform> Platforms { get; set; }
 
+    public Game()
+    {
+        
+    }
+    
     public Game(string name, string urlImage, string description, decimal price, DateTime releaseDate, AgeRating ageRating)
     {
         Name = name;
