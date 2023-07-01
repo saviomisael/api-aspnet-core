@@ -2,7 +2,7 @@ namespace Domain.Entity;
 
 public class Genre : AggregateRoot
 {
-    public string Name { get; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
     public ICollection<Game> Games { get; set; } = new List<Game>();
 
     public Genre(string name)

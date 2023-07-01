@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -79,7 +80,7 @@ public class GameControllerTests
 
         var response = await client.PostAsync(ApiRoutes.GameRoutes.CreateGame, multipartFormDataRequest);
         var body = ConvertResponseHelper.ToObject<ErrorResponseDto>(response);
-        
+
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         body.Errors.Contains("Age rating not found.").Should().BeTrue();
     }
@@ -88,7 +89,7 @@ public class GameControllerTests
     public async void CreateGame_ShouldReturnNotFound_WhenGenreDoesNotExist()
     {
         var age = await _context.AgeRatings.FirstAsync();
-        
+
         var client = _factory.CreateClient();
 
         var image = await File.ReadAllBytesAsync("../../../Images/720824.png");
