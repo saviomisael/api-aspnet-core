@@ -1,7 +1,9 @@
 using System.Reflection;
 using GamesWebApi.IoC;
-using GamesWebApi.Options;
 using Infrastructure.Data;
+using Infrastructure.ImagesServerApi;
+using Infrastructure.ImagesServerApi.Contracts;
+using Infrastructure.ImagesServerApi.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -24,16 +26,18 @@ builder.Services.AddCors(opt =>
 {
     opt.AddPolicy("cors_api", policy => { policy.WithOrigins("*").AllowAnyMethod().AllowAnyHeader(); });
 });
-builder.Services.AddHttpClient("ImagesServer", httpClient =>
-{
-    httpClient.BaseAddress =
-        new Uri(builder.Configuration.GetValue<ImagesServerOptions>("ImagesServerOptions").BaseUrl);
-});
+
+var imagesServerOptions = new ImagesServerOptions();
+builder.Configuration.GetSection("ImagesServerOptions").Bind(imagesServerOptions);
+builder.Services.AddSingleton(imagesServerOptions);
+builder.Services.AddHttpClient<IImagesServerApiClient, ImagesServerApiClient>();
 
 builder.Services.AddInfraDependencies();
 builder.Services.AddAppDependencies();
 builder.Services.AddValidatorDependencies();
 builder.Services.AddControllers();
+
+
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo

@@ -1,4 +1,4 @@
-namespace GamesWebApi.Options;
+namespace Infrastructure.ImagesServerApi.Options;
 
 public class ImagesServerOptions
 {

@@ -24,7 +24,7 @@ public class GameController : ControllerBase
     }
 
     [HttpPost(ApiRoutes.GameRoutes.CreateGame)]
-    public async Task<IActionResult> CreateGame([FromServices] IValidator<CreateGameDto> validator, CreateGameDto dto)
+    public async Task<IActionResult> CreateGame([FromServices] IValidator<CreateGameDto> validator, [FromForm] CreateGameDto dto)
     {
         var errors = await validator.ValidateAsync(dto);
 

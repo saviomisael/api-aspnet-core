@@ -2,30 +2,30 @@ using System.Net;
 using System.Net.Http.Headers;
 using Domain.DTO;
 using Infrastructure.ImagesServerApi.Contracts;
+using Infrastructure.ImagesServerApi.Options;
 using Newtonsoft.Json;
 
 namespace Infrastructure.ImagesServerApi;
 
 public class ImagesServerApiClient : IImagesServerApiClient
 {
-    private readonly IHttpClientFactory _httpClientFactory;
+    private readonly HttpClient _client;
 
-    public ImagesServerApiClient(IHttpClientFactory factory)
+    public ImagesServerApiClient(HttpClient client, ImagesServerOptions options)
     {
-        _httpClientFactory = factory;
+        _client = client;
+        _client.BaseAddress = new Uri(options.BaseUrl);
     }
 
     public async Task<ImageResponseDto?> PostImageAsync(Stream imageStream, string contentType, string imageName)
     {
-        var httpClient = _httpClientFactory.CreateClient("ImagesServer");
-
         var imageContent = new StreamContent(imageStream);
         imageContent.Headers.ContentType = new MediaTypeHeaderValue(contentType);
 
         using MultipartFormDataContent multipartContent = new();
         multipartContent.Add(imageContent, "image", imageName);
 
-        using var response = await httpClient.PostAsync("images", multipartContent);
+        using var response = await _client.PostAsync("images", multipartContent);
 
         if (response.StatusCode != HttpStatusCode.Created) return null;
 

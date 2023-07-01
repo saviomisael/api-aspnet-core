@@ -5,7 +5,7 @@ public class CreateGameDto
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public decimal Price { get; set; }
-    public DateTime ReleaseDate { get; set; }
+    public string ReleaseDate { get; set; }
     public string AgeRatingId { get; set; }
     public ICollection<string> Genres { get; set; } = new List<string>();
     public ICollection<string> Platforms { get; set; } = new List<string>();

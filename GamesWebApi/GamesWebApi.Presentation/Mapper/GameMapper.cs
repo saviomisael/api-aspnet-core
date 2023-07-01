@@ -12,7 +12,7 @@ public static class GameMapper
             Name = dto.Name,
             Description = dto.Description,
             Price = dto.Price,
-            ReleaseDate = dto.ReleaseDate,
+            ReleaseDate = DateTime.Parse(dto.ReleaseDate),
             AgeRating = new AgeRating()
             {
                 Id = dto.AgeRatingId
