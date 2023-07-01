@@ -18,6 +18,10 @@ public class AgeRatingController : ControllerBase
         _service = service;
     }
 
+    /// <summary>
+    /// Returns all age ratings.
+    /// </summary>
+    /// <returns>Returns all age ratings.</returns>
     [ProducesResponseType(typeof(ICollection<AgeRating>), StatusCodes.Status200OK)]
     [HttpGet(ApiRoutes.AgeRatingRoutes.GetAll)]
     public async Task<IActionResult> GetAll()
