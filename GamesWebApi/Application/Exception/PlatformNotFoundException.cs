@@ -6,4 +6,9 @@ public class PlatformNotFoundException : System.Exception
     {
         
     }
+
+    public PlatformNotFoundException() : base("Platform not found.")
+    {
+        
+    }
 }
