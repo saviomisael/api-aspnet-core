@@ -42,7 +42,7 @@ public class GameServiceTests
             AgeRating = new AgeRating("3+", "description")
         };
 
-        await service.Invoking(x => x.CreateGame(game)).Should().ThrowAsync<AgeNotFoundException>();
+        await service.Invoking(x => x.CreateGameAsync(game)).Should().ThrowAsync<AgeNotFoundException>();
     }
 
     [Fact]
@@ -62,7 +62,7 @@ public class GameServiceTests
             Genres = new List<Genre>() { new("genre") }
         };
 
-        await service.Invoking(x => x.CreateGame(game)).Should().ThrowAsync<GenreNotFoundException>();
+        await service.Invoking(x => x.CreateGameAsync(game)).Should().ThrowAsync<GenreNotFoundException>();
     }
 
     [Fact]
@@ -85,6 +85,6 @@ public class GameServiceTests
             Platforms = new List<Platform>() { new("platform") }
         };
         
-        await service.Invoking(x => x.CreateGame(game)).Should().ThrowAsync<PlatformNotFoundException>();
+        await service.Invoking(x => x.CreateGameAsync(game)).Should().ThrowAsync<PlatformNotFoundException>();
     }
 }

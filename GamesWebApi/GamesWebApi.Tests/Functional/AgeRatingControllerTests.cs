@@ -32,6 +32,7 @@ public class AgeRatingControllerTests
         var descriptions = bodyParsed.Select(x => x.Description);
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
+        ages.Count().Should().Be(5);
         ages.Contains("3+").Should().BeTrue();
         ages.Contains("7+").Should().BeTrue();
         ages.Contains("12+").Should().BeTrue();
