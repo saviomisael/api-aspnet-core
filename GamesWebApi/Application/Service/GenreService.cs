@@ -23,7 +23,7 @@ public class GenreService : IGenreService
         }
 
         _unitOfWork.GenreRepository.CreateGenre(genre);
-        await _unitOfWork.Commit();
+        await _unitOfWork.CommitAsync();
 
         var genreSaved = await _unitOfWork.GenreRepository.GetByNameAsync(genre.Name);
 
@@ -50,6 +50,6 @@ public class GenreService : IGenreService
         }
         
         _unitOfWork.GenreRepository.Delete(genre);
-        await _unitOfWork.Commit();
+        await _unitOfWork.CommitAsync();
     }
 }

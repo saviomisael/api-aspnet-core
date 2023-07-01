@@ -19,7 +19,7 @@ public class UnitOfWork : IUnitOfWork
         GameRepository = gameRepository;
     }
     
-    public async Task Commit()
+    public async Task CommitAsync()
     {
         await _context.SaveChangesAsync();
     }

@@ -44,7 +44,7 @@ public class GameService : IGameService
         }
         
         _unitOfWork.GameRepository.SaveGame(game);
-        await _unitOfWork.Commit();
+        await _unitOfWork.CommitAsync();
 
         return await _unitOfWork.GameRepository.GetGameByIdAsync(game.Id);
     }

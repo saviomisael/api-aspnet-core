@@ -24,7 +24,7 @@ public class PlatformService : IPlatformService
         }
         
         _unitOfWork.PlatformRepository.CreatePlatform(platform);
-        await _unitOfWork.Commit();
+        await _unitOfWork.CommitAsync();
 
         var platformFromDb = await _unitOfWork.PlatformRepository.GetByNameAsync(platform.Name);
 

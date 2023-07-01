@@ -4,7 +4,7 @@ namespace Infrastructure.Data;
 
 public interface IUnitOfWork
 {
-    Task Commit();
+    Task CommitAsync();
     IGenreRepository GenreRepository { get; }
     IPlatformRepository PlatformRepository { get; }
     IAgeRatingRepository AgeRatingRepository { get; }
