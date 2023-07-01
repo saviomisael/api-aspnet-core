@@ -17,4 +17,11 @@ public class AgeRatingRepository : IAgeRatingRepository
     {
         return await _context.AgeRatings.ToListAsync();
     }
+
+    public async Task<bool> AgeExistsAsync(string ageId)
+    {
+        var age = await _context.AgeRatings.FirstOrDefaultAsync(x => x.Id == ageId);
+
+        return age != null;
+    }
 }
