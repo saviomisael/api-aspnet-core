@@ -37,7 +37,7 @@ public class GenreController : ControllerBase
     /// <response code="201">Returns the newly created genre.</response>
     /// <response code="400">Returns all errors in the request.</response>
     /// <response code="500">Internal Server Error.</response>
-    [ProducesResponseType(typeof(Genre),StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(GenreResponseDto),StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [HttpPost(ApiRoutes.GenreRoutes.Create)]
@@ -63,7 +63,7 @@ public class GenreController : ControllerBase
 
             var genreSaved = await _service.CreateGenreAsync(genre);
 
-            return Created(ApiRoutes.GenreRoutes.Create, genreSaved);
+            return Created(ApiRoutes.GenreRoutes.Create, GenreMapper.FromEntityToGenreResponseDto(genreSaved));
         }
         catch (GenreAlreadyExistsException e)
         {
