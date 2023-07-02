@@ -1,3 +1,4 @@
+using Application.Exceptions;
 using Application.Options;
 using Domain.DTO;
 using Domain.Entity;
@@ -31,5 +32,18 @@ public class ImageService : IImageService
         await _unitOfWork.CommitAsync();
 
         return new ImageResponseDto(image.Name, _domainOptions.Domain + "/api/v1/images/" + image.Name);
+    }
+
+    public async Task DeleteImageAsync(string imageName)
+    {
+        var image = await _unitOfWork.ImageRepository.GetImageAsync(imageName);
+
+        if (image is null)
+        {
+            throw new ImageNotFoundException(imageName);
+        }
+        
+        _unitOfWork.ImageRepository.DeleteImage(image);
+        await _unitOfWork.CommitAsync();
     }
 }
