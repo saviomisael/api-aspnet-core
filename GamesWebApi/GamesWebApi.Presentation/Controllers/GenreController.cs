@@ -37,7 +37,7 @@ public class GenreController : ControllerBase
     /// <response code="201">Returns the newly created genre.</response>
     /// <response code="400">Returns all errors in the request.</response>
     /// <response code="500">Internal Server Error.</response>
-    [ProducesResponseType(typeof(GenreResponseDto),StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(GenreResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [HttpPost(ApiRoutes.GenreRoutes.Create)]
@@ -83,7 +83,7 @@ public class GenreController : ControllerBase
     /// </summary>
     /// <returns>Returns all genres.</returns>
     /// <response code="200">Returns all genres.</response>
-    [ProducesResponseType(typeof(ICollection<GenreResponseDto>),StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ICollection<GenreResponseDto>), StatusCodes.Status200OK)]
     [HttpGet(ApiRoutes.GenreRoutes.GetAll)]
     public async Task<IActionResult> GetAll()
     {
@@ -100,8 +100,10 @@ public class GenreController : ControllerBase
     /// <returns>Deletes a genre.</returns>
     /// <response code="204">Successfully deleted.</response>
     /// <response code="404">Genre not found.</response>
+    /// <response code="409">Exists Games using this genre.</response>
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status409Conflict)]
     [HttpDelete(ApiRoutes.GenreRoutes.DeleteByName)]
     public async Task<IActionResult> DeleteByName(string name)
     {
@@ -116,6 +118,10 @@ public class GenreController : ControllerBase
             errorsDto.Errors.Add(e.Message);
 
             return NotFound(errorsDto);
+        }
+        catch (GenreHasRelatedGamesException e)
+        {
+            return Conflict(new ErrorResponseDto { Errors = { e.Message } });
         }
     }
 }
