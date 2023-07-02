@@ -55,7 +55,7 @@ public class GameController : ControllerBase
         {
             var game = await _service.CreateGameAsync(GameMapper.FromCreateGameDtoToEntity(dto, image.Url));
 
-            return Created(ApiRoutes.GameRoutes.CreateGame, game);
+            return Created(ApiRoutes.GameRoutes.CreateGame, GameMapper.FromEntityToGameResponseDto(game));
         }
         catch (Exception e) when (e is AgeNotFoundException or GenreNotFoundException or PlatformNotFoundException)
         {
