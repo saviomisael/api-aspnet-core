@@ -10,5 +10,6 @@ public static class ApiRoutes
     {
         public const string CreateImage = Base + "/images";
         public const string GetImage = Base + "/images/{name}";
+        public const string DeleteImageByName = Base + "/images/{name}";
     }
 }

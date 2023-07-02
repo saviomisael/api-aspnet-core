@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Mime;
+using Application.Exceptions;
 using Domain.DTO;
 using Domain.Entity;
 using Domain.Repository;
@@ -83,5 +84,19 @@ public class ImageController : ControllerBase
         }
 
         return new FileContentResult(image.Content, $"image/{image.Extension}");
+    }
+
+    [HttpDelete(ApiRoutes.Images.DeleteImageByName)]
+    public async Task<IActionResult> DeleteImage(string name)
+    {
+        try
+        {
+            await _service.DeleteImageAsync(name);
+            return NoContent();
+        }
+        catch (ImageNotFoundException e)
+        {
+            return NotFound(new ErrorsDto { Errors = { e.Message } });
+        }
     }
 }
