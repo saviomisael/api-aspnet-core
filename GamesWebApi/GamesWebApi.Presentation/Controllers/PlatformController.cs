@@ -93,7 +93,14 @@ public class PlatformController : ControllerBase
         return Ok(platformsResponse);
     }
 
+    /// <summary>
+    /// Delete a platform by name.
+    /// </summary>
+    /// <param name="name"></param>
+    /// <response code="204">Deleted platform successfully.</response>
+    /// <response code="404">Platform not found.</response>
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status404NotFound)]
     [HttpDelete(ApiRoutes.PlatformRoutes.DeleteByName)]
     public async Task<IActionResult> DeleteByName(string name)
     {
