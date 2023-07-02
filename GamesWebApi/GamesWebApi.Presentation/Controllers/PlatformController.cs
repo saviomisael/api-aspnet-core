@@ -20,7 +20,7 @@ public class PlatformController : ControllerBase
     {
         _platformService = platformService;
     }
-    
+
     /// <summary>
     /// Creates a platform.
     /// </summary>
@@ -37,7 +37,7 @@ public class PlatformController : ControllerBase
     /// <response code="201">Returns the newly created platform.</response>
     /// <response code="400">Returns all errors in the request.</response>
     /// <response code="500">Internal Server Error.</response>
-    [ProducesResponseType(typeof(PlatformResponseDto),StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(PlatformResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [HttpPost(ApiRoutes.PlatformRoutes.Create)]
@@ -77,13 +77,13 @@ public class PlatformController : ControllerBase
             return StatusCode(500);
         }
     }
-    
+
     /// <summary>
     /// Gets all platforms.
     /// </summary>
     /// <returns>Returns all platforms.</returns>
     /// <response code="200">Returns all platforms.</response>
-    [ProducesResponseType(typeof(ICollection<PlatformResponseDto>),StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ICollection<PlatformResponseDto>), StatusCodes.Status200OK)]
     [HttpGet(ApiRoutes.PlatformRoutes.GetAll)]
     public async Task<IActionResult> GetAll()
     {
@@ -114,8 +114,12 @@ public class PlatformController : ControllerBase
         {
             var errorDto = new ErrorResponseDto();
             errorDto.Errors.Add(e.Message);
-            
+
             return NotFound(errorDto);
+        }
+        catch (PlatformHasRelatedGamesException e)
+        {
+            return Conflict(new ErrorResponseDto { Errors = { e.Message } });
         }
     }
 }
