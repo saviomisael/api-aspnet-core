@@ -57,16 +57,9 @@ public class GameController : ControllerBase
 
             return Created(ApiRoutes.GameRoutes.CreateGame, game);
         }
-        catch (AgeNotFoundException e)
+        catch (Exception e) when (e is AgeNotFoundException or GenreNotFoundException or PlatformNotFoundException)
         {
-            return NotFound(new ErrorResponseDto { Errors = new List<string>() { e.Message } });
-        }
-        catch (GenreNotFoundException e)
-        {
-            return NotFound(new ErrorResponseDto { Errors = new List<string>() { e.Message } });
-        }
-        catch (PlatformNotFoundException e)
-        {
+            await _apiClient.DeleteImageAsync(image.Name);
             return NotFound(new ErrorResponseDto { Errors = new List<string>() { e.Message } });
         }
     }
