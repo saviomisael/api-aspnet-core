@@ -1,7 +1,7 @@
-using System.Net;
 using System.Net.Mime;
-using Domain.Entity;
+using Domain.DTO;
 using Domain.Service;
+using GamesWebApi.Mapper;
 using GamesWebApi.V1;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,11 +22,12 @@ public class AgeRatingController : ControllerBase
     /// Returns all age ratings.
     /// </summary>
     /// <returns>Returns all age ratings.</returns>
-    [ProducesResponseType(typeof(ICollection<AgeRating>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ICollection<AgeRatingResponseDto>), StatusCodes.Status200OK)]
     [HttpGet(ApiRoutes.AgeRatingRoutes.GetAll)]
     public async Task<IActionResult> GetAll()
     {
         var ages = await _service.GetAllAsync();
-        return Ok(ages);
+        var agesResponse = ages.Select(AgeRatingMapper.FromEntityToAgeRatingResponseDto).ToList();
+        return Ok(agesResponse);
     }
 }
