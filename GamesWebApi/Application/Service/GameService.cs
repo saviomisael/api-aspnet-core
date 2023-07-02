@@ -18,6 +18,7 @@ public class GameService : IGameService
     {
         var age = await _unitOfWork.AgeRatingRepository.AgeExistsAsync(game.AgeRating.Id);
         var genresFromDb = new List<Genre>();
+        var platformsFromDb = new List<Platform>();
 
         if (!age)
         {
@@ -41,13 +42,17 @@ public class GameService : IGameService
 
         foreach (var platform in game.Platforms)
         {
-            var exists = await _unitOfWork.PlatformRepository.PlatformExistsAsync(platform.Id);
+            var platformFromDb = await _unitOfWork.PlatformRepository.GetByNameAsync(platform.Name);
 
-            if (!exists)
+            if (platformFromDb is null)
             {
                 throw new PlatformNotFoundException();
             }
+            
+            platformsFromDb.Add(platformFromDb);
         }
+        game.Platforms.Clear();
+        game.Platforms = platformsFromDb;
 
         _unitOfWork.GameRepository.SaveGame(game);
         await _unitOfWork.CommitAsync();

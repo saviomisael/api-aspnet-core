@@ -32,11 +32,4 @@ public class PlatformRepository : IPlatformRepository
     {
         _context.Platforms.Remove(platform);
     }
-
-    public async Task<bool> PlatformExistsAsync(string platformId)
-    {
-        var platform = await _context.Platforms.FirstOrDefaultAsync(x => x.Id == platformId);
-
-        return platform != null;
-    }
 }

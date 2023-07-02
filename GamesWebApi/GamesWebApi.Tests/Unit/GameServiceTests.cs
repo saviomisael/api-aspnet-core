@@ -70,7 +70,7 @@ public class GameServiceTests
     {
         _ageRepoMock.Setup(x => x.AgeExistsAsync(It.IsAny<string>())).ReturnsAsync(true);
         _genreRepoMock.Setup(x => x.GetByNameAsync(It.IsAny<string>())).ReturnsAsync(new Genre("genre"));
-        _platformRepoMock.Setup(x => x.PlatformExistsAsync(It.IsAny<string>())).ReturnsAsync(false);
+        _platformRepoMock.Setup(x => x.GetByNameAsync(It.IsAny<string>())).ReturnsAsync((Platform?)null);
 
         _unitOfWork.AgeRatingRepository = _ageRepoMock.Object;
         _unitOfWork.GenreRepository = _genreRepoMock.Object;
