@@ -49,7 +49,14 @@ public class PlatformService : IPlatformService
         {
             throw new PlatformNotFoundException(name);
         }
-        
+
+        var hasRelatedGames = platform.Games.Any();
+
+        if (hasRelatedGames)
+        {
+            throw new PlatformHasRelatedGamesException(name);
+        }
+
         _unitOfWork.PlatformRepository.DeleteByName(platform);
     }
 }
