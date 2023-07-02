@@ -20,14 +20,14 @@ public static class GameMapper
             UrlImage = imageUrl
         };
 
-        foreach (var genre in dto.Genres)
+        foreach (var name in dto.GenresNames)
         {
-            game.AddGenre(new Genre { Id = genre });
+            game.AddGenre(new Genre { Name = name});
         }
 
-        foreach (var platform in dto.Platforms)
+        foreach (var name in dto.PlatformsNames)
         {
-            game.AddPlatform(new Platform { Id = platform });
+            game.AddPlatform(new Platform { Name = name });
         }
 
         return game;

@@ -69,7 +69,7 @@ public class GameServiceTests
     public async void CreateGame_ShouldThrowPlatformNotFoundException_WhenPlatformDoesNotExist()
     {
         _ageRepoMock.Setup(x => x.AgeExistsAsync(It.IsAny<string>())).ReturnsAsync(true);
-        _genreRepoMock.Setup(x => x.GenreExistsAsync(It.IsAny<string>())).ReturnsAsync(true);
+        _genreRepoMock.Setup(x => x.GetByNameAsync(It.IsAny<string>())).ReturnsAsync(new Genre("genre"));
         _platformRepoMock.Setup(x => x.PlatformExistsAsync(It.IsAny<string>())).ReturnsAsync(false);
 
         _unitOfWork.AgeRatingRepository = _ageRepoMock.Object;

@@ -3,7 +3,7 @@ namespace Domain.Entity;
 public class Platform : AggregateRoot
 {
     public string Name { get; set; } = string.Empty;
-    public ICollection<Game> Games { get; set; } = new List<Game>();
+    public virtual ICollection<Game>? Games { get; set; }
 
     public Platform(string name)
     {

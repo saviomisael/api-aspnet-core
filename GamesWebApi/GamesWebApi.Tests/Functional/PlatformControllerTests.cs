@@ -16,15 +16,16 @@ using Xunit;
 
 namespace GamesWebApi.Tests.Functional;
 
-public class PlatformControllerTests : IAsyncLifetime
+[Collection("Database collection")]
+public class PlatformControllerTests
 {
     private readonly WebApplicationFactory<Program> _factory;
-    private readonly AppDbContext _context;
+    private readonly DatabaseFixture _fixture;
 
-    public PlatformControllerTests()
+    public PlatformControllerTests(DatabaseFixture fixture)
     {
         _factory = new WebApplicationFactory<Program>();
-        _context = new AppDbContext(AppDbContextOptions.GetSqlServerOptions());
+        _fixture = fixture;
     }
 
     [Fact]
@@ -45,19 +46,16 @@ public class PlatformControllerTests : IAsyncLifetime
     [Fact]
     public async void CreatePlatform_ShouldReturnBadRequest_WhenPlatformAlreadyExists()
     {
-        _context.Platforms.Add(new Platform("xbox"));
-        await _context.SaveChangesAsync();
-
         var client = _factory.CreateClient();
 
-        var dto = new CreatePlatformDto { Name = "xbox" };
+        var dto = new CreatePlatformDto { Name = "platform 1" };
 
         var response = await client.PostAsync(ApiRoutes.PlatformRoutes.Create, ConvertRequestHelper.ToJson(dto));
         
         var errorsFromBody = ConvertResponseHelper.ToObject<ErrorResponseDto>(response);
 
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        errorsFromBody.Errors.Contains("Platform xbox already exists.").Should().BeTrue();
+        errorsFromBody.Errors.Contains("Platform platform 1 already exists.").Should().BeTrue();
     }
 
     [Fact]
@@ -65,25 +63,22 @@ public class PlatformControllerTests : IAsyncLifetime
     {
         var client = _factory.CreateClient();
 
-        var dto = new CreatePlatformDto { Name = "xbox" };
+        var dto = new CreatePlatformDto { Name = "xbox5000" };
 
         var response = await client.PostAsync(ApiRoutes.PlatformRoutes.Create, ConvertRequestHelper.ToJson(dto));
 
         var platformResponse = ConvertResponseHelper.ToObject<Platform>(response);
 
         response.StatusCode.Should().Be(HttpStatusCode.Created);
-        platformResponse.Name.Should().Be("xbox");
+        platformResponse.Name.Should().Be("xbox5000");
+
+        _fixture.Context.Platforms.Remove(platformResponse);
+        await _fixture.Context.SaveChangesAsync();
     }
 
     [Fact]
     public async void GetAll_ShouldReturnAllPlatformsFromDb()
     {
-        _context.Add(new Platform("platform 1"));
-        _context.Add(new Platform("platform 2"));
-        _context.Add(new Platform("platform 3"));
-        _context.Add(new Platform("platform 4"));
-        await _context.SaveChangesAsync();
-        
         var client = _factory.CreateClient();
 
         var response = await client.GetAsync(ApiRoutes.PlatformRoutes.GetAll);
@@ -91,15 +86,12 @@ public class PlatformControllerTests : IAsyncLifetime
         var platforms = ConvertResponseHelper.ToObject<ICollection<Platform>>(response);
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        platforms.Count.Should().Be(4);
+        platforms.Count.Should().Be(5);
     }
 
     [Fact]
     public async void DeleteByName_ShouldDeletePlatform()
     {
-        _context.Platforms.Add(new Platform("xbox"));
-        await _context.SaveChangesAsync();
-
         var client = _factory.CreateClient();
 
         var response = await client.DeleteAsync(ApiRoutes.PlatformRoutes.DeleteByName.Replace("{name}", "xbox"));
@@ -112,18 +104,8 @@ public class PlatformControllerTests : IAsyncLifetime
     {
         var client = _factory.CreateClient();
 
-        var response = await client.DeleteAsync(ApiRoutes.PlatformRoutes.DeleteByName.Replace("{name}", "xbox"));
+        var response = await client.DeleteAsync(ApiRoutes.PlatformRoutes.DeleteByName.Replace("{name}", "xbox3000"));
 
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
-    }
-
-    public async Task InitializeAsync()
-    {
-        await _context.Database.ExecuteSqlRawAsync("DELETE FROM Platforms");
-    }
-
-    public async Task DisposeAsync()
-    {
-        await _context.Database.ExecuteSqlRawAsync("DELETE FROM Platforms");
     }
 }

@@ -15,15 +15,16 @@ using Xunit;
 
 namespace GamesWebApi.Tests.Functional;
 
-public class GenreControllerTests : IAsyncLifetime
+[Collection("Database collection")]
+public class GenreControllerTests
 {
     private readonly WebApplicationFactory<Program> _factory;
-    private AppDbContext _context = null!;
+    private readonly DatabaseFixture _fixture;
 
-    public GenreControllerTests()
+    public GenreControllerTests(DatabaseFixture fixture)
     {
         _factory = new WebApplicationFactory<Program>();
-        InitContext();
+        _fixture = fixture;
     }
 
     [Fact]
@@ -48,23 +49,20 @@ public class GenreControllerTests : IAsyncLifetime
 
         var request = new CreateGenreDto()
         {
-            Name = "genre"
+            Name = "genre3000"
         };
 
         var response = await client.PostAsync(ApiRoutes.GenreRoutes.Create, ConvertRequestHelper.ToJson(request));
 
         response.StatusCode.Should().Be(HttpStatusCode.Created);
+        var genre = await _fixture.Context.Genres.FirstAsync(x => x.Name == "genre3000");
+        _fixture.Context.Genres.Remove(genre);
+        await _fixture.Context.SaveChangesAsync();
     }
 
     [Fact]
     public async void GetAll_ShouldReturnAllGenresFromDB()
     {
-        _context.Genres.Add(new Genre("genre 1"));
-        _context.Genres.Add(new Genre("genre 2"));
-        _context.Genres.Add(new Genre("genre 3"));
-        _context.Genres.Add(new Genre("genre 4"));
-        await _context.SaveChangesAsync();
-        
         var client = _factory.CreateClient();
 
         var response = await client.GetAsync(ApiRoutes.GenreRoutes.GetAll);
@@ -72,7 +70,7 @@ public class GenreControllerTests : IAsyncLifetime
 
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         genresFromBody.Should().NotBeNull();
-        genresFromBody.Count.Should().Be(4);
+        genresFromBody.Count.Should().Be(5);
     }
 
     [Fact]
@@ -80,44 +78,21 @@ public class GenreControllerTests : IAsyncLifetime
     {
         var client = _factory.CreateClient();
 
-        var result = await client.DeleteAsync(ApiRoutes.GenreRoutes.DeleteByName.Replace("{name}", "genre"));
+        var result = await client.DeleteAsync(ApiRoutes.GenreRoutes.DeleteByName.Replace("{name}", "genre3000"));
         var errors = ConvertResponseHelper.ToObject<ErrorResponseDto>(result);
 
         result.StatusCode.Should().Be(HttpStatusCode.NotFound);
         errors.Should().NotBeNull();
-        errors.Errors.Contains("Genre genre not found.").Should().BeTrue();
+        errors.Errors.Contains("Genre genre3000 not found.").Should().BeTrue();
     }
 
     [Fact]
     public async void DeleteByName_ShouldReturnNoContent_WhenGenreIsDeleted()
     {
-        _context.Genres.Add(new Genre("genre"));
-        await _context.SaveChangesAsync();
-        
         var client = _factory.CreateClient();
 
         var result = await client.DeleteAsync(ApiRoutes.GenreRoutes.DeleteByName.Replace("{name}", "genre"));
 
         result.StatusCode.Should().Be(HttpStatusCode.NoContent);
-    }
-
-    private void InitContext()
-    {
-        _context = new AppDbContext(AppDbContextOptions.GetSqlServerOptions());
-    }
-
-    private async Task ClearData()
-    {
-        await _context.Database.ExecuteSqlRawAsync("DELETE FROM Genres");
-    }
-
-    public async Task InitializeAsync()
-    {
-        await ClearData();
-    }
-
-    public async Task DisposeAsync()
-    {
-        await ClearData();
     }
 }

@@ -34,7 +34,7 @@ public class GameController : ControllerBase
             {
                 Errors = errors.Errors.Select(x => x.ErrorMessage).ToList()
             };
-
+        
             return BadRequest(errorsDto);
         }
 

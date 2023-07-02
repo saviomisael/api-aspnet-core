@@ -16,8 +16,8 @@ public class AppDbContext : DbContext
         modelBuilder.ApplyConfiguration(new GameMap());
     }
 
-    public DbSet<Genre> Genres { get; set; } = null!;
-    public DbSet<Platform> Platforms { get; set; } = null!;
-    public DbSet<AgeRating> AgeRatings { get; set; } = null!;
-    public DbSet<Game> Games { get; set; } = null!;
+    public virtual DbSet<Genre> Genres { get; set; } = null!;
+    public virtual DbSet<Platform> Platforms { get; set; } = null!;
+    public virtual DbSet<AgeRating> AgeRatings { get; set; } = null!;
+    public virtual DbSet<Game> Games { get; set; } = null!;
 }

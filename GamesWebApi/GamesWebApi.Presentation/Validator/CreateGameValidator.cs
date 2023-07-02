@@ -15,9 +15,9 @@ public class CreateGameValidator : AbstractValidator<CreateGameDto>
         RuleFor(x => x.Price).GreaterThanOrEqualTo(0).WithMessage("Game price must be 0 or positive.");
         RuleFor(x => x.ReleaseDate).Must(BeAValidDate)
             .WithMessage("Release date must be a valid date and must be in the past.");
-        RuleFor(x => x.Genres).Must(IsGreaterThanZeroAndLessThanFive)
+        RuleFor(x => x.GenresNames).Must(IsGreaterThanZeroAndLessThanFive)
             .WithMessage("Genres provided must have at least 1 genre and no more than 4 genres.");
-        RuleFor(x => x.Platforms).Must(IsGreaterThanZeroAndLessThanFive)
+        RuleFor(x => x.PlatformsNames).Must(IsGreaterThanZeroAndLessThanFive)
             .WithMessage("Platforms provided must have at least 1 platform and no more than 4 platforms.");
         RuleFor(x => x.Image.Length).Must(HasLengthLessThanOrEqualFiveMb).WithMessage("Image too big.");
         RuleFor(x => x.Image.ContentType).Must(IsImageMediaTypeSupported).WithMessage("Image type not supported.");

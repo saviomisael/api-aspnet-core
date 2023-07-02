@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AppDbContext>(opt =>
 {
-    opt.UseSqlServer(builder.Configuration.GetConnectionString("GamesWebApi"), sqlOptions =>
+    opt.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("GamesWebApi"), sqlOptions =>
     {
         sqlOptions.MigrationsAssembly("GamesWebApi.Presentation");
         sqlOptions.EnableRetryOnFailure(

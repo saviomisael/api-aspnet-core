@@ -7,7 +7,7 @@ public class CreateGameDto
     public decimal Price { get; set; }
     public string ReleaseDate { get; set; }
     public string AgeRatingId { get; set; }
-    public ICollection<string> Genres { get; set; } = new List<string>();
-    public ICollection<string> Platforms { get; set; } = new List<string>();
+    public ICollection<string> GenresNames { get; set; } = new List<string>();
+    public ICollection<string> PlatformsNames { get; set; } = new List<string>();
     public IFormFile Image { get; set; } = null!;
 }
