@@ -1,5 +1,6 @@
 using System.Net.Mime;
 using Application.Exception;
+using Domain.DTO;
 using Domain.Service;
 using FluentValidation;
 using GamesWebApi.DTO;
@@ -23,6 +24,10 @@ public class GameController : ControllerBase
         _apiClient = apiClient;
     }
 
+    [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status503ServiceUnavailable)]
+    [ProducesResponseType(typeof(GameResponseDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status404NotFound)]
     [HttpPost(ApiRoutes.GameRoutes.CreateGame)]
     public async Task<IActionResult> CreateGame([FromServices] IValidator<CreateGameDto> validator, [FromForm] CreateGameDto dto)
     {
