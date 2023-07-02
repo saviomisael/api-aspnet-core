@@ -25,15 +25,11 @@ public class GameMap : IEntityTypeConfiguration<Game>
         builder
             .HasMany(x => x.Genres)
             .WithMany(x => x.Games)
-            .UsingEntity<GameGenre>(r => r.HasOne<Genre>().WithMany().HasForeignKey(y => y.GenresId),
-                l => l.HasOne<Game>().WithMany().HasForeignKey(x => x.GamesId)
-            );
+            .UsingEntity<GameGenre>();
         
         builder
             .HasMany(x => x.Platforms)
             .WithMany(x => x.Games)
-            .UsingEntity<GamePlatform>(r => r.HasOne<Platform>().WithMany().HasForeignKey(y => y.PlatformsId),
-                l => l.HasOne<Game>().WithMany().HasForeignKey(x => x.GamesId).HasConstraintName("GamesFK")
-            );
+            .UsingEntity<GamePlatform>();
     }
 }

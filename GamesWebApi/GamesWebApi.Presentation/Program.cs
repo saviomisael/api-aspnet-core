@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text.Json.Serialization;
 using GamesWebApi.IoC;
 using Infrastructure.Data;
 using Infrastructure.ImagesServerApi;
@@ -35,7 +36,7 @@ builder.Services.AddHttpClient<IImagesServerApiClient, ImagesServerApiClient>();
 builder.Services.AddInfraDependencies();
 builder.Services.AddAppDependencies();
 builder.Services.AddValidatorDependencies();
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 
 builder.Services.AddSwaggerGen(options =>

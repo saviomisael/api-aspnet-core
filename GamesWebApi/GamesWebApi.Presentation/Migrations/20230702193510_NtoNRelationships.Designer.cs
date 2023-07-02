@@ -4,6 +4,7 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GamesWebApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230702193510_NtoNRelationships")]
+    partial class NtoNRelationships
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -91,9 +93,11 @@ namespace GamesWebApi.Migrations
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("GameId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("GenreId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(36)");
 
                     b.HasKey("GamesId", "GenresId");
@@ -116,9 +120,11 @@ namespace GamesWebApi.Migrations
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("GameId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("PlatformId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(36)");
 
                     b.HasKey("GamesId", "PlatformsId");
@@ -187,7 +193,9 @@ namespace GamesWebApi.Migrations
                 {
                     b.HasOne("Domain.Entity.Game", "Game")
                         .WithMany()
-                        .HasForeignKey("GameId");
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Domain.Entity.Game", null)
                         .WithMany()
@@ -197,7 +205,9 @@ namespace GamesWebApi.Migrations
 
                     b.HasOne("Domain.Entity.Genre", "Genre")
                         .WithMany()
-                        .HasForeignKey("GenreId");
+                        .HasForeignKey("GenreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Domain.Entity.Genre", null)
                         .WithMany()
@@ -214,7 +224,9 @@ namespace GamesWebApi.Migrations
                 {
                     b.HasOne("Domain.Entity.Game", "Game")
                         .WithMany()
-                        .HasForeignKey("GameId");
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Domain.Entity.Game", null)
                         .WithMany()
@@ -224,7 +236,9 @@ namespace GamesWebApi.Migrations
 
                     b.HasOne("Domain.Entity.Platform", "Platform")
                         .WithMany()
-                        .HasForeignKey("PlatformId");
+                        .HasForeignKey("PlatformId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Domain.Entity.Platform", null)
                         .WithMany()

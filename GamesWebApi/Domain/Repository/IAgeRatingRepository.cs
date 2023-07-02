@@ -6,4 +6,5 @@ public interface IAgeRatingRepository
 {
     Task<ICollection<AgeRating>> GetAllAsync();
     Task<bool> AgeExistsAsync(string ageId);
+    Task<AgeRating> GetById(string id);
 }

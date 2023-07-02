@@ -16,14 +16,17 @@ public class GameService : IGameService
 
     public async Task<Game> CreateGameAsync(Game game)
     {
-        var age = await _unitOfWork.AgeRatingRepository.AgeExistsAsync(game.AgeRating.Id);
-        var genresFromDb = new List<Genre>();
-        var platformsFromDb = new List<Platform>();
-
+        var age = await _unitOfWork.AgeRatingRepository.AgeExistsAsync(game.AgeRatingId);
         if (!age)
         {
             throw new AgeNotFoundException();
         }
+
+        var ageFromDb = await _unitOfWork.AgeRatingRepository.GetById(game.AgeRatingId);
+        game.AgeRating = ageFromDb;
+        
+        var genresFromDb = new List<Genre>();
+        var platformsFromDb = new List<Platform>();
 
         foreach (var genre in game.Genres)
         {

@@ -24,4 +24,9 @@ public class AgeRatingRepository : IAgeRatingRepository
 
         return age != null;
     }
+
+    public async Task<AgeRating> GetById(string id)
+    {
+        return await _context.AgeRatings.FirstAsync(x => x.Id == id);
+    }
 }

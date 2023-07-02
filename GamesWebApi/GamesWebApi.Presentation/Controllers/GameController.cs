@@ -62,5 +62,10 @@ public class GameController : ControllerBase
             await _apiClient.DeleteImageAsync(image.Name);
             return NotFound(new ErrorResponseDto { Errors = new List<string>() { e.Message } });
         }
+        catch (Exception)
+        {
+            await _apiClient.DeleteImageAsync(image.Name);
+            throw;
+        }
     }
 }
