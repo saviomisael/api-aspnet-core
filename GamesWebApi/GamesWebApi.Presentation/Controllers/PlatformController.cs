@@ -99,8 +99,10 @@ public class PlatformController : ControllerBase
     /// <param name="name"></param>
     /// <response code="204">Deleted platform successfully.</response>
     /// <response code="404">Platform not found.</response>
+    /// <response code="409">Exists games that are using this platform.</response>
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status409Conflict)]
     [HttpDelete(ApiRoutes.PlatformRoutes.DeleteByName)]
     public async Task<IActionResult> DeleteByName(string name)
     {
