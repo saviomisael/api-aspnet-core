@@ -86,6 +86,14 @@ public class ImageController : ControllerBase
         return new FileContentResult(image.Content, $"image/{image.Extension}");
     }
 
+    /// <summary>
+    /// Delete an image by name
+    /// </summary>
+    /// <param name="name"></param>
+    /// <response code="204">Image deleted successfully.</response>
+    /// <response code="404">Image not found.</response>
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ErrorsDto), StatusCodes.Status404NotFound)]
     [HttpDelete(ApiRoutes.Images.DeleteImageByName)]
     public async Task<IActionResult> DeleteImage(string name)
     {
