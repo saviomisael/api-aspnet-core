@@ -8,5 +8,4 @@ public interface IGenreRepository
     void CreateGenre(Genre genre);
     Task<ICollection<Genre>> GetAllAsync();
     void Delete(Genre genre);
-    Task<bool> GenreExistsAsync(string genreId);
 }

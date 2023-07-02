@@ -49,7 +49,7 @@ public class GameServiceTests
     public async void CreateGame_ShouldThrowGenreNotFoundException_WhenGenreDoesNotExist()
     {
         _ageRepoMock.Setup(x => x.AgeExistsAsync(It.IsAny<string>())).ReturnsAsync(true);
-        _genreRepoMock.Setup(x => x.GenreExistsAsync(It.IsAny<string>())).ReturnsAsync(false);
+        _genreRepoMock.Setup(x => x.GetByNameAsync(It.IsAny<string>())).ReturnsAsync((Genre?)null);
 
         _unitOfWork.AgeRatingRepository = _ageRepoMock.Object;
         _unitOfWork.GenreRepository = _genreRepoMock.Object;
