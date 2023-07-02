@@ -29,4 +29,9 @@ public class ImageRepository : IImageRepository
     {
         return await _context.Images.FirstOrDefaultAsync(x => x.Name == name);
     }
+
+    public void DeleteImage(Image image)
+    {
+        _context.Images.Remove(image);
+    }
 }
