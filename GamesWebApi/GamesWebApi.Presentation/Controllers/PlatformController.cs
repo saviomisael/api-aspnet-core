@@ -1,8 +1,10 @@
 using Application.Exception;
+using Domain.DTO;
 using Domain.Entity;
 using Domain.Service;
 using FluentValidation;
 using GamesWebApi.DTO;
+using GamesWebApi.Mapper;
 using GamesWebApi.V1;
 using Microsoft.AspNetCore.Mvc;
 
@@ -81,13 +83,14 @@ public class PlatformController : ControllerBase
     /// </summary>
     /// <returns>Returns all platforms.</returns>
     /// <response code="200">Returns all platforms.</response>
-    [ProducesResponseType(typeof(ICollection<Platform>),StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ICollection<PlatformResponseDto>),StatusCodes.Status200OK)]
     [HttpGet(ApiRoutes.PlatformRoutes.GetAll)]
     public async Task<IActionResult> GetAll()
     {
         var platforms = await _platformService.GetAllAsync();
 
-        return Ok(platforms);
+        var platformsResponse = platforms.Select(PlatformMapper.FromEntityToPlatformResponseDto).ToList();
+        return Ok(platformsResponse);
     }
 
     [ProducesResponseType(StatusCodes.Status204NoContent)]
