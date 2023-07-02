@@ -24,6 +24,15 @@ public class GameController : ControllerBase
         _apiClient = apiClient;
     }
 
+    /// <summary>
+    /// Create a game.
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <returns>The newly game created.</returns>
+    /// <response code="400">Returns the errors in the request.</response>
+    /// <response code="503">Upload image service is unavailable.</response>
+    /// <response code="201">Returns the newly game created.</response>
+    /// <response code="404">Age rating / GenresNames / PlatformsNames not found.</response>
     [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status503ServiceUnavailable)]
     [ProducesResponseType(typeof(GameResponseDto), StatusCodes.Status201Created)]
