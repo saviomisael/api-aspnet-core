@@ -1,3 +1,4 @@
+using Domain.DTO;
 using Domain.Entity;
 using GamesWebApi.DTO;
 
@@ -28,5 +29,21 @@ public static class GameMapper
         }
 
         return game;
+    }
+
+    public static GameResponseDto FromEntityToGameResponseDto(Game game)
+    {
+        return new GameResponseDto
+        {
+            Id = game.Id,
+            Description = game.Description,
+            Price = game.Price,
+            ReleaseDate = game.ReleaseDate,
+            UrlImage = game.UrlImage,
+            Name = game.Name,
+            Genres = game.Genres.Select(GenreMapper.FromEntityToGenreResponseDto).ToList(),
+            Platforms = game.Platforms.Select(PlatformMapper.FromEntityToPlatformResponseDto).ToList(),
+            AgeRating = AgeRatingMapper.FromEntityToAgeRatingResponseDto(game.AgeRating)
+        };
     }
 }
