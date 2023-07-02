@@ -48,6 +48,11 @@ public class GenreService : IGenreService
         {
             throw new GenreNotFoundException(name);
         }
+
+        if (genre.Games.Any())
+        {
+            throw new GenreHasRelatedGamesException(name);
+        }
         
         _unitOfWork.GenreRepository.Delete(genre);
         await _unitOfWork.CommitAsync();
