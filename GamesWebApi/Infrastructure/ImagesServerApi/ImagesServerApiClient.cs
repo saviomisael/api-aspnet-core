@@ -32,4 +32,9 @@ public class ImagesServerApiClient : IImagesServerApiClient
         var body = response.Content.ReadAsStringAsync().Result;
         return JsonConvert.DeserializeObject<ImageResponseDto>(body);
     }
+
+    public async Task DeleteImageAsync(string imageName)
+    {
+        await _client.DeleteAsync($"images/{imageName}");
+    }
 }
