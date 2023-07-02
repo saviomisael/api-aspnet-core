@@ -37,7 +37,7 @@ public class PlatformController : ControllerBase
     /// <response code="201">Returns the newly created platform.</response>
     /// <response code="400">Returns all errors in the request.</response>
     /// <response code="500">Internal Server Error.</response>
-    [ProducesResponseType(typeof(Platform),StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(PlatformResponseDto),StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [HttpPost(ApiRoutes.PlatformRoutes.Create)]
@@ -63,7 +63,7 @@ public class PlatformController : ControllerBase
 
             var platformSaved = await _platformService.CreatePlatformAsync(platform);
 
-            return Created(ApiRoutes.GenreRoutes.Create, platformSaved);
+            return Created(ApiRoutes.GenreRoutes.Create, PlatformMapper.FromEntityToPlatformResponseDto(platformSaved));
         }
         catch (PlatformAlreadyExistsException e)
         {
