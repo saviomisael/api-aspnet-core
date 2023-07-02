@@ -30,13 +30,12 @@ public class DatabaseFixture : IAsyncLifetime
         await Context.SaveChangesAsync();
     }
 
-    public Task DisposeAsync()
+    public async Task DisposeAsync()
     {
-        return Task.CompletedTask;
-        // await Context.Database.ExecuteSqlRawAsync("DELETE FROM GameGenre");
-        // await Context.Database.ExecuteSqlRawAsync("DELETE FROM GamePlatform");
-        // await Context.Database.ExecuteSqlRawAsync("DELETE FROM Genres");
-        // await Context.Database.ExecuteSqlRawAsync("DELETE FROM Platforms");
-        // await Context.Database.ExecuteSqlRawAsync("DELETE FROM Games");
+        await Context.Database.ExecuteSqlRawAsync("DELETE FROM GameGenre");
+        await Context.Database.ExecuteSqlRawAsync("DELETE FROM GamePlatform");
+        await Context.Database.ExecuteSqlRawAsync("DELETE FROM Genres");
+        await Context.Database.ExecuteSqlRawAsync("DELETE FROM Platforms");
+        await Context.Database.ExecuteSqlRawAsync("DELETE FROM Games");
     }
 }
