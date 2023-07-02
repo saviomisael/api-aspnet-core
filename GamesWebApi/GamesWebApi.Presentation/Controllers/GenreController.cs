@@ -3,6 +3,7 @@ using Domain.Entity;
 using Domain.Service;
 using FluentValidation;
 using GamesWebApi.DTO;
+using GamesWebApi.Mapper;
 using GamesWebApi.V1;
 using Microsoft.AspNetCore.Mvc;
 
@@ -87,7 +88,8 @@ public class GenreController : ControllerBase
     {
         var genres = await _service.GetAllAsync();
 
-        return Ok(genres);
+        var genresResponse = genres.Select(GenreMapper.FromEntityToGenreResponseDto).ToList();
+        return Ok(genresResponse);
     }
 
     /// <summary>
