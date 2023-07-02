@@ -1,4 +1,5 @@
 using Application.Exception;
+using Domain.DTO;
 using Domain.Entity;
 using Domain.Service;
 using FluentValidation;
@@ -82,7 +83,7 @@ public class GenreController : ControllerBase
     /// </summary>
     /// <returns>Returns all genres.</returns>
     /// <response code="200">Returns all genres.</response>
-    [ProducesResponseType(typeof(ICollection<Genre>),StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ICollection<GenreResponseDto>),StatusCodes.Status200OK)]
     [HttpGet(ApiRoutes.GenreRoutes.GetAll)]
     public async Task<IActionResult> GetAll()
     {
