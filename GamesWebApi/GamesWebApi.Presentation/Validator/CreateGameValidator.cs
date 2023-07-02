@@ -19,9 +19,11 @@ public class CreateGameValidator : AbstractValidator<CreateGameDto>
             .WithMessage("Genres provided must have at least 1 genre and no more than 4 genres.");
         RuleFor(x => x.PlatformsNames).Must(IsGreaterThanZeroAndLessThanFive)
             .WithMessage("Platforms provided must have at least 1 platform and no more than 4 platforms.");
-        RuleFor(x => x.Image.Length).Must(HasLengthLessThanOrEqualFiveMb).WithMessage("Image too big.");
+        RuleFor(x => x.Image.Length).Must(HaveLengthLessThanOrEqualFiveMb).WithMessage("Image too big.");
         RuleFor(x => x.Image.ContentType).Must(IsImageMediaTypeSupported).WithMessage("Image type not supported.");
         RuleFor(x => x.AgeRatingId).NotEmpty().WithMessage("Age rating must be provided.");
+        RuleFor(x => x.GenresNames).Must(NotHaveDuplicates).WithMessage("Genres provided must not have duplicates.");
+        RuleFor(x => x.PlatformsNames).Must(NotHaveDuplicates).WithMessage("Platforms provided must not have duplicates.");
     }
 
     private bool BeAValidDate(string date)
@@ -31,8 +33,10 @@ public class CreateGameValidator : AbstractValidator<CreateGameDto>
 
     private bool IsGreaterThanZeroAndLessThanFive<T>(ICollection<T> list) => list.Count is > 0 and < 5;
 
-    private bool HasLengthLessThanOrEqualFiveMb(long imageSize) => imageSize <= 5 * 1024 * 1024;
+    private bool HaveLengthLessThanOrEqualFiveMb(long imageSize) => imageSize <= 5 * 1024 * 1024;
 
     private bool IsImageMediaTypeSupported(string mediaType) =>
         mediaType is MediaTypeNames.Image.Jpeg or "image/jpg" or "image/png";
+
+    private bool NotHaveDuplicates(ICollection<string> list) => list.Count == list.GroupBy(x => x).Count();
 }
