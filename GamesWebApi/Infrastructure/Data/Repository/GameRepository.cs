@@ -22,11 +22,4 @@ public class GameRepository : IGameRepository
     {
         return await _context.Games.FirstAsync(x => x.Id == gameId);
     }
-
-    public async Task<bool> PlatformHasRelatedGames(string platformId)
-    {
-        var games = await _context.Games.Where(x => x.Platforms.Any(y => y.Id == platformId)).ToListAsync();
-
-        return games.Any();
-    }
 }
