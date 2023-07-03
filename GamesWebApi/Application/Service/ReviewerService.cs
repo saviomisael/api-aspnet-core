@@ -1,3 +1,4 @@
+using Application.Exception;
 using Domain.DTO;
 using Domain.Entity;
 using Domain.Service;
@@ -23,7 +24,7 @@ public class ReviewerService : IReviewerService
 
         if (!result.Succeeded)
         {
-            return null;
+            throw new CreateAccountFailureException(result.Errors.Select(x => x.Description).ToArray());
         }
 
         var reviewerSaved = await _userManager.FindByEmailAsync(reviewer.Email);
