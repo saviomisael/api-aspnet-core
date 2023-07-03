@@ -1,3 +1,6 @@
+## Notes
+This project uses [dotnet secrets](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-6.0&tabs=windows).
+
 ## Commands
 
 ### Run tests
