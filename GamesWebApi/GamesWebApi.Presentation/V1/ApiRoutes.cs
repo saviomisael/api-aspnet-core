@@ -32,4 +32,9 @@ public static class ApiRoutes
         public const string UpdateImage = Base + "/games/{id}";
         public const string DeleteGameById = Base + "/games/{id}";
     }
+    
+    public static class ReviewersRoutes
+    {
+        public const string CreateAccount = Base + "/reviewers";
+    }
 }
