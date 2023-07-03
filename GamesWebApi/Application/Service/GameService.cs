@@ -62,4 +62,16 @@ public class GameService : IGameService
 
         return await _unitOfWork.GameRepository.GetGameByIdAsync(game.Id);
     }
+
+    public async Task<Game> GetGameById(string gameId)
+    {
+        var gameExists = await _unitOfWork.GameRepository.GameExists(gameId);
+
+        if (!gameExists)
+        {
+            throw new GameNotFoundException();
+        }
+
+        return await _unitOfWork.GameRepository.GetGameByIdAsync(gameId);
+    }
 }
