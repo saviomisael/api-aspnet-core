@@ -47,6 +47,14 @@ builder.Services.AddHttpClient<IImagesServerApiClient, ImagesServerApiClient>();
 builder.Services.AddInfraDependencies();
 builder.Services.AddAppDependencies();
 builder.Services.AddValidatorDependencies();
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Password.RequireDigit = true;
+    options.Password.RequiredLength = 8;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequireUppercase = true;
+});
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
