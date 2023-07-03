@@ -1,6 +1,7 @@
 using System.Net.Mime;
 using Application.Exception;
 using Domain.DTO;
+using Domain.Entity;
 using Domain.Service;
 using FluentValidation;
 using GamesWebApi.DTO;
@@ -38,7 +39,8 @@ public class GameController : ControllerBase
     [ProducesResponseType(typeof(GameResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status404NotFound)]
     [HttpPost(ApiRoutes.GameRoutes.CreateGame)]
-    public async Task<IActionResult> CreateGame([FromServices] IValidator<CreateGameDto> validator, [FromForm] CreateGameDto dto)
+    public async Task<IActionResult> CreateGame([FromServices] IValidator<CreateGameDto> validator,
+        [FromForm] CreateGameDto dto)
     {
         var errors = await validator.ValidateAsync(dto);
 
@@ -48,7 +50,7 @@ public class GameController : ControllerBase
             {
                 Errors = errors.Errors.Select(x => x.ErrorMessage).ToList()
             };
-        
+
             return BadRequest(errorsDto);
         }
 
@@ -102,6 +104,39 @@ public class GameController : ControllerBase
             return Ok(GameMapper.FromEntityToGameResponseDto(game));
         }
         catch (GameNotFoundException e)
+        {
+            return NotFound(new ErrorResponseDto { Errors = { e.Message } });
+        }
+    }
+
+    /// <summary>
+    /// Updates a game by id.
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <param name="id"></param>
+    /// <returns>Returns the game updated.</returns>
+    /// <response code="200">Returns the game updated.</response>
+    /// <response code="404">Game / AgeRating / GenresName / PlatformName not found.</response>
+    [ProducesResponseType(typeof(GameResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status404NotFound)]
+    [HttpPut(ApiRoutes.GameRoutes.UpdateGameById)]
+    public async Task<IActionResult> UpdateGameById([FromServices] IValidator<UpdateGameDto> validator,
+        [FromBody] UpdateGameDto dto, [FromRoute] string id)
+    {
+        var errors = await validator.ValidateAsync(dto);
+
+        if (!errors.IsValid)
+        {
+            return BadRequest(new ErrorResponseDto { Errors = errors.Errors.Select(x => x.ErrorMessage).ToList() });
+        }
+
+        try
+        {
+            var gameUpdate = await _service.UpdateGameByIdAsync(GameMapper.FromUpdateGameDtoToEntity(dto, id));
+            return Ok(GameMapper.FromEntityToGameResponseDto(gameUpdate));
+        }
+        catch (Exception e) when (e is GameNotFoundException or AgeNotFoundException or GenreNotFoundException
+                                      or PlatformNotFoundException)
         {
             return NotFound(new ErrorResponseDto { Errors = { e.Message } });
         }
