@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application.Exception;
 using Application.Service;
@@ -55,7 +56,7 @@ public class PlatformServiceTests
     [Fact]
     public async void DeleteByNameAsync_ShouldDeleteAPlatform()
     {
-        _platformRepoMock.Setup(x => x.GetByNameAsync(It.IsAny<string>())).ReturnsAsync(new Platform("platform"));
+        _platformRepoMock.Setup(x => x.GetByNameAsync(It.IsAny<string>())).ReturnsAsync(new Platform("platform") { Games = new List<Game>()});
         _platformRepoMock.Setup(x => x.DeleteByName(It.IsAny<Platform>())).Verifiable();
         
         _unitOfWork.PlatformRepository = _platformRepoMock.Object;
