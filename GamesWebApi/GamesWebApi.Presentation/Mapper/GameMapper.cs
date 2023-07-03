@@ -31,6 +31,31 @@ public static class GameMapper
         return game;
     }
 
+    public static Game FromUpdateGameDtoToEntity(UpdateGameDto dto, string gameId)
+    {
+        var game = new Game
+        {
+            Id = gameId,
+            Name = dto.Name,
+            Description = dto.Description,
+            Price = dto.Price,
+            ReleaseDate = DateTime.Parse(dto.ReleaseDate),
+            AgeRatingId = dto.AgeRatingId
+        };
+
+        foreach (var name in dto.GenresNames)
+        {
+            game.AddGenre(new Genre(name));
+        }
+
+        foreach (var name in dto.PlatformsNames)
+        {
+            game.AddPlatform(new Platform(name));
+        }
+
+        return game;
+    }
+
     public static GameResponseDto FromEntityToGameResponseDto(Game game)
     {
         return new GameResponseDto
