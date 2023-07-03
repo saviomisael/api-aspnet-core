@@ -121,7 +121,7 @@ public class GameService : IGameService
 
             if (platformFromDb is null)
             {
-                throw new GenreNotFoundException(platform.Name);
+                throw new PlatformNotFoundException(platform.Name);
             }
             
             gameFromDb.AddPlatform(platformFromDb);
