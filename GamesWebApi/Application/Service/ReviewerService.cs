@@ -34,16 +34,16 @@ public class ReviewerService : IReviewerService
         return _tokenGenerator.GenerateToken(reviewerSaved.Id, reviewerSaved.UserName);
     }
 
-    public async Task<ReviewerTokenDto> LoginAsync(string reviewerEmail, string password)
+    public async Task<ReviewerTokenDto> LoginAsync(string reviewerUserName, string password)
     {
-        var result = await _signInManager.PasswordSignInAsync(reviewerEmail, password, false, false);
+        var result = await _signInManager.PasswordSignInAsync(reviewerUserName, password, false, false);
 
         if (!result.Succeeded)
         {
             throw new LoginFailureException();
         }
 
-        var account = await _userManager.FindByEmailAsync(reviewerEmail);
+        var account = await _userManager.FindByNameAsync(reviewerUserName);
 
         return _tokenGenerator.GenerateToken(account.Id, account.UserName);
     }
