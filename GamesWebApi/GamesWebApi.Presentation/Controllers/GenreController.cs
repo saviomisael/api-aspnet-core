@@ -105,7 +105,7 @@ public class GenreController : ControllerBase
     [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status409Conflict)]
     [HttpDelete(ApiRoutes.GenreRoutes.DeleteByName)]
-    public async Task<IActionResult> DeleteByName(string name)
+    public async Task<IActionResult> DeleteByName([FromRoute] string name)
     {
         try
         {
