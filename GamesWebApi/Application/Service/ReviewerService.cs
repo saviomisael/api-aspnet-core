@@ -47,4 +47,16 @@ public class ReviewerService : IReviewerService
 
         return _tokenGenerator.GenerateToken(account.Id, account.UserName);
     }
+
+    public async Task DeleteAccountAsync(string username)
+    {
+        var reviewer = await _userManager.FindByNameAsync(username);
+
+        if (reviewer is null)
+        {
+            throw new ReviewerNotFoundException(username);
+        }
+
+        await _userManager.DeleteAsync(reviewer);
+    }
 }
