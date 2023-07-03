@@ -11,5 +11,6 @@ public static class ApplicationExtensions
         service.AddScoped<IPlatformService, PlatformService>();
         service.AddScoped<IAgeRatingService, AgeRatingService>();
         service.AddScoped<IGameService, GameService>();
+        service.AddScoped<IReviewerService, ReviewerService>();
     }
 }
