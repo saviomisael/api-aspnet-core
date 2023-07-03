@@ -36,5 +36,6 @@ public static class ApiRoutes
     public static class ReviewersRoutes
     {
         public const string CreateAccount = Base + "/reviewers";
+        public const string Login = Base + "/reviewers/tokens";
     }
 }

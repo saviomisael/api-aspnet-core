@@ -32,7 +32,7 @@ public class ReviewerController : ControllerBase
     [ProducesResponseType(typeof(ReviewerTokenDto), StatusCodes.Status201Created)]
     [HttpPost(ApiRoutes.ReviewersRoutes.CreateAccount)]
     public async Task<IActionResult> CreateAccount([FromServices] IValidator<CreateAccountDto> validator,
-        CreateAccountDto dto)
+        [FromBody] CreateAccountDto dto)
     {
         var errors = await validator.ValidateAsync(dto);
 
@@ -51,6 +51,36 @@ public class ReviewerController : ControllerBase
         catch (CreateAccountFailureException e)
         {
             return BadRequest(new ErrorResponseDto { Errors = e.Errors });
+        }
+    }
+
+    /// <summary>
+    /// Returns the token for using in authorized route.
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <returns>Returns the token for using in authorized route.</returns>
+    /// <response code="200">Returns the token for using in authorized route.</response>
+    /// <response code="400">Returns the errors in the request.</response>
+    [ProducesResponseType(typeof(ReviewerTokenDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status400BadRequest)]
+    [HttpPost(ApiRoutes.ReviewersRoutes.Login)]
+    public async Task<IActionResult> Login([FromServices] IValidator<LoginDto> validator, [FromBody] LoginDto dto)
+    {
+        var errors = await validator.ValidateAsync(dto);
+
+        if (!errors.IsValid)
+        {
+            return BadRequest(new ErrorResponseDto { Errors = errors.Errors.Select(x => x.ErrorMessage).ToList() });
+        }
+
+        try
+        {
+            var token = await _service.LoginAsync(dto.UserName, dto.Password);
+            return Ok(token);
+        }
+        catch (LoginFailureException e)
+        {
+            return BadRequest(new ErrorResponseDto { Errors = { e.Message } });
         }
     }
 }
