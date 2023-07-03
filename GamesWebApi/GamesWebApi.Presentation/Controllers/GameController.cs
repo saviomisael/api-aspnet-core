@@ -97,7 +97,7 @@ public class GameController : ControllerBase
     {
         try
         {
-            var game = await _service.GetGameById(id);
+            var game = await _service.GetGameByIdAsync(id);
 
             return Ok(GameMapper.FromEntityToGameResponseDto(game));
         }
