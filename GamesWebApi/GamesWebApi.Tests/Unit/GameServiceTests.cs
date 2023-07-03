@@ -5,6 +5,7 @@ using Domain.Entity;
 using Domain.Repository;
 using FluentAssertions;
 using Infrastructure.Data;
+using Infrastructure.ImagesServerApi.Contracts;
 using Moq;
 using Xunit;
 
@@ -12,20 +13,20 @@ namespace GamesWebApi.Tests.Unit;
 
 public class GameServiceTests
 {
-    private readonly Mock<IGameRepository> _gameRepoMock;
     private readonly Mock<IAgeRatingRepository> _ageRepoMock;
     private readonly Mock<IGenreRepository> _genreRepoMock;
     private readonly Mock<IPlatformRepository> _platformRepoMock;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly Mock<IImagesServerApiClient> _apiClientMock;
 
     public GameServiceTests()
     {
-        _gameRepoMock = new Mock<IGameRepository>();
         _ageRepoMock = new Mock<IAgeRatingRepository>();
         _genreRepoMock = new Mock<IGenreRepository>();
         _platformRepoMock = new Mock<IPlatformRepository>();
         var context = new AppDbContext(AppDbContextOptions.GetInMemoryOptions());
         _unitOfWork = new UnitOfWork(context);
+        _apiClientMock = new Mock<IImagesServerApiClient>();
     }
 
     [Fact]
@@ -35,7 +36,7 @@ public class GameServiceTests
 
         _unitOfWork.AgeRatingRepository = _ageRepoMock.Object;
 
-        var service = new GameService(_unitOfWork);
+        var service = new GameService(_unitOfWork, _apiClientMock.Object);
 
         var game = new Game
         {
@@ -54,7 +55,7 @@ public class GameServiceTests
         _unitOfWork.AgeRatingRepository = _ageRepoMock.Object;
         _unitOfWork.GenreRepository = _genreRepoMock.Object;
 
-        var service = new GameService(_unitOfWork);
+        var service = new GameService(_unitOfWork, _apiClientMock.Object);
 
         var game = new Game
         {
@@ -76,7 +77,7 @@ public class GameServiceTests
         _unitOfWork.GenreRepository = _genreRepoMock.Object;
         _unitOfWork.PlatformRepository = _platformRepoMock.Object;
 
-        var service = new GameService(_unitOfWork);
+        var service = new GameService(_unitOfWork, _apiClientMock.Object);
 
         var game = new Game
         {
