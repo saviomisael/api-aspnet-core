@@ -23,7 +23,7 @@ public class GameRepository : IGameRepository
         return await _context.Games.FirstAsync(x => x.Id == gameId);
     }
 
-    public async Task<bool> GameExists(string gameId)
+    public async Task<bool> GameExistsAsync(string gameId)
     {
         var game = await _context.Games.FirstOrDefaultAsync(x => x.Id == gameId);
 
