@@ -190,4 +190,26 @@ public class GameController : ControllerBase
             return NotFound(new ErrorResponseDto { Errors = { e.Message } });
         }
     }
+
+    /// <summary>
+    /// Deletes a game by id.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <response code="204">Game deleted successfully.</response>
+    /// <response code="404">Game not found.</response>
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status404NotFound)]
+    [HttpDelete(ApiRoutes.GameRoutes.DeleteGameById)]
+    public async Task<IActionResult> DeleteGameById([FromRoute] string id)
+    {
+        try
+        {
+            await _service.DeleteGameById(id);
+            return NoContent();
+        }
+        catch (GameNotFoundException e)
+        {
+            return NotFound(new ErrorResponseDto { Errors = { e.Message } });
+        }
+    }
 }
