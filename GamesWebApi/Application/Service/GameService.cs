@@ -2,16 +2,19 @@ using Application.Exception;
 using Domain.Entity;
 using Domain.Service;
 using Infrastructure.Data;
+using Infrastructure.ImagesServerApi.Contracts;
 
 namespace Application.Service;
 
 public class GameService : IGameService
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IImagesServerApiClient _apiClient;
 
-    public GameService(IUnitOfWork unitOfWork)
+    public GameService(IUnitOfWork unitOfWork, IImagesServerApiClient apiClient)
     {
         _unitOfWork = unitOfWork;
+        _apiClient = apiClient;
     }
 
     public async Task<Game> CreateGameAsync(Game game)
@@ -143,7 +146,9 @@ public class GameService : IGameService
         }
 
         var game = await _unitOfWork.GameRepository.GetGameByIdAsync(gameId);
+        var oldImage = game.UrlImage;
         game.UrlImage = urlImage;
         await _unitOfWork.CommitAsync();
+        await _apiClient.DeleteImageAsync(oldImage.Split("images/")[1]);
     }
 }
