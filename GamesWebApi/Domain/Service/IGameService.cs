@@ -5,5 +5,6 @@ namespace Domain.Service;
 public interface IGameService
 {
     Task<Game> CreateGameAsync(Game game);
-    Task<Game> GetGameById(string gameId);
+    Task<Game> GetGameByIdAsync(string gameId);
+    Task<Game> UpdateGameByIdAsync(Game game);
 }

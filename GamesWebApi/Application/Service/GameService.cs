@@ -22,7 +22,7 @@ public class GameService : IGameService
             throw new AgeNotFoundException();
         }
 
-        var ageFromDb = await _unitOfWork.AgeRatingRepository.GetById(game.AgeRatingId);
+        var ageFromDb = await _unitOfWork.AgeRatingRepository.GetByIdAsync(game.AgeRatingId);
         game.AgeRating = ageFromDb;
         
         var genresFromDb = new List<Genre>();
@@ -63,9 +63,9 @@ public class GameService : IGameService
         return await _unitOfWork.GameRepository.GetGameByIdAsync(game.Id);
     }
 
-    public async Task<Game> GetGameById(string gameId)
+    public async Task<Game> GetGameByIdAsync(string gameId)
     {
-        var gameExists = await _unitOfWork.GameRepository.GameExists(gameId);
+        var gameExists = await _unitOfWork.GameRepository.GameExistsAsync(gameId);
 
         if (!gameExists)
         {
@@ -73,5 +73,64 @@ public class GameService : IGameService
         }
 
         return await _unitOfWork.GameRepository.GetGameByIdAsync(gameId);
+    }
+
+    public async Task<Game> UpdateGameByIdAsync(Game game)
+    {
+        var gameExists = await _unitOfWork.GameRepository.GameExistsAsync(game.Id);
+
+        if (!gameExists)
+        {
+            throw new GameNotFoundException();
+        }
+
+        var gameFromDb = await _unitOfWork.GameRepository.GetGameByIdAsync(game.Id);
+        gameFromDb.Name = game.Name;
+        gameFromDb.Description = game.Description;
+        gameFromDb.Price = game.Price;
+        gameFromDb.ReleaseDate = game.ReleaseDate;
+
+        var ageExists = await _unitOfWork.AgeRatingRepository.AgeExistsAsync(game.AgeRatingId);
+
+        if (!ageExists)
+        {
+            throw new AgeNotFoundException();
+        }
+
+        var age = await _unitOfWork.AgeRatingRepository.GetByIdAsync(game.AgeRatingId);
+        gameFromDb.AgeRatingId = age.Id;
+        gameFromDb.AgeRating = age;
+        
+        gameFromDb.Genres.Clear();
+        foreach (var genre in game.Genres)
+        {
+            var genreFromDb = await _unitOfWork.GenreRepository.GetByNameAsync(genre.Name);
+
+            if (genreFromDb is null)
+            {
+                throw new GenreNotFoundException(genre.Name);
+            }
+            
+            gameFromDb.AddGenre(genreFromDb);
+        }
+        
+        gameFromDb.Platforms.Clear();
+        foreach (var platform in game.Platforms)
+        {
+            var platformFromDb = await _unitOfWork.PlatformRepository.GetByNameAsync(platform.Name);
+
+            if (platformFromDb is null)
+            {
+                throw new GenreNotFoundException(platform.Name);
+            }
+            
+            gameFromDb.AddPlatform(platformFromDb);
+        }
+
+        await _unitOfWork.CommitAsync();
+
+        var gameUpdated = await _unitOfWork.GameRepository.GetGameByIdAsync(game.Id);
+
+        return gameUpdated;
     }
 }
