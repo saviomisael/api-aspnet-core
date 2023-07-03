@@ -141,4 +141,47 @@ public class GameController : ControllerBase
             return NotFound(new ErrorResponseDto { Errors = { e.Message } });
         }
     }
+
+    /// <summary>
+    /// Update image for game.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="image"></param>
+    /// <response code="204">Image updated successfully.</response>
+    /// <response code="404">Game not found.</response>
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status404NotFound)]
+    [HttpPatch(ApiRoutes.GameRoutes.UpdateImage)]
+    public async Task<IActionResult> UpdateImage([FromServices] IValidator<IFormFile> validator, [FromRoute] string id,
+        [FromForm] IFormFile image)
+    {
+        var errors = await validator.ValidateAsync(image);
+
+        if (!errors.IsValid)
+        {
+            return BadRequest(new ErrorResponseDto { Errors = errors.Errors.Select(x => x.ErrorMessage).ToList() });
+        }
+
+        using var memoryStream = new MemoryStream();
+        await image.OpenReadStream().CopyToAsync(memoryStream);
+        var imageFromService =
+            await _apiClient.PostImageAsync(memoryStream.ToArray(), image.ContentType, image.FileName);
+
+        if (imageFromService is null)
+        {
+            return StatusCode(StatusCodes.Status503ServiceUnavailable,
+                new ErrorResponseDto { Errors = { "Upload image service is unavailable" } });
+        }
+
+        try
+        {
+            await _service.UpdateImageAsync(imageFromService.Url, id);
+            return NoContent();
+        }
+        catch (GameNotFoundException e)
+        {
+            await _apiClient.DeleteImageAsync(imageFromService.Name);
+            return NotFound(new ErrorResponseDto { Errors = { e.Message } });
+        }
+    }
 }
