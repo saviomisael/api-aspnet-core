@@ -24,17 +24,19 @@ public class CreateGameValidator : AbstractValidator<CreateGameDto>
         RuleFor(x => x.Image.ContentType).Must(IsImageMediaTypeSupported).WithMessage("Image type not supported.");
         RuleFor(x => x.AgeRatingId).NotEmpty().WithMessage("Age rating must be provided.");
         RuleFor(x => x.GenresNames).Must(NotHaveDuplicates).WithMessage("Genres provided must not have duplicates.");
-        RuleFor(x => x.PlatformsNames).Must(NotHaveDuplicates).WithMessage("Platforms provided must not have duplicates.");
+        RuleFor(x => x.PlatformsNames).Must(NotHaveDuplicates)
+            .WithMessage("Platforms provided must not have duplicates.");
     }
 
     private bool IsAValidDate(string date) => date.IsAValidDate();
 
     private bool IsGreaterThanZeroAndLessThanFive<T>(ICollection<T> list) => list.IsGreaterThanXAndLessThanY(0, 5);
 
-    private bool HaveLengthLessThanOrEqualFiveMb(long imageSize) => imageSize <= 5 * 1024 * 1024;
+    private bool HaveLengthLessThanOrEqualFiveMb(long imageSize) =>
+        ValidatorHelper.IsImageSizeLessThanOrEqualTo(imageSize, 5 * 1024 * 1024);
 
     private bool IsImageMediaTypeSupported(string mediaType) =>
-        mediaType is MediaTypeNames.Image.Jpeg or "image/jpg" or "image/png";
+        ValidatorHelper.IsImageTypeSupported(mediaType, new[] { MediaTypeNames.Image.Jpeg, "image/jpg", "image/png" });
 
     private bool NotHaveDuplicates(ICollection<string> list) => list.NotHasDuplicates();
 }
