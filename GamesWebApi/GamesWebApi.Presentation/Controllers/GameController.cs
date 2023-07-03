@@ -95,7 +95,7 @@ public class GameController : ControllerBase
     [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(GameResponseDto), StatusCodes.Status200OK)]
     [HttpGet(ApiRoutes.GameRoutes.GetGameById)]
-    public async Task<IActionResult> GetGameById(string id)
+    public async Task<IActionResult> GetGameById([FromRoute] string id)
     {
         try
         {
