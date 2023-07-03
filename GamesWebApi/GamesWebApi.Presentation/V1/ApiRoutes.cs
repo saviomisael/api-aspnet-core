@@ -27,5 +27,6 @@ public static class ApiRoutes
     public static class GameRoutes
     {
         public const string CreateGame = Base + "/games";
+        public const string GetGameById = Base + "/games/{id}";
     }
 }

@@ -82,4 +82,28 @@ public class GameController : ControllerBase
             throw;
         }
     }
+
+    /// <summary>
+    /// Returns a game.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns>Returns a game.</returns>
+    /// <response code="200">Returns a game.</response>
+    /// <response code="404">Game not found.</response>
+    [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(GameResponseDto), StatusCodes.Status200OK)]
+    [HttpGet(ApiRoutes.GameRoutes.GetGameById)]
+    public async Task<IActionResult> GetGameById(string id)
+    {
+        try
+        {
+            var game = await _service.GetGameById(id);
+
+            return Ok(GameMapper.FromEntityToGameResponseDto(game));
+        }
+        catch (GameNotFoundException e)
+        {
+            return NotFound(new ErrorResponseDto { Errors = { e.Message } });
+        }
+    }
 }
