@@ -1,6 +1,7 @@
 using System.Net.Mime;
 using FluentValidation;
 using GamesWebApi.DTO;
+using GamesWebApi.Helpers;
 
 namespace GamesWebApi.Validator;
 
@@ -26,17 +27,14 @@ public class CreateGameValidator : AbstractValidator<CreateGameDto>
         RuleFor(x => x.PlatformsNames).Must(NotHaveDuplicates).WithMessage("Platforms provided must not have duplicates.");
     }
 
-    private bool BeAValidDate(string date)
-    {
-        return DateTime.TryParse(date, out _);
-    }
+    private bool BeAValidDate(string date) => date.IsAValidDate();
 
-    private bool IsGreaterThanZeroAndLessThanFive<T>(ICollection<T> list) => list.Count is > 0 and < 5;
+    private bool IsGreaterThanZeroAndLessThanFive<T>(ICollection<T> list) => list.IsGreaterThanXAndLessThanY(0, 5);
 
     private bool HaveLengthLessThanOrEqualFiveMb(long imageSize) => imageSize <= 5 * 1024 * 1024;
 
     private bool IsImageMediaTypeSupported(string mediaType) =>
         mediaType is MediaTypeNames.Image.Jpeg or "image/jpg" or "image/png";
 
-    private bool NotHaveDuplicates(ICollection<string> list) => list.Count == list.GroupBy(x => x).Count();
+    private bool NotHaveDuplicates(ICollection<string> list) => list.NotHasDuplicates();
 }
