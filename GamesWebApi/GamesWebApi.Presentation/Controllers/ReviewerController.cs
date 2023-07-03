@@ -111,4 +111,19 @@ public class ReviewerController : ControllerBase
             return NotFound(new ErrorResponseDto { Errors = { e.Message } });
         }
     }
+    
+    /// <summary>
+    /// Returns a fresh token.
+    /// </summary>
+    /// <returns>Returns a fresh token.</returns>
+    /// <response code="201">Returns a fresh token.</response>
+    [ProducesResponseType(typeof(ReviewerTokenDto), StatusCodes.Status201Created)]
+    [Authorize(AuthenticationSchemes = "Bearer")]
+    [HttpPost(ApiRoutes.ReviewersRoutes.RefreshToken)]
+    public IActionResult RefreshToken()
+    {
+        var payload = _tokenGenerator.DecodeToken(Request.Headers.Authorization[0].Split(" ")[1]);
+        var newToken = _tokenGenerator.GenerateToken(payload.Sub, payload.UserName);
+        return Created(ApiRoutes.ReviewersRoutes.RefreshToken, newToken);
+    }
 }
