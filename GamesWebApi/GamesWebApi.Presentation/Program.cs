@@ -62,7 +62,7 @@ builder.Services
     {
         var jwtOptions = new JwtOptions();
         builder.Configuration.GetSection("JWT").Bind(jwtOptions);
-        
+
         var parameters = new TokenValidationParameters()
         {
             ClockSkew = TimeSpan.Zero,
@@ -92,6 +92,29 @@ builder.Services.AddSwaggerGen(options =>
 
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory,
         $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authentication with Authorization header. Example: Authorization: Bearer token***",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "Bearer"
+    });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement()
+    {
+        {
+            new OpenApiSecurityScheme()
+            {
+                Reference = new OpenApiReference()
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                },
+            },
+            new List<string>()
+        }
+    });
 });
 
 var app = builder.Build();
