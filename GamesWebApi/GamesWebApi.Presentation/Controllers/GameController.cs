@@ -147,6 +147,12 @@ public class GameController : ControllerBase
     /// </summary>
     /// <param name="id"></param>
     /// <param name="image"></param>
+    /// <remarks>
+    /// Sample request:
+    ///
+    ///     POST /api/v1/games/{id} multipart/form-data
+    ///        "image": file
+    /// </remarks>
     /// <response code="204">Image updated successfully.</response>
     /// <response code="404">Game not found.</response>
     [ProducesResponseType(StatusCodes.Status204NoContent)]
