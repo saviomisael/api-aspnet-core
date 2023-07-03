@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Domain.DTO;
+using Infrastructure.Jwt.DTO;
 using Infrastructure.Jwt.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -35,6 +36,17 @@ public class TokenGenerator
             Token = new JwtSecurityTokenHandler().WriteToken(token),
             Expiration = expiration,
             Username = reviewerUsername
+        };
+    }
+
+    public PayloadDto DecodeToken(string token)
+    {
+        var tokenDecoded = new JwtSecurityToken(token);
+
+        return new PayloadDto
+        {
+            Sub = tokenDecoded.Payload.Sub,
+            UserName = tokenDecoded.Claims.First(x => x.Type == "UserName").Value
         };
     }
 }
