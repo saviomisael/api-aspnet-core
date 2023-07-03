@@ -133,4 +133,17 @@ public class GameService : IGameService
 
         return gameUpdated;
     }
+
+    public async Task UpdateImageAsync(string urlImage, string gameId)
+    {
+        var gameExists = await _unitOfWork.GameRepository.GameExistsAsync(gameId);
+        if (!gameExists)
+        {
+            throw new GameNotFoundException();
+        }
+
+        var game = await _unitOfWork.GameRepository.GetGameByIdAsync(gameId);
+        game.UrlImage = urlImage;
+        await _unitOfWork.CommitAsync();
+    }
 }
