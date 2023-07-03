@@ -11,5 +11,6 @@ public static class ValidatorExtensions
         service.AddScoped<IValidator<CreateGenreDto>, CreateGenreValidator>();
         service.AddScoped<IValidator<CreatePlatformDto>, CreatePlatformValidator>();
         service.AddScoped<IValidator<CreateGameDto>, CreateGameValidator>();
+        service.AddScoped<IValidator<UpdateGameDto>, UpdateGameValidator>();
     }
 }
