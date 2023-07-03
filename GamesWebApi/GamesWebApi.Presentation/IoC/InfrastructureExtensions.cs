@@ -1,8 +1,7 @@
 using Domain.Repository;
 using Infrastructure.Data;
 using Infrastructure.Data.Repository;
-using Infrastructure.ImagesServerApi;
-using Infrastructure.ImagesServerApi.Contracts;
+using Infrastructure.Jwt;
 
 namespace GamesWebApi.IoC;
 
@@ -16,5 +15,6 @@ public static class InfrastructureExtensions
         service.AddScoped<IGameRepository, GameRepository>();
         service.AddScoped<IUnitOfWork, UnitOfWork>();
         service.AddTransient<DataSeeder>();
+        service.AddScoped<TokenGenerator>();
     }
 }

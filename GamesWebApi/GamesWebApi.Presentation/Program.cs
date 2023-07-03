@@ -3,11 +3,11 @@ using System.Text;
 using System.Text.Json.Serialization;
 using Domain.Entity;
 using GamesWebApi.IoC;
-using GamesWebApi.Options;
 using Infrastructure.Data;
 using Infrastructure.ImagesServerApi;
 using Infrastructure.ImagesServerApi.Contracts;
 using Infrastructure.ImagesServerApi.Options;
+using Infrastructure.Jwt.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -39,6 +39,9 @@ builder.Services.AddCors(opt =>
 var imagesServerOptions = new ImagesServerOptions();
 builder.Configuration.GetSection("ImagesServerOptions").Bind(imagesServerOptions);
 builder.Services.AddSingleton(imagesServerOptions);
+var jwtOptions = new JwtOptions();
+builder.Configuration.GetSection("JWT").Bind(jwtOptions);
+builder.Services.AddSingleton(jwtOptions);
 builder.Services.AddHttpClient<IImagesServerApiClient, ImagesServerApiClient>();
 
 builder.Services.AddInfraDependencies();
@@ -55,8 +58,8 @@ builder.Services
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = "games_api_issuer",
-            ValidAudience = "games_api_audience",
+            ValidIssuer = builder.Configuration.GetValue<JwtOptions>("JWT").Issuer,
+            ValidAudience = builder.Configuration.GetValue<JwtOptions>("JWT").Audience,
             IssuerSigningKey =
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetValue<JwtOptions>("JWT").Key))
         };
