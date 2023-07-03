@@ -30,6 +30,7 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 });
 builder.Services.AddIdentity<Reviewer, IdentityRole>().AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
+builder.Configuration.AddEnvironmentVariables().AddUserSecrets(Assembly.GetExecutingAssembly(), true);
 
 builder.Services.AddCors(opt =>
 {
@@ -59,18 +60,22 @@ builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.TokenValidationParameters = new TokenValidationParameters()
+        var jwtOptions = new JwtOptions();
+        builder.Configuration.GetSection("JWT").Bind(jwtOptions);
+        
+        var parameters = new TokenValidationParameters()
         {
             ClockSkew = TimeSpan.Zero,
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration.GetValue<JwtOptions>("JWT").Issuer,
-            ValidAudience = builder.Configuration.GetValue<JwtOptions>("JWT").Audience,
+            ValidIssuer = jwtOptions.Issuer,
+            ValidAudience = jwtOptions.Audience,
             IssuerSigningKey =
-                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetValue<JwtOptions>("JWT").Key))
+                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key))
         };
+        options.TokenValidationParameters = parameters;
     });
 builder.Services.AddControllers()
     .AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
@@ -93,7 +98,6 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    builder.Configuration.AddEnvironmentVariables().AddUserSecrets(Assembly.GetExecutingAssembly(), true);
     app.Services.RunMigrations();
     app.UseSwagger();
     app.UseSwaggerUI();
