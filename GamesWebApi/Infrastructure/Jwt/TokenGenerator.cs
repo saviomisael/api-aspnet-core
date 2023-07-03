@@ -34,7 +34,7 @@ public class TokenGenerator
         return new ReviewerTokenDto
         {
             Token = new JwtSecurityTokenHandler().WriteToken(token),
-            Expiration = expiration,
+            ExpirationUtcTime = expiration,
             Username = reviewerUsername
         };
     }
