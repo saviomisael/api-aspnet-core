@@ -204,7 +204,7 @@ public class GameController : ControllerBase
     {
         try
         {
-            await _service.DeleteGameById(id);
+            await _service.DeleteGameByIdAsync(id);
             return NoContent();
         }
         catch (GameNotFoundException e)

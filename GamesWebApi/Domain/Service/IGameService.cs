@@ -8,5 +8,5 @@ public interface IGameService
     Task<Game> GetGameByIdAsync(string gameId);
     Task<Game> UpdateGameByIdAsync(Game game);
     Task UpdateImageAsync(string urlImage, string gameId);
-    Task DeleteGameById(string gameId);
+    Task DeleteGameByIdAsync(string gameId);
 }

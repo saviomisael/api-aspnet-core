@@ -152,7 +152,7 @@ public class GameService : IGameService
         await _apiClient.DeleteImageAsync(oldImage.Split("images/")[1]);
     }
 
-    public async Task DeleteGameById(string gameId)
+    public async Task DeleteGameByIdAsync(string gameId)
     {
         var gameExists = await _unitOfWork.GameRepository.GameExistsAsync(gameId);
 
