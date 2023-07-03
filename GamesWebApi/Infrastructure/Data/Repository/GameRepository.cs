@@ -29,4 +29,9 @@ public class GameRepository : IGameRepository
 
         return game != null;
     }
+
+    public void DeleteGame(Game game)
+    {
+        _context.Games.Remove(game);
+    }
 }
