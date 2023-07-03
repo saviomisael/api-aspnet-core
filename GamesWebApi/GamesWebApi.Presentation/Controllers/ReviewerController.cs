@@ -1,3 +1,4 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Net.Mime;
 using Application.Exception;
 using Domain.DTO;
@@ -6,6 +7,8 @@ using Domain.Service;
 using FluentValidation;
 using GamesWebApi.DTO;
 using GamesWebApi.V1;
+using Infrastructure.Jwt;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GamesWebApi.Controllers;
@@ -15,10 +18,12 @@ namespace GamesWebApi.Controllers;
 public class ReviewerController : ControllerBase
 {
     private readonly IReviewerService _service;
+    private readonly TokenGenerator _tokenGenerator;
 
-    public ReviewerController(IReviewerService service)
+    public ReviewerController(IReviewerService service, TokenGenerator tokenGenerator)
     {
         _service = service;
+        _tokenGenerator = tokenGenerator;
     }
 
     /// <summary>
@@ -43,7 +48,8 @@ public class ReviewerController : ControllerBase
 
         try
         {
-            var token = await _service.CreateAccountAsync(new Reviewer { UserName = dto.UserName, Email = dto.UserName },
+            var token = await _service.CreateAccountAsync(
+                new Reviewer { UserName = dto.UserName, Email = dto.UserName },
                 dto.Password);
 
             return Created(ApiRoutes.ReviewersRoutes.CreateAccount, token);
@@ -81,6 +87,28 @@ public class ReviewerController : ControllerBase
         catch (LoginFailureException e)
         {
             return BadRequest(new ErrorResponseDto { Errors = { e.Message } });
+        }
+    }
+
+    /// <summary>
+    /// Delete a reviewer account.
+    /// </summary>
+    [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [Authorize(AuthenticationSchemes = "Bearer")]
+    [HttpDelete(ApiRoutes.ReviewersRoutes.DeleteAccount)]
+    public async Task<IActionResult> DeleteAccount()
+    {
+        var payload = _tokenGenerator.DecodeToken(Request.Headers.Authorization[0].Split(" ")[1]);
+
+        try
+        {
+            await _service.DeleteAccountAsync(payload.UserName);
+            return NoContent();
+        }
+        catch (ReviewerNotFoundException e)
+        {
+            return NotFound(new ErrorResponseDto { Errors = { e.Message } });
         }
     }
 }
