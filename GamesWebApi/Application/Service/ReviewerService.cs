@@ -18,7 +18,7 @@ public class ReviewerService : IReviewerService
         _tokenGenerator = tokenGenerator;
     }
 
-    public async Task<ReviewerTokenDto?> CreateAccount(Reviewer reviewer, string password)
+    public async Task<ReviewerTokenDto?> CreateAccountAsync(Reviewer reviewer, string password)
     {
         var result = await _userManager.CreateAsync(reviewer, password);
 
