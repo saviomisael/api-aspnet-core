@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GamesWebApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230702193510_NtoNRelationships")]
-    partial class NtoNRelationships
+    [Migration("20230703154924_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -86,56 +86,44 @@ namespace GamesWebApi.Migrations
 
             modelBuilder.Entity("Domain.Entity.GameGenre", b =>
                 {
-                    b.Property<string>("GamesId")
-                        .HasColumnType("nvarchar(36)");
+                    b.Property<string>("GameId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("GenresId")
                         .HasColumnType("nvarchar(36)");
 
-                    b.Property<string>("GameId")
+                    b.Property<string>("GamesId")
                         .IsRequired()
                         .HasColumnType("nvarchar(36)");
 
-                    b.Property<string>("GenreId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(36)");
+                    b.HasKey("GameId", "GenresId");
 
-                    b.HasKey("GamesId", "GenresId");
-
-                    b.HasIndex("GameId");
-
-                    b.HasIndex("GenreId");
+                    b.HasIndex("GamesId");
 
                     b.HasIndex("GenresId");
 
-                    b.ToTable("GameGenre");
+                    b.ToTable("GameGenres");
                 });
 
             modelBuilder.Entity("Domain.Entity.GamePlatform", b =>
                 {
-                    b.Property<string>("GamesId")
-                        .HasColumnType("nvarchar(36)");
+                    b.Property<string>("GameId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("PlatformsId")
                         .HasColumnType("nvarchar(36)");
 
-                    b.Property<string>("GameId")
+                    b.Property<string>("GamesId")
                         .IsRequired()
                         .HasColumnType("nvarchar(36)");
 
-                    b.Property<string>("PlatformId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(36)");
+                    b.HasKey("GameId", "PlatformsId");
 
-                    b.HasKey("GamesId", "PlatformsId");
-
-                    b.HasIndex("GameId");
-
-                    b.HasIndex("PlatformId");
+                    b.HasIndex("GamesId");
 
                     b.HasIndex("PlatformsId");
 
-                    b.ToTable("GamePlatform");
+                    b.ToTable("GamePlatforms");
                 });
 
             modelBuilder.Entity("Domain.Entity.Genre", b =>
@@ -193,23 +181,11 @@ namespace GamesWebApi.Migrations
                 {
                     b.HasOne("Domain.Entity.Game", "Game")
                         .WithMany()
-                        .HasForeignKey("GameId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entity.Game", null)
-                        .WithMany()
                         .HasForeignKey("GamesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Entity.Genre", "Genre")
-                        .WithMany()
-                        .HasForeignKey("GenreId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entity.Genre", null)
                         .WithMany()
                         .HasForeignKey("GenresId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -224,23 +200,11 @@ namespace GamesWebApi.Migrations
                 {
                     b.HasOne("Domain.Entity.Game", "Game")
                         .WithMany()
-                        .HasForeignKey("GameId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entity.Game", null)
-                        .WithMany()
                         .HasForeignKey("GamesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Entity.Platform", "Platform")
-                        .WithMany()
-                        .HasForeignKey("PlatformId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entity.Platform", null)
                         .WithMany()
                         .HasForeignKey("PlatformsId")
                         .OnDelete(DeleteBehavior.Cascade)
