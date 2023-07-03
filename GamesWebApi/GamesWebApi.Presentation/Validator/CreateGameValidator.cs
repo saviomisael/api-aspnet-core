@@ -14,7 +14,7 @@ public class CreateGameValidator : AbstractValidator<CreateGameDto>
         RuleFor(x => x.Description).MaximumLength(1000).MinimumLength(10)
             .WithMessage("Game description must have between 10 and 1000 characters.");
         RuleFor(x => x.Price).GreaterThanOrEqualTo(0).WithMessage("Game price must be 0 or positive.");
-        RuleFor(x => x.ReleaseDate).Must(BeAValidDate)
+        RuleFor(x => x.ReleaseDate).Must(IsAValidDate)
             .WithMessage("Release date must be a valid date and must be in the past.");
         RuleFor(x => x.GenresNames).Must(IsGreaterThanZeroAndLessThanFive)
             .WithMessage("Genres provided must have at least 1 genre and no more than 4 genres.");
@@ -27,7 +27,7 @@ public class CreateGameValidator : AbstractValidator<CreateGameDto>
         RuleFor(x => x.PlatformsNames).Must(NotHaveDuplicates).WithMessage("Platforms provided must not have duplicates.");
     }
 
-    private bool BeAValidDate(string date) => date.IsAValidDate();
+    private bool IsAValidDate(string date) => date.IsAValidDate();
 
     private bool IsGreaterThanZeroAndLessThanFive<T>(ICollection<T> list) => list.IsGreaterThanXAndLessThanY(0, 5);
 
