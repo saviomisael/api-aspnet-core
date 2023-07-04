@@ -10,4 +10,5 @@ public interface IReviewerService
     Task<ReviewerTokenDto> LoginAsync(string reviewerUserName, string password);
     Task DeleteAccountAsync(string username);
     Task<ReviewerInfo> GetReviewerInfoAsync(string username);
+    Task<ICollection<Game>> GetGamesByUsernameAsync(string username);
 }

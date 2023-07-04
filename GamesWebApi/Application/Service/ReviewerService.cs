@@ -83,4 +83,16 @@ public class ReviewerService : IReviewerService
             CreatedAtUtcTime = reviewer.CreatedAt
         };
     }
+
+    public async Task<ICollection<Game>> GetGamesByUsernameAsync(string username)
+    {
+        var reviewer = await _userManager.FindByNameAsync(username);
+
+        if (reviewer is null)
+        {
+            throw new ReviewerNotFoundException();
+        }
+
+        return reviewer.Reviews.Select(x => x.Game).ToList();
+    }
 }
