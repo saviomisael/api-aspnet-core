@@ -215,4 +215,29 @@ public class GameController : ControllerBase
             return NotFound(new ErrorResponseDto { Errors = { e.Message } });
         }
     }
+    
+    [Authorize(AuthenticationSchemes = "Bearer")]
+    [HttpPost(ApiRoutes.GameRoutes.AddReview)]
+    public async Task<IActionResult> AddReviewToGame([FromServices] IValidator<CreateReviewDto> validator, string id,
+        [FromBody] CreateReviewDto dto)
+    {
+        var errors = await validator.ValidateAsync(dto);
+
+        if (!errors.IsValid)
+        {
+            return BadRequest(new ErrorResponseDto { Errors = errors.Errors.Select(x => x.ErrorMessage).ToList() });
+        }
+
+        var reviewerId = _tokenGenerator.DecodeToken(Request.Headers.Authorization[0].Split(" ")[1]).Sub;
+
+        try
+        {
+            var game = await _service.AddReviewAsync(dto.Description, dto.Stars, id, reviewerId);
+            return Created(ApiRoutes.GameRoutes.AddReview, GameMapper.FromEntityToGameResponseDto(game));
+        }
+        catch (Exception e) when (e is GameNotFoundException or ReviewerNotFoundException)
+        {
+            return NotFound(new ErrorResponseDto { Errors = { e.Message } });
+        }
+    }
 }
