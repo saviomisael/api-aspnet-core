@@ -216,6 +216,20 @@ public class GameController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Create a review for game.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="dto"></param>
+    /// <returns>The game with the new review.</returns>
+    /// <response code="400">Returns the errors in the request.</response>
+    /// <response code="409">The reviewer already made a review for this game.</response>
+    /// <response code="404">Game / Reviewer not found.</response>
+    /// <response code="201">Returns the game with the new review.</response>
+    [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status409Conflict)]
+    [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(SingleGameResponseDto), StatusCodes.Status201Created)]
     [Authorize(AuthenticationSchemes = "Bearer")]
     [HttpPost(ApiRoutes.GameRoutes.AddReview)]
     public async Task<IActionResult> AddReviewToGame([FromServices] IValidator<CreateReviewDto> validator, string id,
