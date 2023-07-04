@@ -260,6 +260,20 @@ public class GameController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Update a review and return the game with the review updated.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="dto"></param>
+    /// <returns>Returns a game.</returns>
+    /// <response code="400">Returns the errors in the request.</response>
+    /// <response code="200">Returns a game.</response>
+    /// <response code="404">Review not found.</response>
+    /// <response code="401">You are not the owner of the review.</response>
+    [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(SingleGameResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status401Unauthorized)]
     [Authorize(AuthenticationSchemes = "Bearer")]
     [HttpPut(ApiRoutes.GameRoutes.UpdateReview)]
     public async Task<IActionResult> UpdateReview([FromServices] IValidator<UpdateReviewDto> validator,
