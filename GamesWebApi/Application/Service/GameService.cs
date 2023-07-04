@@ -188,6 +188,11 @@ public class GameService : IGameService
 
         var game = await _unitOfWork.GameRepository.GetGameByIdAsync(gameId);
 
+        if (game.Reviews.Any(x => x.ReviewerId == reviewerId))
+        {
+            throw new AlreadyReviewedGameException();
+        }
+
         var review = new Review()
         {
             Description = description,
