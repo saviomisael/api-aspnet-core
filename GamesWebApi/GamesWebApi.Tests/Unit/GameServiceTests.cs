@@ -6,6 +6,7 @@ using Domain.Repository;
 using FluentAssertions;
 using Infrastructure.Data;
 using Infrastructure.ImagesServerApi.Contracts;
+using Microsoft.AspNetCore.Identity;
 using Moq;
 using Xunit;
 
@@ -18,6 +19,7 @@ public class GameServiceTests
     private readonly Mock<IPlatformRepository> _platformRepoMock;
     private readonly IUnitOfWork _unitOfWork;
     private readonly Mock<IImagesServerApiClient> _apiClientMock;
+    private readonly Mock<UserManager<Reviewer>> _userManagerMock;
 
     public GameServiceTests()
     {
@@ -27,6 +29,7 @@ public class GameServiceTests
         var context = new AppDbContext(AppDbContextOptions.GetInMemoryOptions());
         _unitOfWork = new UnitOfWork(context);
         _apiClientMock = new Mock<IImagesServerApiClient>();
+        _userManagerMock = new Mock<UserManager<Reviewer>>();
     }
 
     [Fact]
@@ -36,7 +39,7 @@ public class GameServiceTests
 
         _unitOfWork.AgeRatingRepository = _ageRepoMock.Object;
 
-        var service = new GameService(_unitOfWork, _apiClientMock.Object);
+        var service = new GameService(_unitOfWork, _apiClientMock.Object, _userManagerMock.Object);
 
         var game = new Game
         {
@@ -55,7 +58,7 @@ public class GameServiceTests
         _unitOfWork.AgeRatingRepository = _ageRepoMock.Object;
         _unitOfWork.GenreRepository = _genreRepoMock.Object;
 
-        var service = new GameService(_unitOfWork, _apiClientMock.Object);
+        var service = new GameService(_unitOfWork, _apiClientMock.Object, _userManagerMock.Object);
 
         var game = new Game
         {
@@ -77,7 +80,7 @@ public class GameServiceTests
         _unitOfWork.GenreRepository = _genreRepoMock.Object;
         _unitOfWork.PlatformRepository = _platformRepoMock.Object;
 
-        var service = new GameService(_unitOfWork, _apiClientMock.Object);
+        var service = new GameService(_unitOfWork, _apiClientMock.Object, _userManagerMock.Object);
 
         var game = new Game
         {
