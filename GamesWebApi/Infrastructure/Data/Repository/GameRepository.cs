@@ -65,18 +65,24 @@ public class GameRepository : IGameRepository
         {
             term = $"\"{term}\"";
 
-            if (!descending)
-            {
-                return await SearchGameOrderByReleaseDateInAscendingOrderAsync(page, term);
-            }
+            if (!descending && sortType is "reviewsCount")
+                return await SearchGameOrderByReviewsCountInAscendingOrderAsync(page, term);
+
+            if (descending && sortType is "reviewsCount")
+                return await SearchGameOrderByReviewsCountInDescendingOrderAsync(page, term);
+
+            if (!descending) return await SearchGameOrderByReleaseDateInAscendingOrderAsync(page, term);
 
             return await SearchGameOrderByReleaseDateInDescendingOrderAsync(page, term);
         }
 
-        if (!descending)
-        {
-            return await GetGamesOrderByReleaseDateInAscendingOrderAsync(page);
-        }
+        if (!descending && sortType is "reviewsCount")
+            return await GetGamesOrderByReviewsCountInAscendingOrderAsync(page);
+
+        if (descending && sortType is "reviewsCount")
+            return await GetGamesOrderByReviewsCountInDescendingOrderAsync(page);
+
+        if (!descending) return await GetGamesOrderByReleaseDateInAscendingOrderAsync(page);
 
         return await GetGamesOrderByReleaseDateInDescendingOrderAsync(page);
     }
@@ -91,7 +97,7 @@ public class GameRepository : IGameRepository
     public async Task<int> GetMaxPagesBySearchAsync(string term)
     {
         term = $"\"{term}\"";
-        
+
         var games = await _context.Games.Where(x =>
             EF.Functions.Contains(x.Name, term) || x.Genres.Any(y => EF.Functions.Contains(y.Name, term)) ||
             x.Platforms.Any(y => EF.Functions.Contains(y.Name, term))).ToListAsync();
@@ -118,6 +124,19 @@ public class GameRepository : IGameRepository
             .Take(MaxGamesPerPage).ToListAsync();
     }
 
+    private async Task<ICollection<Game>> GetGamesOrderByReviewsCountInDescendingOrderAsync(int page)
+    {
+        return await _context.Games.OrderByDescending(x => x.Reviews.Count)
+            .Skip(page < 2 ? 0 : (page - 1) * MaxGamesPerPage)
+            .Take(MaxGamesPerPage).ToListAsync();
+    }
+
+    private async Task<ICollection<Game>> GetGamesOrderByReviewsCountInAscendingOrderAsync(int page)
+    {
+        return await _context.Games.OrderBy(x => x.Reviews.Count).Skip(page < 2 ? 0 : (page - 1) * MaxGamesPerPage)
+            .Take(MaxGamesPerPage).ToListAsync();
+    }
+
     private async Task<ICollection<Game>> SearchGameOrderByReleaseDateInDescendingOrderAsync(int page, string term)
     {
         return await _context.Games.Where(x =>
@@ -133,6 +152,25 @@ public class GameRepository : IGameRepository
                 EF.Functions.Contains(x.Name, term) || x.Genres.Any(y => EF.Functions.Contains(y.Name, term)) ||
                 x.Platforms.Any(y => EF.Functions.Contains(y.Name, term)))
             .OrderBy(x => x.ReleaseDate).Skip(page < 2 ? 0 : (page - 1) * MaxGamesPerPage).Take(MaxGamesPerPage)
+            .ToListAsync();
+    }
+
+    private async Task<ICollection<Game>> SearchGameOrderByReviewsCountInDescendingOrderAsync(int page, string term)
+    {
+        return await _context.Games.Where(x =>
+                EF.Functions.Contains(x.Name, term) || x.Genres.Any(y => EF.Functions.Contains(y.Name, term)) ||
+                x.Platforms.Any(y => EF.Functions.Contains(y.Name, term)))
+            .OrderByDescending(x => x.Reviews.Count).Skip(page < 2 ? 0 : (page - 1) * MaxGamesPerPage)
+            .Take(MaxGamesPerPage)
+            .ToListAsync();
+    }
+
+    private async Task<ICollection<Game>> SearchGameOrderByReviewsCountInAscendingOrderAsync(int page, string term)
+    {
+        return await _context.Games.Where(x =>
+                EF.Functions.Contains(x.Name, term) || x.Genres.Any(y => EF.Functions.Contains(y.Name, term)) ||
+                x.Platforms.Any(y => EF.Functions.Contains(y.Name, term)))
+            .OrderBy(x => x.Reviews.Count).Skip(page < 2 ? 0 : (page - 1) * MaxGamesPerPage).Take(MaxGamesPerPage)
             .ToListAsync();
     }
 }
