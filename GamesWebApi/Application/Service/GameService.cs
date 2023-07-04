@@ -22,6 +22,13 @@ public class GameService : IGameService
 
     public async Task<Game> CreateGameAsync(Game game)
     {
+        var isGameNameInUse = await _unitOfWork.GameRepository.IsGameNameInUseAsync(game.Name);
+
+        if (isGameNameInUse)
+        {
+            throw new GameNameInUseException(game.Name);
+        }
+        
         var age = await _unitOfWork.AgeRatingRepository.AgeExistsAsync(game.AgeRatingId);
         if (!age)
         {
