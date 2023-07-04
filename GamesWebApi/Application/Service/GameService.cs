@@ -233,7 +233,7 @@ public class GameService : IGameService
         return game;
     }
 
-    public async Task<ICollection<Game>> GetAllAsync(int page = 1, bool descending = true, string sortType = "releaseDate", string term = "")
+    public async Task<ICollection<Game>> GetAllAsync(int page, bool descending, string sortType, string term)
     {
         return await _unitOfWork.GameRepository.GetAllAsync(page, descending, sortType, term);
     }
