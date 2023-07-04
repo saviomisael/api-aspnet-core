@@ -12,5 +12,5 @@ public interface IGameRepository
 
     Task<Review> UpdateReviewAsync(Review review);
     Task<bool> ReviewExistsAsync(string reviewId);
-    Task<ICollection<Game>> GetAll(int page = 1, bool descending = true, string sortType = "releaseDate", string term = "");
+    Task<ICollection<Game>> GetAllAsync(int page = 1, bool descending = true, string sortType = "releaseDate", string term = "");
 }
