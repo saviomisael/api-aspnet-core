@@ -47,4 +47,10 @@ public class GameRepository : IGameRepository
         reviewFromDb.Description = review.Description;
         reviewFromDb.Stars = review.Stars;
     }
+
+    public async Task<bool> ReviewExistsAsync(string reviewId)
+    {
+        var review = await _context.Reviews.FirstOrDefaultAsync(x => x.Id == reviewId);
+        return review != null;
+    }
 }

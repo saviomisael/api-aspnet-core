@@ -11,4 +11,5 @@ public interface IGameRepository
     void AddReview(Review review);
 
     Task UpdateReviewAsync(Review review);
+    Task<bool> ReviewExistsAsync(string reviewId);
 }
