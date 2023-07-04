@@ -322,6 +322,9 @@ public class GameController : ControllerBase
     /// <summary>
     /// Returns all games or all searched games.
     /// </summary>
+    /// <remarks>
+    /// SORT must be asc(releaseDate) or desc(releaseDate) if it is provided.
+    /// </remarks>
     /// <param name="dto"></param>
     /// <returns>Returns all games or all searched games.</returns>
     /// <response code="200">Returns all games or all searched games.</response>
@@ -346,7 +349,7 @@ public class GameController : ControllerBase
             CurrentPage = dto.Page ?? 1,
             PreviousPage = dto.Page > 1 ? dto.Page - 1 : null,
             NextPage = dto.Page < maxPages ? dto.Page + 1 : null,
-            LastPage = maxPages
+            LastPage = maxPages > 0 ? maxPages : 1
         });
     }
 }
