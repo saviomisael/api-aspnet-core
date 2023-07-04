@@ -8,4 +8,5 @@ public interface IGameRepository
     Task<Game> GetGameByIdAsync(string gameId);
     Task<bool> GameExistsAsync(string gameId);
     void DeleteGame(Game game);
+    void AddReview(Review review);
 }

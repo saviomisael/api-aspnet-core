@@ -34,4 +34,9 @@ public class GameRepository : IGameRepository
     {
         _context.Games.Remove(game);
     }
+
+    public void AddReview(Review review)
+    {
+        _context.Reviews.Add(review);
+    }
 }
