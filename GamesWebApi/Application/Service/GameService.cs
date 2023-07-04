@@ -232,4 +232,9 @@ public class GameService : IGameService
         var game = await _unitOfWork.GameRepository.GetGameByIdAsync(reviewFromDb.GameId);
         return game;
     }
+
+    public async Task<ICollection<Game>> GetAllAsync(int page = 1, bool descending = true, string sortType = "releaseDate", string term = "")
+    {
+        return await _unitOfWork.GameRepository.GetAllAsync(page, descending, sortType, term);
+    }
 }

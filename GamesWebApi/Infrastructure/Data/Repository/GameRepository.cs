@@ -58,8 +58,8 @@ public class GameRepository : IGameRepository
         return review != null;
     }
 
-    public async Task<ICollection<Game>> GetAllAsync(int page = 1, bool descending = true,
-        string sortType = "releaseDate", string term = "")
+    public async Task<ICollection<Game>> GetAllAsync(int page, bool descending,
+        string sortType, string term)
     {
         if (term.Length > 0)
         {
