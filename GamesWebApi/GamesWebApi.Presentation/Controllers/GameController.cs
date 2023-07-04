@@ -215,7 +215,7 @@ public class GameController : ControllerBase
             return NotFound(new ErrorResponseDto { Errors = { e.Message } });
         }
     }
-    
+
     [Authorize(AuthenticationSchemes = "Bearer")]
     [HttpPost(ApiRoutes.GameRoutes.AddReview)]
     public async Task<IActionResult> AddReviewToGame([FromServices] IValidator<CreateReviewDto> validator, string id,
@@ -234,6 +234,10 @@ public class GameController : ControllerBase
         {
             var game = await _service.AddReviewAsync(dto.Description, dto.Stars, id, reviewerId);
             return Created(ApiRoutes.GameRoutes.AddReview, GameMapper.FromEntityToGameResponseDto(game));
+        }
+        catch (AlreadyReviewedGameException e)
+        {
+            return StatusCode(StatusCodes.Status409Conflict, new ErrorResponseDto { Errors = { e.Message } });
         }
         catch (Exception e) when (e is GameNotFoundException or ReviewerNotFoundException)
         {
