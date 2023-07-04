@@ -81,6 +81,11 @@ public class GameController : ControllerBase
 
             return Created(ApiRoutes.GameRoutes.CreateGame, GameMapper.FromEntityToSingleGameResponseDto(game));
         }
+        catch (GameNameInUseException e)
+        {
+            await _apiClient.DeleteImageAsync(image.Name);
+            return BadRequest(new ErrorResponseDto { Errors = { e.Message } });
+        }
         catch (Exception e) when (e is AgeNotFoundException or GenreNotFoundException or PlatformNotFoundException)
         {
             await _apiClient.DeleteImageAsync(image.Name);
