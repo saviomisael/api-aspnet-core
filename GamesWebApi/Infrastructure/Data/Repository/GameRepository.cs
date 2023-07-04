@@ -1,3 +1,4 @@
+using System.Collections;
 using Domain.Entity;
 using Domain.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -7,12 +8,13 @@ namespace Infrastructure.Data.Repository;
 public class GameRepository : IGameRepository
 {
     private readonly AppDbContext _context;
+    private const int MaxGamesPerPage = 9;
 
     public GameRepository(AppDbContext context)
     {
         _context = context;
     }
-    
+
     public void SaveGame(Game game)
     {
         _context.Games.Add(game);
@@ -54,5 +56,58 @@ public class GameRepository : IGameRepository
     {
         var review = await _context.Reviews.FirstOrDefaultAsync(x => x.Id == reviewId);
         return review != null;
+    }
+
+    public async Task<ICollection<Game>> GetAll(int page = 1, bool descending = true,
+        string sortType = "releaseDate", string term = "")
+    {
+        if (term.Length > 0)
+        {
+            term = $"\"{term}\"";
+
+            if (!descending)
+            {
+                return await SearchGameOrderByReleaseDateInAscendingOrderAsync(page, term);
+            }
+
+            return await SearchGameOrderByReleaseDateInDescendingOrderAsync(page, term);
+        }
+
+        if (!descending)
+        {
+            return await GetGamesOrderByReleaseDateInAscendingOrderAsync(page);
+        }
+
+        return await GetGamesOrderByReleaseDateInDescendingOrderAsync(page);
+    }
+
+    private async Task<ICollection<Game>> GetGamesOrderByReleaseDateInDescendingOrderAsync(int page)
+    {
+        return await _context.Games.OrderByDescending(x => x.ReleaseDate)
+            .Skip(page < 2 ? 0 : (page - 1) * MaxGamesPerPage).Take(MaxGamesPerPage).ToListAsync();
+    }
+
+    private async Task<ICollection<Game>> GetGamesOrderByReleaseDateInAscendingOrderAsync(int page)
+    {
+        return await _context.Games.OrderBy(x => x.ReleaseDate).Skip(page < 2 ? 0 : (page - 1) * MaxGamesPerPage)
+            .Take(MaxGamesPerPage).ToListAsync();
+    }
+
+    private async Task<ICollection<Game>> SearchGameOrderByReleaseDateInDescendingOrderAsync(int page, string term)
+    {
+        return await _context.Games.Where(x =>
+                EF.Functions.Contains(x.Name, term) || x.Genres.Any(y => EF.Functions.Contains(y.Name, term)) ||
+                x.Platforms.Any(y => EF.Functions.Contains(y.Name, term)))
+            .OrderByDescending(x => x.ReleaseDate).Skip(page < 2 ? 0 : (page - 1) * MaxGamesPerPage)
+            .Take(MaxGamesPerPage).ToListAsync();
+    }
+
+    private async Task<ICollection<Game>> SearchGameOrderByReleaseDateInAscendingOrderAsync(int page, string term)
+    {
+        return await _context.Games.Where(x =>
+                EF.Functions.Contains(x.Name, term) || x.Genres.Any(y => EF.Functions.Contains(y.Name, term)) ||
+                x.Platforms.Any(y => EF.Functions.Contains(y.Name, term)))
+            .OrderBy(x => x.ReleaseDate).Skip(page < 2 ? 0 : (page - 1) * MaxGamesPerPage).Take(MaxGamesPerPage)
+            .ToListAsync();
     }
 }
