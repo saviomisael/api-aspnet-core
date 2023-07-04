@@ -6,4 +6,5 @@ public class ReviewResponseDto
     public string Description { get; set; }
     public int Stars { get; set; }
     public ReviewerResponseDto Reviewer { get; set; }
+    public DateTime CreatedAtUtcTime { get; set; }
 }

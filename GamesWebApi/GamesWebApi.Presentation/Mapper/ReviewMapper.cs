@@ -12,7 +12,8 @@ public static class ReviewMapper
             Id = entity.Id,
             Description = entity.Description,
             Stars = entity.Stars,
-            Reviewer = ReviewerMapper.FromEntityToReviewerResponseDto(entity.Reviewer)
+            Reviewer = ReviewerMapper.FromEntityToReviewerResponseDto(entity.Reviewer),
+            CreatedAtUtcTime = entity.CreatedAtUtcTime
         };
     }
 }
