@@ -2,6 +2,7 @@ using System.Net.Mime;
 using Application.Exception;
 using Domain.DTO;
 using Domain.Entity;
+using Domain.Repository;
 using Domain.Service;
 using FluentValidation;
 using GamesWebApi.DTO;
@@ -21,12 +22,15 @@ public class GameController : ControllerBase
     private readonly IGameService _service;
     private readonly IImagesServerApiClient _apiClient;
     private readonly TokenGenerator _tokenGenerator;
+    private readonly IGameRepository _gameRepository;
 
-    public GameController(IGameService service, IImagesServerApiClient apiClient, TokenGenerator tokenGenerator)
+    public GameController(IGameService service, IImagesServerApiClient apiClient, TokenGenerator tokenGenerator,
+        IGameRepository gameRepository)
     {
         _service = service;
         _apiClient = apiClient;
         _tokenGenerator = tokenGenerator;
+        _gameRepository = gameRepository;
     }
 
     /// <summary>
@@ -308,5 +312,36 @@ public class GameController : ControllerBase
         {
             return Unauthorized(new ErrorResponseDto { Errors = { e.Message } });
         }
+    }
+
+    /// <summary>
+    /// Returns all games or all searched games.
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <returns>Returns all games or all searched games.</returns>
+    /// <response code="200">Returns all games or all searched games.</response>
+    [HttpGet(ApiRoutes.GameRoutes.GetAll)]
+    public async Task<IActionResult> GetAll([FromQuery] GamesQueryParamsDto? dto)
+    {
+        var maxPages = dto.Term != null && dto.Term.Trim().Length > 0
+            ? await _gameRepository.GetMaxPagesBySearchAsync(dto.Term.Trim())
+            : await _gameRepository.GetMaxPagesAsync();
+
+        if (dto.Page is null) dto.Page = 1;
+        if (dto.Sort is null) dto.Sort = "desc(releaseDate)";
+
+        if (dto.Page != null && dto.Page > maxPages) dto.Page = 1;
+
+        if (dto.Term != null && dto.Term.Trim().Length > 0) dto.Term = dto.Term.Trim();
+
+        var games = await _service.GetAllAsync(dto.Page ?? 1, dto.Sort.Contains("desc"), "releaseDate", dto.Term ?? "");
+        return Ok(new GetAllGamesResponseDto
+        {
+            Games = games.Select(GameMapper.FromEntityToGameResponseDto).ToList(),
+            CurrentPage = dto.Page ?? 1,
+            PreviousPage = dto.Page > 1 ? dto.Page - 1 : null,
+            NextPage = dto.Page < maxPages ? dto.Page + 1 : null,
+            LastPage = maxPages
+        });
     }
 }
