@@ -25,16 +25,29 @@ public class ImagesServerApiClient : IImagesServerApiClient
         using MultipartFormDataContent multipartContent = new();
         multipartContent.Add(imageContent, "image", imageName);
 
-        using var response = await _client.PostAsync("images", multipartContent);
+        try
+        {
+            using var response = await _client.PostAsync("images", multipartContent);
 
-        if (response.StatusCode != HttpStatusCode.Created) return null;
+            if (response.StatusCode != HttpStatusCode.Created) return null;
 
-        var body = response.Content.ReadAsStringAsync().Result;
-        return JsonConvert.DeserializeObject<ImageResponseDto>(body);
+            var body = response.Content.ReadAsStringAsync().Result;
+            return JsonConvert.DeserializeObject<ImageResponseDto>(body);
+        }
+        catch (HttpRequestException e)
+        {
+            return null;
+        }
     }
 
     public async Task DeleteImageAsync(string imageName)
     {
-        await _client.DeleteAsync($"images/{imageName}");
+        try
+        {
+            await _client.DeleteAsync($"images/{imageName}");
+        }
+        catch (HttpRequestException)
+        {
+        }
     }
 }
