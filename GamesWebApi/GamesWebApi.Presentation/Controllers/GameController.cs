@@ -338,11 +338,15 @@ public class GameController : ControllerBase
         if (dto.Page is null) dto.Page = 1;
         if (dto.Sort is null) dto.Sort = "desc(releaseDate)";
 
+        var sortType = dto.Sort.Contains("reviewsCount") ? "reviewsCount" : "releaseDate";
+
         if (dto.Page != null && dto.Page > maxPages) dto.Page = 1;
 
         if (dto.Term != null && dto.Term.Trim().Length > 0) dto.Term = dto.Term.Trim();
 
-        var games = await _service.GetAllAsync(dto.Page ?? 1, dto.Sort.Contains("desc"), "releaseDate", dto.Term ?? "");
+        var games = await _service.GetAllAsync(dto.Page ?? 1, dto.Sort.Contains("desc"), sortType, dto.Term ?? "");
+
+        var reviewsCount = games.Select(x => x.Reviews.Count).ToList();
         return Ok(new GetAllGamesResponseDto
         {
             Games = games.Select(GameMapper.FromEntityToGameResponseDto).ToList(),
