@@ -14,6 +14,7 @@ public class ReviewMap : IEntityTypeConfiguration<Review>
 
         builder.Property(x => x.Description).HasColumnType("text").IsRequired();
         builder.Property(x => x.Stars).HasColumnType("tinyint").IsRequired();
+        builder.Property(x => x.CreatedAtUtcTime).IsRequired();
 
         builder.HasOne(x => x.Game).WithMany(x => x.Reviews).HasForeignKey(x => x.GameId);
         builder.HasOne(x => x.Reviewer).WithMany(x => x.Reviews).HasForeignKey(x => x.ReviewerId);

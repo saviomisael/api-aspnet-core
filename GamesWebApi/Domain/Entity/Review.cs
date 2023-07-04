@@ -9,9 +9,11 @@ public class Review
     public virtual Game Game { get; set; }
     public string ReviewerId { get; set; }
     public virtual Reviewer Reviewer { get; set; }
+    public DateTime CreatedAtUtcTime { get; set; }
 
     public Review()
     {
         Id = Guid.NewGuid().ToString();
+        CreatedAtUtcTime = DateTime.UtcNow;
     }
 }
