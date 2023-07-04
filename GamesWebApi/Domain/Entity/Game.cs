@@ -11,6 +11,7 @@ public class Game : AggregateRoot
     public string? AgeRatingId { get; set; }
     public virtual ICollection<Genre>? Genres { get; set; }
     public virtual ICollection<Platform>? Platforms { get; set; }
+    public virtual ICollection<Review>? Reviews { get; set; }
 
     public Game()
     { }
