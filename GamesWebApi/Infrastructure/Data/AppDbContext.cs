@@ -15,6 +15,7 @@ public class AppDbContext : IdentityDbContext<Reviewer>
         modelBuilder.ApplyConfiguration(new PlatformMap());
         modelBuilder.ApplyConfiguration(new AgeRatingMap());
         modelBuilder.ApplyConfiguration(new GameMap());
+        modelBuilder.ApplyConfiguration(new ReviewMap());
         base.OnModelCreating(modelBuilder);
     }
 
