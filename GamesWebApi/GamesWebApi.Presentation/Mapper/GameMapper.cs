@@ -56,9 +56,9 @@ public static class GameMapper
         return game;
     }
 
-    public static GameResponseDto FromEntityToGameResponseDto(Game game)
+    public static SingleGameResponseDto FromEntityToGameResponseDto(Game game)
     {
-        return new GameResponseDto
+        return new SingleGameResponseDto
         {
             Id = game.Id,
             Description = game.Description,
@@ -68,7 +68,8 @@ public static class GameMapper
             Name = game.Name,
             Genres = game.Genres.Select(GenreMapper.FromEntityToGenreResponseDto).ToList(),
             Platforms = game.Platforms.Select(PlatformMapper.FromEntityToPlatformResponseDto).ToList(),
-            AgeRating = AgeRatingMapper.FromEntityToAgeRatingResponseDto(game.AgeRating)
+            AgeRating = AgeRatingMapper.FromEntityToAgeRatingResponseDto(game.AgeRating),
+            Reviews = game.Reviews.Select(ReviewMapper.FromEntityToReviewResponseDto).ToList()
         };
     }
 }

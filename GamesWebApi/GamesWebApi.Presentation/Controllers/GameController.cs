@@ -1,13 +1,14 @@
 using System.Net.Mime;
 using Application.Exception;
 using Domain.DTO;
-using Domain.Entity;
 using Domain.Service;
 using FluentValidation;
 using GamesWebApi.DTO;
 using GamesWebApi.Mapper;
 using GamesWebApi.V1;
 using Infrastructure.ImagesServerApi.Contracts;
+using Infrastructure.Jwt;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GamesWebApi.Controllers;
@@ -18,11 +19,13 @@ public class GameController : ControllerBase
 {
     private readonly IGameService _service;
     private readonly IImagesServerApiClient _apiClient;
+    private readonly TokenGenerator _tokenGenerator;
 
-    public GameController(IGameService service, IImagesServerApiClient apiClient)
+    public GameController(IGameService service, IImagesServerApiClient apiClient, TokenGenerator tokenGenerator)
     {
         _service = service;
         _apiClient = apiClient;
+        _tokenGenerator = tokenGenerator;
     }
 
     /// <summary>
@@ -36,7 +39,7 @@ public class GameController : ControllerBase
     /// <response code="404">Age rating / GenresNames / PlatformsNames not found.</response>
     [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status503ServiceUnavailable)]
-    [ProducesResponseType(typeof(GameResponseDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(SingleGameResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status404NotFound)]
     [HttpPost(ApiRoutes.GameRoutes.CreateGame)]
     public async Task<IActionResult> CreateGame([FromServices] IValidator<CreateGameDto> validator,
@@ -93,7 +96,7 @@ public class GameController : ControllerBase
     /// <response code="200">Returns a game.</response>
     /// <response code="404">Game not found.</response>
     [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status404NotFound)]
-    [ProducesResponseType(typeof(GameResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(SingleGameResponseDto), StatusCodes.Status200OK)]
     [HttpGet(ApiRoutes.GameRoutes.GetGameById)]
     public async Task<IActionResult> GetGameById([FromRoute] string id)
     {
@@ -117,7 +120,7 @@ public class GameController : ControllerBase
     /// <returns>Returns the game updated.</returns>
     /// <response code="200">Returns the game updated.</response>
     /// <response code="404">Game / AgeRating / GenresName / PlatformName not found.</response>
-    [ProducesResponseType(typeof(GameResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(SingleGameResponseDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status404NotFound)]
     [HttpPut(ApiRoutes.GameRoutes.UpdateGameById)]
     public async Task<IActionResult> UpdateGameById([FromServices] IValidator<UpdateGameDto> validator,

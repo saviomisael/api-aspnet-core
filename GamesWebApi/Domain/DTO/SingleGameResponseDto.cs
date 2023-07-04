@@ -1,6 +1,6 @@
 namespace Domain.DTO;
 
-public class GameResponseDto
+public class SingleGameResponseDto
 {
     public string Id { get; set; }
     public string Name { get; set; }
@@ -11,4 +11,5 @@ public class GameResponseDto
     public AgeRatingResponseDto AgeRating { get; set; }
     public ICollection<GenreResponseDto> Genres { get; set; }
     public ICollection<PlatformResponseDto> Platforms { get; set; }
+    public ICollection<ReviewResponseDto> Reviews { get; set; }
 }
