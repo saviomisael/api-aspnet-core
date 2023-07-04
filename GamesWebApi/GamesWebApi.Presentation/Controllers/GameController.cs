@@ -75,7 +75,7 @@ public class GameController : ControllerBase
         {
             var game = await _service.CreateGameAsync(GameMapper.FromCreateGameDtoToEntity(dto, image.Url));
 
-            return Created(ApiRoutes.GameRoutes.CreateGame, GameMapper.FromEntityToGameResponseDto(game));
+            return Created(ApiRoutes.GameRoutes.CreateGame, GameMapper.FromEntityToSingleGameResponseDto(game));
         }
         catch (Exception e) when (e is AgeNotFoundException or GenreNotFoundException or PlatformNotFoundException)
         {
@@ -105,7 +105,7 @@ public class GameController : ControllerBase
         {
             var game = await _service.GetGameByIdAsync(id);
 
-            return Ok(GameMapper.FromEntityToGameResponseDto(game));
+            return Ok(GameMapper.FromEntityToSingleGameResponseDto(game));
         }
         catch (GameNotFoundException e)
         {
@@ -137,7 +137,7 @@ public class GameController : ControllerBase
         try
         {
             var gameUpdate = await _service.UpdateGameByIdAsync(GameMapper.FromUpdateGameDtoToEntity(dto, id));
-            return Ok(GameMapper.FromEntityToGameResponseDto(gameUpdate));
+            return Ok(GameMapper.FromEntityToSingleGameResponseDto(gameUpdate));
         }
         catch (Exception e) when (e is GameNotFoundException or AgeNotFoundException or GenreNotFoundException
                                       or PlatformNotFoundException)
@@ -248,7 +248,7 @@ public class GameController : ControllerBase
         try
         {
             var game = await _service.AddReviewAsync(dto.Description, dto.Stars, id, reviewerId);
-            return Created(ApiRoutes.GameRoutes.AddReview, GameMapper.FromEntityToGameResponseDto(game));
+            return Created(ApiRoutes.GameRoutes.AddReview, GameMapper.FromEntityToSingleGameResponseDto(game));
         }
         catch (AlreadyReviewedGameException e)
         {
@@ -298,7 +298,7 @@ public class GameController : ControllerBase
                 Id = id
             });
 
-            return Ok(GameMapper.FromEntityToGameResponseDto(gameWithNewReview));
+            return Ok(GameMapper.FromEntityToSingleGameResponseDto(gameWithNewReview));
         }
         catch (ReviewNotFoundException e)
         {
