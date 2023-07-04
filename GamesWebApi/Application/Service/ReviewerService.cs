@@ -2,6 +2,7 @@ using Application.Exception;
 using Domain.DTO;
 using Domain.Entity;
 using Domain.Service;
+using Domain.ValueObjects;
 using Infrastructure.Jwt;
 using Microsoft.AspNetCore.Identity;
 
@@ -65,5 +66,21 @@ public class ReviewerService : IReviewerService
         }
 
         await _userManager.DeleteAsync(reviewer);
+    }
+
+    public async Task<ReviewerInfo> GetReviewerInfoAsync(string username)
+    {
+        var reviewer = await _userManager.FindByNameAsync(username);
+
+        if (reviewer is null)
+        {
+            throw new ReviewerNotFoundException();
+        }
+
+        return new ReviewerInfo
+        {
+            ReviewsCount = reviewer.Reviews.Count,
+            CreatedAtUtcTime = reviewer.CreatedAt
+        };
     }
 }
