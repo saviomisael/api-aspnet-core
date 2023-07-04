@@ -221,6 +221,12 @@ public class GameService : IGameService
         }
 
         var reviewFromDb = await _unitOfWork.GameRepository.UpdateReviewAsync(review);
+
+        if (reviewFromDb.ReviewerId != review.ReviewerId)
+        {
+            throw new NotReviewOwnerException();
+        }
+        
         await _unitOfWork.CommitAsync();
 
         var game = await _unitOfWork.GameRepository.GetGameByIdAsync(reviewFromDb.GameId);
