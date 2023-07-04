@@ -13,4 +13,6 @@ public interface IGameRepository
     Task<Review> UpdateReviewAsync(Review review);
     Task<bool> ReviewExistsAsync(string reviewId);
     Task<ICollection<Game>> GetAllAsync(int page, bool descending, string sortType, string term);
+    Task<int> GetMaxPagesAsync();
+    Task<int> GetMaxPagesBySearchAsync(string term);
 }

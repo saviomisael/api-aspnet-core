@@ -81,6 +81,24 @@ public class GameRepository : IGameRepository
         return await GetGamesOrderByReleaseDateInDescendingOrderAsync(page);
     }
 
+    public async Task<int> GetMaxPagesAsync()
+    {
+        var games = await _context.Games.ToListAsync();
+
+        return (int)Math.Ceiling((double)games.Count / MaxGamesPerPage);
+    }
+
+    public async Task<int> GetMaxPagesBySearchAsync(string term)
+    {
+        term = $"\"{term}\"";
+        
+        var games = await _context.Games.Where(x =>
+            EF.Functions.Contains(x.Name, term) || x.Genres.Any(y => EF.Functions.Contains(y.Name, term)) ||
+            x.Platforms.Any(y => EF.Functions.Contains(y.Name, term))).ToListAsync();
+
+        return (int)Math.Ceiling((double)games.Count / MaxGamesPerPage);
+    }
+
     private async Task<ICollection<Game>> GetGamesOrderByReleaseDateInDescendingOrderAsync(int page)
     {
         return await _context.Games.OrderByDescending(x => x.ReleaseDate)
