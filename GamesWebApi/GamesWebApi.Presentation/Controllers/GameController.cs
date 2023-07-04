@@ -1,6 +1,7 @@
 using System.Net.Mime;
 using Application.Exception;
 using Domain.DTO;
+using Domain.Entity;
 using Domain.Service;
 using FluentValidation;
 using GamesWebApi.DTO;
@@ -256,6 +257,42 @@ public class GameController : ControllerBase
         catch (Exception e) when (e is GameNotFoundException or ReviewerNotFoundException)
         {
             return NotFound(new ErrorResponseDto { Errors = { e.Message } });
+        }
+    }
+
+    [Authorize(AuthenticationSchemes = "Bearer")]
+    [HttpPut(ApiRoutes.GameRoutes.UpdateReview)]
+    public async Task<IActionResult> UpdateReview([FromServices] IValidator<UpdateReviewDto> validator,
+        [FromRoute] string id, [FromBody] UpdateReviewDto dto)
+    {
+        var errors = await validator.ValidateAsync(dto);
+
+        if (!errors.IsValid)
+        {
+            return BadRequest(new ErrorResponseDto { Errors = errors.Errors.Select(x => x.ErrorMessage).ToList() });
+        }
+
+        var reviewerId = _tokenGenerator.DecodeToken(Request.Headers.Authorization[0].Split(" ")[1]).Sub;
+
+        try
+        {
+            var gameWithNewReview = await _service.UpdateReviewAsync(new Review
+            {
+                Description = dto.Description,
+                Stars = dto.Stars,
+                ReviewerId = reviewerId,
+                Id = id
+            });
+
+            return Ok(GameMapper.FromEntityToGameResponseDto(gameWithNewReview));
+        }
+        catch (ReviewNotFoundException e)
+        {
+            return NotFound(new ErrorResponseDto { Errors = { e.Message } });
+        }
+        catch (NotReviewOwnerException e)
+        {
+            return Unauthorized(new ErrorResponseDto { Errors = { e.Message } });
         }
     }
 }

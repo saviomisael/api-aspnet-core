@@ -32,6 +32,7 @@ public static class ApiRoutes
         public const string UpdateImage = Base + "/games/{id}";
         public const string DeleteGameById = Base + "/games/{id}";
         public const string AddReview = Base + "/games/{id}/reviews";
+        public const string UpdateReview = Base + "/games/reviews/{id}";
     }
     
     public static class ReviewersRoutes
