@@ -42,5 +42,6 @@ public static class ApiRoutes
         public const string DeleteAccount = Base + "/reviewers";
         public const string RefreshToken = Base + "/reviewers/tokens/refreshToken";
         public const string ReviewerInfo = Base + "/reviewers/{username}";
+        public const string GamesByUsername = Base + "/reviewers/games";
     }
 }

@@ -1,4 +1,3 @@
-using System.IdentityModel.Tokens.Jwt;
 using System.Net.Mime;
 using Application.Exception;
 using Domain.DTO;
@@ -7,6 +6,7 @@ using Domain.Service;
 using Domain.ValueObjects;
 using FluentValidation;
 using GamesWebApi.DTO;
+using GamesWebApi.Mapper;
 using GamesWebApi.V1;
 using Infrastructure.Jwt;
 using Microsoft.AspNetCore.Authorization;
@@ -148,6 +148,31 @@ public class ReviewerController : ControllerBase
         {
             var info = await _service.GetReviewerInfoAsync(username);
             return Ok(info);
+        }
+        catch (ReviewerNotFoundException e)
+        {
+            return NotFound(new ErrorResponseDto { Errors = { e.Message } });
+        }
+    }
+
+    /// <summary>
+    /// Returns all games that the reviewer review.
+    /// </summary>
+    /// <returns>Returns all games that the reviewer review.</returns>
+    /// <response code="200">Returns all games that the reviewer review.</response>
+    /// <response code="404">Reviewer not found.</response>
+    [ProducesResponseType(typeof(ICollection<GameResponseDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status404NotFound)]
+    [Authorize(AuthenticationSchemes = "Bearer")]
+    [HttpGet(ApiRoutes.ReviewersRoutes.GamesByUsername)]
+    public async Task<IActionResult> GetGamesByUsername()
+    {
+        var username = _tokenGenerator.DecodeToken(Request.Headers.Authorization[0].Split(" ")[1]).UserName;
+
+        try
+        {
+            var games = await _service.GetGamesByUsernameAsync(username);
+            return Ok(games.Select(GameMapper.FromEntityToGameResponseDto).ToList());
         }
         catch (ReviewerNotFoundException e)
         {
