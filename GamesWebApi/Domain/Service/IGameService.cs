@@ -10,4 +10,5 @@ public interface IGameService
     Task UpdateImageAsync(string urlImage, string gameId);
     Task DeleteGameByIdAsync(string gameId);
     Task<Game> AddReviewAsync(string description, int stars, string gameId, string reviewerId);
+    Task<Game> UpdateReviewAsync(Review review);
 }

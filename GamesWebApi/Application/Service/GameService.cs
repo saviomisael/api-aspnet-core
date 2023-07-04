@@ -210,4 +210,20 @@ public class GameService : IGameService
 
         return gameWithReview;
     }
+
+    public async Task<Game> UpdateReviewAsync(Review review)
+    {
+        var exists = await _unitOfWork.GameRepository.ReviewExistsAsync(review.Id);
+
+        if (!exists)
+        {
+            throw new ReviewNotFoundException();
+        }
+
+        var reviewFromDb = await _unitOfWork.GameRepository.UpdateReviewAsync(review);
+        await _unitOfWork.CommitAsync();
+
+        var game = await _unitOfWork.GameRepository.GetGameByIdAsync(reviewFromDb.GameId);
+        return game;
+    }
 }
