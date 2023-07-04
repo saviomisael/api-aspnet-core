@@ -10,6 +10,6 @@ public interface IGameRepository
     void DeleteGame(Game game);
     void AddReview(Review review);
 
-    Task UpdateReviewAsync(Review review);
+    Task<Review> UpdateReviewAsync(Review review);
     Task<bool> ReviewExistsAsync(string reviewId);
 }
