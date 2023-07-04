@@ -4,6 +4,7 @@ using Application.Exception;
 using Domain.DTO;
 using Domain.Entity;
 using Domain.Service;
+using Domain.ValueObjects;
 using FluentValidation;
 using GamesWebApi.DTO;
 using GamesWebApi.V1;
@@ -131,6 +132,15 @@ public class ReviewerController : ControllerBase
         return Created(ApiRoutes.ReviewersRoutes.RefreshToken, newToken);
     }
 
+    /// <summary>
+    /// Returns information about a reviewer.
+    /// </summary>
+    /// <param name="username"></param>
+    /// <returns>Returns information about a reviewer.</returns>
+    /// <response code="200">Returns information about a reviewer.</response>
+    /// <response code="404">Reviewer not found.</response>
+    [ProducesResponseType(typeof(ReviewerInfo), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status404NotFound)]
     [HttpGet(ApiRoutes.ReviewersRoutes.ReviewerInfo)]
     public async Task<IActionResult> GetReviewerInfo([FromRoute] string username)
     {
