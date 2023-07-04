@@ -13,6 +13,7 @@ public class GameMap : IEntityTypeConfiguration<Game>
         builder.HasKey(x => x.Id).HasName("GameId");
 
         builder.Property(x => x.Name).HasMaxLength(255).IsRequired();
+        builder.HasIndex(x => x.Name).IsUnique();
         builder.Property(x => x.UrlImage).IsRequired();
         builder.Property(x => x.Description).IsRequired().HasColumnType("text");
         builder.Property(x => x.Price).IsRequired().HasColumnType("numeric(10,2)");

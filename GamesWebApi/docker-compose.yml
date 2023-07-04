@@ -2,7 +2,9 @@ version: "3.8"
 
 services:
   api_db:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    build:
+      context: .
+      dockerfile: ./SqlServer/Dockerfile
     user: root
     restart: always
     volumes:
