@@ -22,6 +22,13 @@ public class ReviewerService : IReviewerService
 
     public async Task<ReviewerTokenDto?> CreateAccountAsync(Reviewer reviewer, string password)
     {
+        var emailIsInUse = await _userManager.FindByEmailAsync(reviewer.Email);
+
+        if (emailIsInUse != null)
+        {
+            throw new EmailInUseException(reviewer.Email);
+        }
+        
         var result = await _userManager.CreateAsync(reviewer, password);
 
         if (!result.Succeeded)

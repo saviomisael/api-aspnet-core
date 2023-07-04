@@ -49,7 +49,7 @@ public class ReviewerController : ControllerBase
         try
         {
             var token = await _service.CreateAccountAsync(
-                new Reviewer { UserName = dto.UserName, Email = dto.UserName },
+                new Reviewer { UserName = dto.UserName, Email = dto.Email },
                 dto.Password);
 
             return Created(ApiRoutes.ReviewersRoutes.CreateAccount, token);
@@ -57,6 +57,10 @@ public class ReviewerController : ControllerBase
         catch (CreateAccountFailureException e)
         {
             return BadRequest(new ErrorResponseDto { Errors = e.Errors });
+        }
+        catch (EmailInUseException e)
+        {
+            return BadRequest(new ErrorResponseDto { Errors = { e.Message } });
         }
     }
 
@@ -111,7 +115,7 @@ public class ReviewerController : ControllerBase
             return NotFound(new ErrorResponseDto { Errors = { e.Message } });
         }
     }
-    
+
     /// <summary>
     /// Returns a fresh token.
     /// </summary>
