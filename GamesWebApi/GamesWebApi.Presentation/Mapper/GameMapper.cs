@@ -69,7 +69,7 @@ public static class GameMapper
             Genres = game.Genres.Select(GenreMapper.FromEntityToGenreResponseDto).ToList(),
             Platforms = game.Platforms.Select(PlatformMapper.FromEntityToPlatformResponseDto).ToList(),
             AgeRating = AgeRatingMapper.FromEntityToAgeRatingResponseDto(game.AgeRating),
-            Reviews = game.Reviews.Select(ReviewMapper.FromEntityToReviewResponseDto).ToList()
+            Reviews = game.Reviews is null ? new List<ReviewResponseDto>() : game.Reviews.Select(ReviewMapper.FromEntityToReviewResponseDto).ToList()
         };
     }
 }
