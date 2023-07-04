@@ -3,6 +3,7 @@ using Domain.Entity;
 using Domain.Service;
 using Infrastructure.Data;
 using Infrastructure.ImagesServerApi.Contracts;
+using Microsoft.AspNetCore.Identity;
 
 namespace Application.Service;
 
@@ -10,11 +11,13 @@ public class GameService : IGameService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IImagesServerApiClient _apiClient;
+    private readonly UserManager<Reviewer> _userManager;
 
-    public GameService(IUnitOfWork unitOfWork, IImagesServerApiClient apiClient)
+    public GameService(IUnitOfWork unitOfWork, IImagesServerApiClient apiClient, UserManager<Reviewer> userManager)
     {
         _unitOfWork = unitOfWork;
         _apiClient = apiClient;
+        _userManager = userManager;
     }
 
     public async Task<Game> CreateGameAsync(Game game)
@@ -165,5 +168,41 @@ public class GameService : IGameService
         _unitOfWork.GameRepository.DeleteGame(game);
         await _unitOfWork.CommitAsync();
         await _apiClient.DeleteImageAsync(game.UrlImage.Split("images/")[1]);
+    }
+
+    public async Task<Game> AddReviewAsync(string description, int stars, string gameId, string reviewerId)
+    {
+        var gameExists = await _unitOfWork.GameRepository.GameExistsAsync(gameId);
+
+        if (!gameExists)
+        {
+            throw new GameNotFoundException();
+        }
+
+        var reviewer = await _userManager.FindByIdAsync(reviewerId);
+
+        if (reviewer is null)
+        {
+            throw new ReviewerNotFoundException();
+        }
+
+        var game = await _unitOfWork.GameRepository.GetGameByIdAsync(gameId);
+
+        var review = new Review()
+        {
+            Description = description,
+            Stars = stars,
+            Game = game,
+            GameId = game.Id,
+            Reviewer = reviewer,
+            ReviewerId = reviewer.Id
+        };
+        
+        _unitOfWork.GameRepository.AddReview(review);
+        await _unitOfWork.CommitAsync();
+
+        var gameWithReview = await _unitOfWork.GameRepository.GetGameByIdAsync(gameId);
+
+        return gameWithReview;
     }
 }
