@@ -9,4 +9,6 @@ public interface IGameRepository
     Task<bool> GameExistsAsync(string gameId);
     void DeleteGame(Game game);
     void AddReview(Review review);
+
+    Task UpdateReviewAsync(Review review);
 }

@@ -39,4 +39,12 @@ public class GameRepository : IGameRepository
     {
         _context.Reviews.Add(review);
     }
+
+    public async Task UpdateReviewAsync(Review review)
+    {
+        var reviewFromDb = await _context.Reviews.FirstAsync(x => x.Id == review.Id);
+
+        reviewFromDb.Description = review.Description;
+        reviewFromDb.Stars = review.Stars;
+    }
 }
