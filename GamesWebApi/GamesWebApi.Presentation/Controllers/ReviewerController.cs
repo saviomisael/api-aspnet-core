@@ -130,4 +130,18 @@ public class ReviewerController : ControllerBase
         var newToken = _tokenGenerator.GenerateToken(payload.Sub, payload.UserName);
         return Created(ApiRoutes.ReviewersRoutes.RefreshToken, newToken);
     }
+
+    [HttpGet(ApiRoutes.ReviewersRoutes.ReviewerInfo)]
+    public async Task<IActionResult> GetReviewerInfo([FromRoute] string username)
+    {
+        try
+        {
+            var info = await _service.GetReviewerInfoAsync(username);
+            return Ok(info);
+        }
+        catch (ReviewerNotFoundException e)
+        {
+            return NotFound(new ErrorResponseDto { Errors = { e.Message } });
+        }
+    }
 }
