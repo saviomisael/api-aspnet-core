@@ -22,4 +22,5 @@ public class AppDbContext : IdentityDbContext<Reviewer>
     public virtual DbSet<Platform> Platforms { get; set; }
     public virtual DbSet<AgeRating> AgeRatings { get; set; }
     public virtual DbSet<Game> Games { get; set; }
+    public virtual DbSet<Review> Reviews { get; set; }
 }
