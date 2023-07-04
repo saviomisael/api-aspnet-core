@@ -99,6 +99,13 @@ public class GameRepository : IGameRepository
         return (int)Math.Ceiling((double)games.Count / MaxGamesPerPage);
     }
 
+    public async Task<bool> IsGameNameInUseAsync(string name)
+    {
+        var game = await _context.Games.FirstOrDefaultAsync(x => x.Name == name);
+
+        return game != null;
+    }
+
     private async Task<ICollection<Game>> GetGamesOrderByReleaseDateInDescendingOrderAsync(int page)
     {
         return await _context.Games.OrderByDescending(x => x.ReleaseDate)

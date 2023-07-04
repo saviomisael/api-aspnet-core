@@ -15,4 +15,5 @@ public interface IGameRepository
     Task<ICollection<Game>> GetAllAsync(int page, bool descending, string sortType, string term);
     Task<int> GetMaxPagesAsync();
     Task<int> GetMaxPagesBySearchAsync(string term);
+    Task<bool> IsGameNameInUseAsync(string name);
 }
