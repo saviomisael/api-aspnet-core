@@ -15,7 +15,14 @@ public class Main : BackgroundService
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
         Console.WriteLine("App is running!");
-        _notificationService.SendNotification();
+        try
+        {
+            _notificationService.SendNotification();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
 
         return Task.CompletedTask;
     }

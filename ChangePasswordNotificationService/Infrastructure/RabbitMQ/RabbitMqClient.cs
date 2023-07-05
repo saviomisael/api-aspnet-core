@@ -25,8 +25,8 @@ public class RabbitMqClient
 
     public void ConnectChangePasswordEmailQueue()
     {
-        using var connection = _connectionFactory.CreateConnection();
-        using var channel = connection.CreateModel();
+        var connection = _connectionFactory.CreateConnection();
+        var channel = connection.CreateModel();
 
         channel.QueueDeclare("change_password_notification", false, false, false, null);
         
@@ -38,7 +38,7 @@ public class RabbitMqClient
         {
             var body = ea.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
-
+            
             var emailReceiver = JsonConvert.DeserializeObject<EmailReceiver>(message);
 
             if (emailReceiver is null) return;
