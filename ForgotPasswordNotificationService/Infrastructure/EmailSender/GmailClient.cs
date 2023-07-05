@@ -6,7 +6,7 @@ namespace Infrastructure.EmailSender;
 
 public class GmailClient
 {
-    private GmailOptions _options;
+    private readonly GmailOptions _options;
     
     public GmailClient(GmailOptions options)
     {
