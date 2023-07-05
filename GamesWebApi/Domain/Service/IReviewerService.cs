@@ -12,4 +12,5 @@ public interface IReviewerService
     Task<ReviewerInfo> GetReviewerInfoAsync(string username);
     Task<ICollection<Game>> GetGamesByUsernameAsync(string username);
     Task ChangePasswordAsync(string username, string oldPassword, string newPassword);
+    Task CreateTemporaryPasswordAsync(string email);
 }

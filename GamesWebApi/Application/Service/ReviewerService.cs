@@ -3,6 +3,7 @@ using Domain.DTO;
 using Domain.Entity;
 using Domain.Service;
 using Domain.ValueObjects;
+using Infrastructure;
 using Infrastructure.Jwt;
 using Microsoft.AspNetCore.Identity;
 
@@ -14,12 +15,25 @@ public class ReviewerService : IReviewerService
     private readonly SignInManager<Reviewer> _signInManager;
     private readonly TokenGenerator _tokenGenerator;
     private readonly ISendChangePasswordNotificationService _changePasswordNotificationService;
+    private readonly ISendTemporaryPasswordNotificationService _temporaryPasswordNotificationService;
 
     public ReviewerService(UserManager<Reviewer> userManager, TokenGenerator tokenGenerator,
         SignInManager<Reviewer> signInManager,
-        ISendChangePasswordNotificationService changePasswordNotificationService) =>
-        (_userManager, _tokenGenerator, _signInManager, _changePasswordNotificationService) = (userManager,
-            tokenGenerator, signInManager, changePasswordNotificationService);
+        ISendChangePasswordNotificationService changePasswordNotificationService,
+        ISendTemporaryPasswordNotificationService temporaryPasswordNotificationService) =>
+    (
+        _userManager,
+        _tokenGenerator,
+        _signInManager,
+        _changePasswordNotificationService,
+        _temporaryPasswordNotificationService
+    ) = (
+        userManager,
+        tokenGenerator,
+        signInManager,
+        changePasswordNotificationService,
+        temporaryPasswordNotificationService
+    );
 
     public async Task<ReviewerTokenDto?> CreateAccountAsync(Reviewer reviewer, string password)
     {
@@ -111,11 +125,37 @@ public class ReviewerService : IReviewerService
         {
             throw new ChangePasswordFailureException(result.Errors.Select(x => x.Description).ToArray());
         }
-        
+
         _changePasswordNotificationService.SendNotification(new EmailReceiverDto
         {
             Email = reviewer.Email,
             UserName = reviewer.UserName
+        });
+    }
+
+    public async Task CreateTemporaryPasswordAsync(string email)
+    {
+        var reviewer = await _userManager.FindByEmailAsync(email);
+
+        if (reviewer is null)
+        {
+            throw new ReviewerNotFoundException();
+        }
+
+        var randomPassword = RandomPassword.Generate();
+        reviewer.TemporaryPassword = PasswordEncrypter.Encrypt(randomPassword);
+        reviewer.TempPasswordTime = DateTime.UtcNow.AddHours(1);
+        var result = await _userManager.UpdateAsync(reviewer);
+        if (!result.Succeeded)
+        {
+            throw new InternalServerErrorException();
+        }
+        
+        _temporaryPasswordNotificationService.SendNotification(new ForgotPasswordEmailReceiverDto
+        {
+            UserName = reviewer.UserName,
+            Email = reviewer.Email,
+            RandomPassword = randomPassword
         });
     }
 }
