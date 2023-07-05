@@ -105,7 +105,13 @@ public class ReviewerService : IReviewerService
             throw new ReviewerNotFoundException();
         }
 
-        await _userManager.ChangePasswordAsync(reviewer, oldPassword, newPassword);
+        var result = await _userManager.ChangePasswordAsync(reviewer, oldPassword, newPassword);
+
+        if (!result.Succeeded)
+        {
+            throw new ChangePasswordFailureException(result.Errors.Select(x => x.Description).ToArray());
+        }
+        
         _changePasswordNotificationService.SendNotification(new EmailReceiverDto
         {
             Email = reviewer.Email,
