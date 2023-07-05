@@ -16,6 +16,15 @@ services:
       retries: 20
     ports:
       - "1433:1433"
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    volumes:
+      - rabbit_data:/var/lib/rabbitmq/mnesia
+    env_file: ./.env
 
 volumes:
   api_data: {}
+  rabbit_data: {}
