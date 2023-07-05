@@ -13,4 +13,13 @@ public class PasswordEncrypterTests
 
         hash.Should().NotBe("123aBc@#");
     }
+
+    [Fact]
+    public void Compare_ShouldReturnFalse()
+    {
+        var hash = PasswordEncrypter.Encrypt("123aBc@#");
+
+        var result = PasswordEncrypter.Compare("teste123", hash);
+        result.Should().BeFalse();
+    }
 }
