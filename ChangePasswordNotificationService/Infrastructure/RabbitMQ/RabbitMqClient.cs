@@ -34,7 +34,7 @@ public class RabbitMqClient
 
         var consumer = new EventingBasicConsumer(channel);
 
-        consumer.Received += (model, ea) =>
+        consumer.Received += async (model, ea) =>
         {
             var body = ea.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
@@ -43,7 +43,7 @@ public class RabbitMqClient
 
             if (emailReceiver is null) return;
 
-            _sendEmailService.SendEmail(emailReceiver.Email, emailReceiver.UserName);
+            await _sendEmailService.SendEmail(emailReceiver.Email, emailReceiver.UserName);
             Console.WriteLine($"Send email notification for {emailReceiver.Email}.");
         };
 
