@@ -58,14 +58,34 @@ public class ReviewerService : IReviewerService
 
     public async Task<ReviewerTokenDto> LoginAsync(string reviewerUserName, string password)
     {
+        var account = await _userManager.FindByNameAsync(reviewerUserName);
+
+        if (account is null)
+        {
+            throw new ReviewerNotFoundException();
+        }
+
+        if (account.TempPasswordTime != null && account.TempPasswordTime > DateTime.UtcNow && account.TemporaryPassword != null)
+        {
+            var passwordMatch = PasswordEncrypter.Compare(password, account.TemporaryPassword);
+
+            if (!passwordMatch)
+            {
+                throw new LoginFailureException();
+            }
+
+            account.TemporaryPassword = null;
+            account.TempPasswordTime = null;
+            await _userManager.UpdateAsync(account);
+            return _tokenGenerator.GenerateToken(account.Id, account.UserName);
+        }
+
         var result = await _signInManager.PasswordSignInAsync(reviewerUserName, password, false, false);
 
         if (!result.Succeeded)
         {
             throw new LoginFailureException();
         }
-
-        var account = await _userManager.FindByNameAsync(reviewerUserName);
 
         return _tokenGenerator.GenerateToken(account.Id, account.UserName);
     }
