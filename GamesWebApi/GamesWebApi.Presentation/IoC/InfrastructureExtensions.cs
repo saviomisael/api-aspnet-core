@@ -19,5 +19,6 @@ public static class InfrastructureExtensions
         service.AddTransient<DataSeeder>();
         service.AddScoped<TokenGenerator>();
         service.AddScoped<ISendChangePasswordNotificationService, SendChangePasswordNotificationService>();
+        service.AddScoped<ISendTemporaryPasswordNotificationService, SendTemporaryPasswordNotificationService>();
     }
 }
