@@ -484,3 +484,6 @@ $RECYCLE.BIN/
 
 # ChangePasswordNotificationService
 ChangePasswordNotificationService/ChangePasswordNotificationService.Presentation/appsettings.json
+
+# ForgotPasswordNotificationService
+ForgotPasswordNotificationService/ForgotPasswordNotificationService.Presentation/appsettings.json
