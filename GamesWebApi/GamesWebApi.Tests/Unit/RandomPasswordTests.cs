@@ -28,4 +28,15 @@ public class RandomPasswordTests
         result.Should().BeTrue();
         password.Length.Should().Be(8);
     }
+
+    [Fact]
+    public void Generate_PasswordShouldContainsAtLeastOneUppercase()
+    {
+        var password = RandomPassword.Generate();
+
+        var result = Regex.IsMatch(password, "[A-Z]+");
+
+        result.Should().BeTrue();
+        password.Length.Should().Be(8);
+    }
 }
