@@ -18,5 +18,6 @@ public static class ValidatorExtensions
         service.AddScoped<IValidator<CreateReviewDto>, CreateReviewValidator>();
         service.AddScoped<IValidator<UpdateReviewDto>, UpdateReviewValidator>();
         service.AddScoped<IValidator<ChangePasswordDto>, ChangePasswordValidator>();
+        service.AddScoped<IValidator<ForgotPasswordDto>, ForgotPasswordValidator>();
     }
 }
