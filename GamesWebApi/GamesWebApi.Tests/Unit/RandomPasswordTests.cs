@@ -39,4 +39,15 @@ public class RandomPasswordTests
         result.Should().BeTrue();
         password.Length.Should().Be(8);
     }
+    
+    [Fact]
+    public void Generate_PasswordShouldContainsAtLeastOneNonAlphanumerical()
+    {
+        var password = RandomPassword.Generate();
+
+        var result = Regex.IsMatch(password, @"[^a-zA-Z\d\s]");
+
+        result.Should().BeTrue();
+        password.Length.Should().Be(8);
+    }
 }
