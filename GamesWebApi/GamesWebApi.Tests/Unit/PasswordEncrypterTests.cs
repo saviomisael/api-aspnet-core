@@ -22,4 +22,14 @@ public class PasswordEncrypterTests
         var result = PasswordEncrypter.Compare("teste123", hash);
         result.Should().BeFalse();
     }
+
+    [Fact]
+    public void Compare_ShouldReturnTrue()
+    {
+        var hash = PasswordEncrypter.Encrypt("123aBc@#");
+
+        var result = PasswordEncrypter.Compare("123aBc@#", hash);
+
+        result.Should().BeTrue();
+    }
 }
