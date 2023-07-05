@@ -8,6 +8,7 @@ using Infrastructure.ImagesServerApi;
 using Infrastructure.ImagesServerApi.Contracts;
 using Infrastructure.ImagesServerApi.Options;
 using Infrastructure.Jwt.Options;
+using Infrastructure.RabbitMQ.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -43,6 +44,10 @@ builder.Services.AddSingleton(imagesServerOptions);
 var jwtOptions = new JwtOptions();
 builder.Configuration.GetSection("JWT").Bind(jwtOptions);
 builder.Services.AddSingleton(jwtOptions);
+var rabbitmqOptions = new RabbitMQOptions();
+builder.Configuration.GetSection("RabbitMQ").Bind(rabbitmqOptions);
+builder.Services.AddSingleton(rabbitmqOptions);
+
 builder.Services.AddHttpClient<IImagesServerApiClient, ImagesServerApiClient>();
 
 builder.Services.AddInfraDependencies();
