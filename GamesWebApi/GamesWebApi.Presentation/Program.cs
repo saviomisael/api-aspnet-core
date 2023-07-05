@@ -38,15 +38,7 @@ builder.Services.AddCors(opt =>
     opt.AddPolicy("cors_api", policy => { policy.WithOrigins("*").AllowAnyMethod().AllowAnyHeader(); });
 });
 
-var imagesServerOptions = new ImagesServerOptions();
-builder.Configuration.GetSection("ImagesServerOptions").Bind(imagesServerOptions);
-builder.Services.AddSingleton(imagesServerOptions);
-var jwtOptions = new JwtOptions();
-builder.Configuration.GetSection("JWT").Bind(jwtOptions);
-builder.Services.AddSingleton(jwtOptions);
-var rabbitmqOptions = new RabbitMQOptions();
-builder.Configuration.GetSection("RabbitMQ").Bind(rabbitmqOptions);
-builder.Services.AddSingleton(rabbitmqOptions);
+builder.Services.AddSingletonOptions(builder.Configuration);
 
 builder.Services.AddHttpClient<IImagesServerApiClient, ImagesServerApiClient>();
 
