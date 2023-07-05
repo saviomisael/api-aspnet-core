@@ -218,4 +218,44 @@ public class ReviewerController : ControllerBase
             return BadRequest(new ErrorResponseDto { Errors = e.Errors });
         }
     }
+
+    /// <summary>
+    /// Creates a temporary password.
+    /// </summary>
+    /// <param name="email"></param>
+    /// <response code="204">Creates temporary password successfully.</response>
+    /// <response code="400">Returns the errors in the request.</response>
+    /// <response code="404">Reviewer not found.</response>
+    /// <response code="500">Internal Server Error.</response>
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorResponseDto),StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ErrorResponseDto),StatusCodes.Status500InternalServerError)]
+    [HttpPost(ApiRoutes.ReviewersRoutes.ForgotPassword)]
+    public async Task<IActionResult> ForgotPassword([FromServices] IValidator<ForgotPasswordDto> validator,
+        string email)
+    {
+        var dto = new ForgotPasswordDto { Email = email };
+        var errors = await validator.ValidateAsync(dto);
+
+        if (!errors.IsValid)
+        {
+            return BadRequest(new ErrorResponseDto { Errors = errors.Errors.Select(x => x.ErrorMessage).ToList() });
+        }
+
+        try
+        {
+            await _service.CreateTemporaryPasswordAsync(dto.Email);
+            return NoContent();
+        }
+        catch (ReviewerNotFoundException e)
+        {
+            return NotFound(new ErrorResponseDto { Errors = { e.Message } });
+        }
+        catch (InternalServerErrorException e)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError,
+                new ErrorResponseDto { Errors = { e.Message } });
+        }
+    }
 }

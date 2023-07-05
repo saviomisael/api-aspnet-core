@@ -45,5 +45,6 @@ public static class ApiRoutes
         public const string ReviewerInfo = Base + "/reviewers/{username}";
         public const string GamesByUsername = Base + "/reviewers/games";
         public const string ChangePassword = Base + "/reviewers";
+        public const string ForgotPassword = Base + "/reviewers/{email}/passwords";
     }
 }
