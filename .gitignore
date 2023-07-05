@@ -481,3 +481,6 @@ $RECYCLE.BIN/
 
 # Docker
 .env
+
+# ChangePasswordNotificationService
+ChangePasswordNotificationService/ChangePasswordNotificationService.Presentation/appsettings.json
