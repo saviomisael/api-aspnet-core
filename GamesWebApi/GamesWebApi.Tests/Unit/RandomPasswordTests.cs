@@ -17,4 +17,15 @@ public class RandomPasswordTests
         result.Should().BeTrue();
         password.Length.Should().Be(8);
     }
+
+    [Fact]
+    public void Generate_PasswordShouldContainsAtLeastOneLowercase()
+    {
+        var password = RandomPassword.Generate();
+
+        var result = Regex.IsMatch(password, "[a-z]+");
+
+        result.Should().BeTrue();
+        password.Length.Should().Be(8);
+    }
 }
