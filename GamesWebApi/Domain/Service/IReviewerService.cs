@@ -11,4 +11,5 @@ public interface IReviewerService
     Task DeleteAccountAsync(string username);
     Task<ReviewerInfo> GetReviewerInfoAsync(string username);
     Task<ICollection<Game>> GetGamesByUsernameAsync(string username);
+    Task ChangePasswordAsync(string username, string oldPassword, string newPassword);
 }

@@ -13,13 +13,13 @@ public class ReviewerService : IReviewerService
     private readonly UserManager<Reviewer> _userManager;
     private readonly SignInManager<Reviewer> _signInManager;
     private readonly TokenGenerator _tokenGenerator;
+    private readonly ISendChangePasswordNotificationService _changePasswordNotificationService;
 
-    public ReviewerService(UserManager<Reviewer> userManager, TokenGenerator tokenGenerator, SignInManager<Reviewer> signInManager)
-    {
-        _userManager = userManager;
-        _tokenGenerator = tokenGenerator;
-        _signInManager = signInManager;
-    }
+    public ReviewerService(UserManager<Reviewer> userManager, TokenGenerator tokenGenerator,
+        SignInManager<Reviewer> signInManager,
+        ISendChangePasswordNotificationService changePasswordNotificationService) =>
+        (_userManager, _tokenGenerator, _signInManager, _changePasswordNotificationService) = (userManager,
+            tokenGenerator, signInManager, changePasswordNotificationService);
 
     public async Task<ReviewerTokenDto?> CreateAccountAsync(Reviewer reviewer, string password)
     {
@@ -29,7 +29,7 @@ public class ReviewerService : IReviewerService
         {
             throw new EmailInUseException(reviewer.Email);
         }
-        
+
         var result = await _userManager.CreateAsync(reviewer, password);
 
         if (!result.Succeeded)
@@ -94,5 +94,22 @@ public class ReviewerService : IReviewerService
         }
 
         return reviewer.Reviews.Select(x => x.Game).ToList();
+    }
+
+    public async Task ChangePasswordAsync(string username, string oldPassword, string newPassword)
+    {
+        var reviewer = await _userManager.FindByNameAsync(username);
+
+        if (reviewer is null)
+        {
+            throw new ReviewerNotFoundException();
+        }
+
+        await _userManager.ChangePasswordAsync(reviewer, oldPassword, newPassword);
+        _changePasswordNotificationService.SendNotification(new EmailReceiverDto
+        {
+            Email = reviewer.Email,
+            UserName = reviewer.UserName
+        });
     }
 }
