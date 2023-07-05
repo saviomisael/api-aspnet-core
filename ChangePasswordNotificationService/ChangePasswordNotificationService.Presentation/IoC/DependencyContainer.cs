@@ -1,7 +1,10 @@
+using Application.Services;
 using Domain.EmailSender.Services;
+using Domain.Services;
 using Infrastructure.EmailSender;
 using Infrastructure.EmailSender.Services;
 using Infrastructure.Options;
+using Infrastructure.RabbitMQ;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,6 +17,8 @@ public static class DependencyContainer
         service.AddTransient<Main.Main>();
         service.AddScoped<GmailClient>();
         service.AddScoped<ISendEmailService, ChangePasswordEmailService>();
+        service.AddScoped<RabbitMqClient>();
+        service.AddScoped<ISendChangePasswordNotificationService, SendChangePasswordNotificationService>();
     }
 
     public static void AddSingletonOptions(this IServiceCollection service, IConfiguration config)
