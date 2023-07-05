@@ -6,8 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-var currentDirectory = AppContext.BaseDirectory;
-
 var config = new ConfigurationBuilder().SetBasePath(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location))
     .AddJsonFile("appsettings.json")
     .AddEnvironmentVariables().Build();
