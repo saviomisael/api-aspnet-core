@@ -1,3 +1,4 @@
+using Infrastructure.EmailSender;
 using Infrastructure.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,7 +9,7 @@ public static class DependencyContainer
 {
     public static void AddDependencies(this IServiceCollection service)
     {
-        
+        service.AddScoped<GmailClient>();
     }
 
     public static void AddSingletonOptions(this IServiceCollection service, IConfiguration configuration)
