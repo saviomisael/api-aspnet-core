@@ -1,12 +1,23 @@
+using Domain.Services;
+
 namespace ChangePasswordNotificationService.Main;
 
 public class Main
 {
+    private readonly ISendChangePasswordNotificationService _notificationService;
+
+    public Main(ISendChangePasswordNotificationService notificationService)
+    {
+        _notificationService = notificationService;
+    }
+    
     public void Run()
     {
         Console.WriteLine("App is running!");
         
-        Console.WriteLine("Click enter to exit from application.");
+        _notificationService.SendNotification();
+        
+        Console.WriteLine("Press [Enter] to exit.");
         Console.ReadLine();
     }
 }
