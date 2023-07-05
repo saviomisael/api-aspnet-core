@@ -1,3 +1,4 @@
+using Application.Service;
 using Domain.Service;
 using Infrastructure.EmailSender;
 using Infrastructure.EmailSender.Service;
@@ -15,6 +16,7 @@ public static class DependencyContainer
         service.AddScoped<GmailClient>();
         service.AddScoped<IEmailService, SendRandomPassswordEmailService>();
         service.AddScoped<RabbitMqClient>();
+        service.AddScoped<ISendTemporaryPasswordNotificationService, SendTemporaryPasswordNotificationService>();
     }
 
     public static void AddSingletonOptions(this IServiceCollection service, IConfiguration configuration)
