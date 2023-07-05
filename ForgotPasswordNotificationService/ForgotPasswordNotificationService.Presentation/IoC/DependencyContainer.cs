@@ -1,4 +1,6 @@
+using Domain.Service;
 using Infrastructure.EmailSender;
+using Infrastructure.EmailSender.Service;
 using Infrastructure.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,6 +12,7 @@ public static class DependencyContainer
     public static void AddDependencies(this IServiceCollection service)
     {
         service.AddScoped<GmailClient>();
+        service.AddScoped<IEmailService, SendRandomPassswordEmailService>();
     }
 
     public static void AddSingletonOptions(this IServiceCollection service, IConfiguration configuration)
