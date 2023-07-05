@@ -15,11 +15,9 @@ var host = Host.CreateDefaultBuilder(args)
     {
         services.AddSingletonOptions(config);
         services.AddDependencies();
+        services.AddHostedService<Main>();
     });
 
 var app = host.Build();
 
-using var serviceScope = app.Services.CreateScope();
-var provider = serviceScope.ServiceProvider;
-var main = provider.GetRequiredService<Main>();
-main.Run();
+await app.RunAsync();

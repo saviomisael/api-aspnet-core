@@ -14,7 +14,6 @@ public static class DependencyContainer
 {
     public static void AddDependencies(this IServiceCollection service)
     {
-        service.AddTransient<Main.Main>();
         service.AddScoped<GmailClient>();
         service.AddScoped<ISendEmailService, ChangePasswordEmailService>();
         service.AddScoped<RabbitMqClient>();
