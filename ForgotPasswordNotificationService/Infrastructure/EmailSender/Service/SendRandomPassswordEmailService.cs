@@ -22,7 +22,7 @@ public class SendRandomPassswordEmailService : IEmailService
         using var mail = new MailMessage();
         mail.From = new MailAddress(_options.SenderEmail);
         mail.To.Add(receiver.Email);
-        mail.Subject = $"Here is your temporary password / {DateTime.UtcNow}";
+        mail.Subject = $"Here is your temporary password {DateTime.UtcNow}";
         mail.IsBodyHtml = true;
         mail.Body = $@"
             <span style=""visibility: hidden; color: transparent"">{datetimeInUnix}</span>
