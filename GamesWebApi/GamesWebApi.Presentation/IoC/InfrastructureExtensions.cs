@@ -1,7 +1,9 @@
 using Domain.Repository;
+using Domain.Service;
 using Infrastructure.Data;
 using Infrastructure.Data.Repository;
 using Infrastructure.Jwt;
+using Infrastructure.RabbitMQ.Service;
 
 namespace GamesWebApi.IoC;
 
@@ -16,5 +18,6 @@ public static class InfrastructureExtensions
         service.AddScoped<IUnitOfWork, UnitOfWork>();
         service.AddTransient<DataSeeder>();
         service.AddScoped<TokenGenerator>();
+        service.AddScoped<ISendChangePasswordNotificationService, SendChangePasswordNotificationService>();
     }
 }
