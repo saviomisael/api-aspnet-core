@@ -179,4 +179,43 @@ public class ReviewerController : ControllerBase
             return NotFound(new ErrorResponseDto { Errors = { e.Message } });
         }
     }
+
+    /// <summary>
+    /// Change password for a reviewer that already sign in.
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <response code="400">Returns the errors in the request.</response>
+    /// <response code="204">Change password successfully.</response>
+    /// <response code="404">Reviewer not found.</response>
+    [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ErrorResponseDto), StatusCodes.Status404NotFound)]
+    [Authorize(AuthenticationSchemes = "Bearer")]
+    [HttpPut(ApiRoutes.ReviewersRoutes.ChangePassword)]
+    public async Task<IActionResult> ChangePassword([FromServices] IValidator<ChangePasswordDto> validator,
+        [FromBody] ChangePasswordDto dto)
+    {
+        var errors = await validator.ValidateAsync(dto);
+
+        if (!errors.IsValid)
+        {
+            return BadRequest(new ErrorResponseDto { Errors = errors.Errors.Select(x => x.ErrorMessage).ToList() });
+        }
+
+        var username = _tokenGenerator.DecodeToken(Request.Headers.Authorization[0].Split(" ")[1]).UserName;
+
+        try
+        {
+            await _service.ChangePasswordAsync(username, dto.CurrentPassword, dto.NewPassword);
+            return NoContent();
+        }
+        catch (ReviewerNotFoundException e)
+        {
+            return NotFound(new ErrorResponseDto { Errors = { e.Message } });
+        }
+        catch (ChangePasswordFailureException e)
+        {
+            return BadRequest(new ErrorResponseDto { Errors = e.Errors });
+        }
+    }
 }
