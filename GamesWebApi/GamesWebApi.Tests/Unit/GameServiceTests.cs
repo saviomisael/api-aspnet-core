@@ -20,24 +20,28 @@ public class GameServiceTests
     private readonly IUnitOfWork _unitOfWork;
     private readonly Mock<IImagesServerApiClient> _apiClientMock;
     private readonly Mock<UserManager<Reviewer>> _userManagerMock;
+    private readonly Mock<IGameRepository> _gameRepoMock;
 
     public GameServiceTests()
     {
         _ageRepoMock = new Mock<IAgeRatingRepository>();
         _genreRepoMock = new Mock<IGenreRepository>();
         _platformRepoMock = new Mock<IPlatformRepository>();
+        _gameRepoMock = new Mock<IGameRepository>();
         var context = new AppDbContext(AppDbContextOptions.GetInMemoryOptions());
         _unitOfWork = new UnitOfWork(context);
         _apiClientMock = new Mock<IImagesServerApiClient>();
-        _userManagerMock = new Mock<UserManager<Reviewer>>();
+        _userManagerMock = new Mock<UserManager<Reviewer>>(Mock.Of<IUserStore<Reviewer>>(), null, null, null, null, null, null, null, null);
     }
 
     [Fact]
     public async void CreateGame_ShouldThrowAgeNotFoundException_WhenAgeDoesNotExist()
     {
+        _gameRepoMock.Setup(x => x.IsGameNameInUseAsync(It.IsAny<string>())).ReturnsAsync(false);
         _ageRepoMock.Setup(x => x.AgeExistsAsync(It.IsAny<string>())).ReturnsAsync(false);
 
         _unitOfWork.AgeRatingRepository = _ageRepoMock.Object;
+        _unitOfWork.GameRepository = _gameRepoMock.Object;
 
         var service = new GameService(_unitOfWork, _apiClientMock.Object, _userManagerMock.Object);
 
@@ -52,11 +56,13 @@ public class GameServiceTests
     [Fact]
     public async void CreateGame_ShouldThrowGenreNotFoundException_WhenGenreDoesNotExist()
     {
+        _gameRepoMock.Setup(x => x.IsGameNameInUseAsync(It.IsAny<string>())).ReturnsAsync(false);
         _ageRepoMock.Setup(x => x.AgeExistsAsync(It.IsAny<string>())).ReturnsAsync(true);
         _genreRepoMock.Setup(x => x.GetByNameAsync(It.IsAny<string>())).ReturnsAsync((Genre?)null);
 
         _unitOfWork.AgeRatingRepository = _ageRepoMock.Object;
         _unitOfWork.GenreRepository = _genreRepoMock.Object;
+        _unitOfWork.GameRepository = _gameRepoMock.Object;
 
         var service = new GameService(_unitOfWork, _apiClientMock.Object, _userManagerMock.Object);
 
@@ -72,6 +78,7 @@ public class GameServiceTests
     [Fact]
     public async void CreateGame_ShouldThrowPlatformNotFoundException_WhenPlatformDoesNotExist()
     {
+        _gameRepoMock.Setup(x => x.IsGameNameInUseAsync(It.IsAny<string>())).ReturnsAsync(false);
         _ageRepoMock.Setup(x => x.AgeExistsAsync(It.IsAny<string>())).ReturnsAsync(true);
         _genreRepoMock.Setup(x => x.GetByNameAsync(It.IsAny<string>())).ReturnsAsync(new Genre("genre"));
         _platformRepoMock.Setup(x => x.GetByNameAsync(It.IsAny<string>())).ReturnsAsync((Platform?)null);
@@ -79,6 +86,7 @@ public class GameServiceTests
         _unitOfWork.AgeRatingRepository = _ageRepoMock.Object;
         _unitOfWork.GenreRepository = _genreRepoMock.Object;
         _unitOfWork.PlatformRepository = _platformRepoMock.Object;
+        _unitOfWork.GameRepository = _gameRepoMock.Object;
 
         var service = new GameService(_unitOfWork, _apiClientMock.Object, _userManagerMock.Object);
 
