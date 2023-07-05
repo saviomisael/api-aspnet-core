@@ -16,5 +16,8 @@ public static class DependencyContainer
         var rabbitmqOptions = new RabbitMqOptions();
         config.GetSection("RabbitMQ").Bind(rabbitmqOptions);
         service.AddSingleton(rabbitmqOptions);
+        var gmailOptions = new GmailOptions();
+        config.GetSection("GmailOptions").Bind(gmailOptions);
+        service.AddSingleton(gmailOptions);
     }
 }
