@@ -1,6 +1,6 @@
 # Games API
 
-This is a project that uses DDD, microservices, RabbitMQ and .NET 6.
+This is a project that uses DDD, microservices, RabbitMQ and .NET 6. This project was tested with Postman and XUnit.
 
 # Technologies
 
@@ -20,6 +20,7 @@ This is a project that uses DDD, microservices, RabbitMQ and .NET 6.
 - [BCrypt.Net-Next](https://github.com/BcryptNet/bcrypt.net/tree/main)
 - [Sql Server 2022](https://www.microsoft.com/pt-br/sql-server/sql-server-2022)
 - [Full Text Search](https://learn.microsoft.com/en-us/sql/relational-databases/search/full-text-search?view=sql-server-ver16)
+- [Postman](https://www.postman.com/downloads/)
 
 ## Design Patterns
 - `DTO`
