@@ -31,6 +31,7 @@ This is a project that uses DDD, microservices, RabbitMQ and .NET 6. This projec
 - `Value Object`
 - `Singleton`
 - `Inversion of Control`
+- `Unit of Work`
 
 ## How to run
 
